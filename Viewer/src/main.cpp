@@ -34,6 +34,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene);
 /**
  * Function implementation
  */
+
 void ScrollCallback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
@@ -63,7 +64,7 @@ int main(int argc, char **argv)
 		DrawImguiMenus(io, scene);
 		RenderFrame(window, scene, renderer, io);
     }
-
+	//render.DrawLine()
 	Cleanup(window);
     return 0;
 }

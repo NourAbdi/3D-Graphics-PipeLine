@@ -17,6 +17,8 @@ public:
 private:
 	void PutPixel(const int i, const int j, const glm::vec3& color);
 	void DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color);
+	void plotLineLow(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color);
+	void plotLineHigh(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color);
 
 	void CreateBuffers(int w, int h);
 	void CreateOpenGLBuffer();
@@ -27,4 +29,6 @@ private:
 	int viewport_height_;
 	GLuint gl_screen_tex_;
 	GLuint gl_screen_vtc_;
+	
+	
 };
