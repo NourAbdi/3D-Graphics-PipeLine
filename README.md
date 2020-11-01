@@ -4,9 +4,6 @@
 Name: 'Nour Abdi'  
 Student Number: '206144750'
 
-Name: 'Your real name'  
-Student Number: 'Your student number'
-
 ### Lecturer
 *Roi Poranne*
 
