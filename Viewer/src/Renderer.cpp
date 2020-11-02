@@ -245,24 +245,10 @@ void Renderer::Render(const Scene& scene)
 	// TODO: Replace this code with real scene rendering code
 	int half_width = viewport_width_ / 2;
 	int half_height = viewport_height_ / 2;
-	// circle
-	int thickness = 15;
-	
-	for(int i = 0; i < viewport_width_; i++)
-	{
-		for (int j = half_height - thickness; j < half_height + thickness; j++)
-		{
-			PutPixel(i, j, glm::vec3(1, 1, 0));
-		}
-	}
-
-	for (int i = 0; i < viewport_height_; i++)
-	{
-		for (int j = half_width - thickness; j < half_width + thickness; j++)
-		{
-			PutPixel(j, i, glm::vec3(1, 0, 1));
-		}
-	}
+	// drow circle
+	DrawLine(glm::ivec2(0, 0),
+		glm::ivec2(half_width, half_height),
+		glm::vec3(1.0f, 0.0f,0.0f));
 }
 
 int Renderer::GetViewportWidth() const
