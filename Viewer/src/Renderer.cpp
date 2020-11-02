@@ -245,6 +245,7 @@ void Renderer::Render(const Scene& scene)
 	// TODO: Replace this code with real scene rendering code
 	int half_width = viewport_width_ / 2;
 	int half_height = viewport_height_ / 2;
+	// circle
 	int thickness = 15;
 	
 	for(int i = 0; i < viewport_width_; i++)

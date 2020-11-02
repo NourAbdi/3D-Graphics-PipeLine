@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 		DrawImguiMenus(io, scene);
 		RenderFrame(window, scene, renderer, io);
     }
-	//render.DrawLine()
+	//DrawLine()
 	Cleanup(window);
     return 0;
 }
