@@ -1,7 +1,7 @@
 *Nour Abdi 20614750*
 
 *1. My implementation of the algorithm:*
-
+```
 void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
 {
 	// TODO: Implement bresenham algorithm
@@ -24,9 +24,9 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 		else
 			plotLineHigh(p1, p2, color);
 }
-
+```
 **Working with 2 basic subfunc's : plotLineLow and plotLineHigh, both clarified in the same class Renderer :**
-
+'''
 void Renderer::plotLineLow(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
 {
 	int y, D;
@@ -53,7 +53,7 @@ void Renderer::plotLineLow(const glm::ivec2& p1, const glm::ivec2& p2, const glm
 			D = D + 2 * dy;
 	}
 }
-
+'''
 void Renderer::plotLineHigh(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
 {
 	int x, D;
@@ -80,9 +80,9 @@ void Renderer::plotLineHigh(const glm::ivec2& p1, const glm::ivec2& p2, const gl
 			D = D + 2 * dx;
 	}
 }
-
+''
 *2. The picture of the sanity check results :*
-
+``
 ![Image] 
 
 *3. A drawing of you own choice :*
