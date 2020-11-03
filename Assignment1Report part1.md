@@ -83,7 +83,7 @@ void Renderer::plotLineHigh(const glm::ivec2& p1, const glm::ivec2& p2, const gl
 ```
 **2. The picture of the sanity check results :**
 
-![Image] 
+![1](https://user-images.githubusercontent.com/34486030/97979688-486a4e80-1dd8-11eb-88cf-43fe863c5c32.png)
 
 **3. A drawing of my own choice :**
 
