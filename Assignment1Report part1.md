@@ -1,6 +1,6 @@
-*Nour Abdi 20614750*
+***Nour Abdi 20614750***
 
-*1. My implementation of the algorithm:*
+**1. My implementation of the algorithm:**
 ```
 void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
 {
@@ -25,7 +25,7 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 			plotLineHigh(p1, p2, color);
 }
 ```
-**The algorithm function using 2 basic sub-functions : plotLineLow and plotLineHigh, both clarified in the same class Renderer :**
+*The algorithm function using 2 basic sub-functions : plotLineLow and plotLineHigh, both clarified in the same class Renderer :*
 ```
 void Renderer::plotLineLow(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
 {
@@ -81,9 +81,9 @@ void Renderer::plotLineHigh(const glm::ivec2& p1, const glm::ivec2& p2, const gl
 	}
 }
 ```
-*2. The picture of the sanity check results :*
+**2. The picture of the sanity check results :**
 
 ![Image] 
 
-*3. A drawing of you own choice :*
+**3. A drawing of you own choice :**
 
