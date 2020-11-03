@@ -25,7 +25,7 @@ void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::v
 			plotLineHigh(p1, p2, color);
 }
 ```
-**Working with 2 basic subfunc's : plotLineLow and plotLineHigh, both clarified in the same class Renderer :**
+**The algorithm function using 2 basic sub-functions : plotLineLow and plotLineHigh, both clarified in the same class Renderer :**
 ```
 void Renderer::plotLineLow(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
 {
