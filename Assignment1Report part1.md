@@ -1,7 +1,7 @@
 Nour Abdi
 20614750
 *1. My implementation of the algorithm:*
-'''void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
+```void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
 {
 	// TODO: Implement bresenham algorithm
 	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
@@ -23,7 +23,7 @@ Nour Abdi
 			plotLineHigh(p2, p1, color);
 		else
 			plotLineHigh(p1, p2, color);
-}'''
+}```
 
 **Working with 2 basic subfunc's : plotLineLow and plotLineHigh, both clarified in the same class Renderer :**
 
