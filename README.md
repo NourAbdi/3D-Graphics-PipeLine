@@ -1,9 +1,9 @@
 # Computer Graphics 203.3710
 ## Students Team data
 
-Name: 'Nour Abdi'  
+**Name: 'Nour Abdi'  
 Student Number: '206144750'
-
+**
 ### Lecturer
 *Roi Poranne*
 
