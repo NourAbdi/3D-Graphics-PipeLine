@@ -7,7 +7,8 @@
 
 #define INDEX(width,x,y,c) ((x)+(y)*(width))*3+(c)
 #define Z_INDEX(width,x,y) ((x)+(y)*(width))
-#define Radius 100
+#define Radius1 200
+#define Radius2 100
 #define pi  3.14159 
 #define NDegrees 100
 #define Teta 2*pi/NDegrees
@@ -249,19 +250,47 @@ void Renderer::Render(const Scene& scene)
 	// TODO: Replace this code with real scene rendering code
 	int half_width = viewport_width_ / 2;
 	int half_height = viewport_height_ / 2;
+	int h1 = half_width;
+	int h2 = half_height;
 	int x = 0;
 	int y = 0; 
+	int R = Radius1;
 
 	//draw line: from (0,0)to (half_width, half_height)...
 	//DrawLine(glm::ivec2(0, 0),glm::ivec2(half_width, half_height),glm::vec3(1.0f, 0.0f,0.0f));
 	
 	//draw circle: from (half_width, half_height) to all directions ...
-	for (int i = 0; i < NDegrees; i++)
+	//for (int i = 0; i < NDegrees; i++)
+	//{
+	//	x = half_width + Radius * cos(Teta*i);
+	//	y = half_height + Radius * sin(Teta*i);
+	//	DrawLine(glm::ivec2(half_width, half_height), glm::ivec2(x, y), glm::vec3(1.0f,0.0f,0.0f));
+	//}
+
+	//drawing of my own pic :
+	//for (int i = 0; i < NDegrees/2; i++)
+	//{
+	//	x = h1 + Radius1 * cos(Teta*i);
+	//	y = h2 + Radius1 * sin(Teta*i);
+	//	R++;
+	//	DrawLine(glm::ivec2(half_width, half_height), glm::ivec2(x, y), glm::vec3(1.0f,0.0f,0.0f));
+	//}
+
+	for (int i = -10; i < NDegrees / 2; i++)
 	{
-		x = half_width + Radius * cos(Teta*i);
-		y = half_height + Radius * sin(Teta*i);
-		DrawLine(glm::ivec2(half_width, half_height), glm::ivec2(x, y), glm::vec3(1.0f,0.0f,0.0f));
+		x = half_width + Radius2 * cos(Teta*i);
+		y = half_height + Radius2 * sin(Teta*i);
+		R--;
+		DrawLine(glm::ivec2(half_width - Radius1+200, half_height-300), glm::ivec2(x+100, y), glm::vec3(1.0f, 0.0f, 0.0f));
 	}
+	for (int i = 0; i < NDegrees / 2+10; i++)
+	{
+		x = half_width + Radius2 * cos(Teta*i);
+		y = half_height + Radius2 * sin(Teta*i);
+		R--;
+		DrawLine(glm::ivec2(half_width - Radius1+200 , half_height-300), glm::ivec2(x - 100, y), glm::vec3(1.0f, 0.0f, 0.0f));
+	}
+
 }
 
 int Renderer::GetViewportWidth() const
