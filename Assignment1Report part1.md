@@ -1,28 +1,29 @@
-Nour Abdi
-20614750
+*Nour Abdi 20614750*
+
 *1. My implementation of the algorithm:*
+
 ```void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
-{
-	// TODO: Implement bresenham algorithm
-	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+	{
+		// TODO: Implement bresenham algorithm
+		// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
+	
+		int dx = p2.x - p1.x;
+		int dy = p2.y - p1.y;
+		if (dy < 0)
+			dy = -dy;
+		if (dx < 0)
+			dx = -dx;
 
-	int dx = p2.x - p1.x;
-	int dy = p2.y - p1.y;
-	if (dy < 0)
-		dy = -dy;
-	if (dx < 0)
-		dx = -dx;
-
-	if (dy < dx)//abs(y1 - y0) < abs(x1 - x0)
-		if (p1.x > p2.x)
-			plotLineLow(p2 ,p1 ,color);
+		if (dy < dx)//abs(y1 - y0) < abs(x1 - x0)
+			if (p1.x > p2.x)
+				plotLineLow(p2 ,p1 ,color);
+			else
+				plotLineLow(p1, p2, color);
 		else
-			plotLineLow(p1, p2, color);
-	else
-		if (p1.y > p2.y)
-			plotLineHigh(p2, p1, color);
-		else
-			plotLineHigh(p1, p2, color);
+			if (p1.y > p2.y)
+				plotLineHigh(p2, p1, color);
+			else
+				plotLineHigh(p1, p2, color);
 }```
 
 **Working with 2 basic subfunc's : plotLineLow and plotLineHigh, both clarified in the same class Renderer :**
@@ -80,7 +81,10 @@ void Renderer::plotLineHigh(const glm::ivec2& p1, const glm::ivec2& p2, const gl
 			D = D + 2 * dx;
 	}
 }'''
-2. The picture of the sanity check results :
+
+*2. The picture of the sanity check results :*
+
 ![Image] 
-3. A drawing of you own choice :
+
+*3. A drawing of you own choice :*
 
