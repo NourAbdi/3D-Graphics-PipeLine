@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\computergraphics2021-nour-abdi\ThirdParty\nativefiledialog\nativefiledialog\src\nfd_common.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\computergraphics2021-nour-abdi\ThirdParty\nativefiledialog\nativefiledialog\src\nfd_win.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\computergraphics2021-nour-abdi\ThirdParty\nativefiledialog\nativefiledialog\src\nfd_common.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\computergraphics2021-nour-abdi\ThirdParty\nativefiledialog\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{B3A67608-3B36-3338-961D-D3E9B93FB4CE}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{5F88477E-BFC8-3C3D-9B27-BB9783A1C2FC}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

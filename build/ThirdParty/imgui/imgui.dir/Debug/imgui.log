@@ -1,0 +1,7 @@
+﻿  Building Custom Rule D:/computergraphics2021-nour-abdi/ThirdParty/imgui/CMakeLists.txt
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_widgets.cpp
+  Generating Code...
+  imgui.vcxproj -> D:\computergraphics2021-nour-abdi\build\lib\Debug\imgui.lib
