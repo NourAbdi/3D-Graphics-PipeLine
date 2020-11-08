@@ -276,20 +276,20 @@ void Renderer::Render(const Scene& scene)
 	//	DrawLine(glm::ivec2(half_width, half_height), glm::ivec2(x, y), glm::vec3(1.0f,0.0f,0.0f));
 	//}
 
-	for (int i = -10; i < NDegrees / 2; i++)
-	{
-		x = half_width + Radius2 * cos(Teta*i);
-		y = half_height + Radius2 * sin(Teta*i);
-		R--;
-		DrawLine(glm::ivec2(half_width - Radius1+200, half_height-300), glm::ivec2(x+100, y), glm::vec3(1.0f, 0.0f, 0.0f));
-	}
-	for (int i = 0; i < NDegrees / 2+10; i++)
-	{
-		x = half_width + Radius2 * cos(Teta*i);
-		y = half_height + Radius2 * sin(Teta*i);
-		R--;
-		DrawLine(glm::ivec2(half_width - Radius1+200 , half_height-300), glm::ivec2(x - 100, y), glm::vec3(1.0f, 0.0f, 0.0f));
-	}
+	//for (int i = -10; i < NDegrees / 2; i++)
+	//{
+	//	x = half_width + Radius2 * cos(Teta*i);
+	//	y = half_height + Radius2 * sin(Teta*i);
+	//	R--;
+	//	DrawLine(glm::ivec2(half_width - Radius1+200, half_height-300), glm::ivec2(x+100, y), glm::vec3(1.0f, 0.0f, 0.0f));
+	//}
+	//for (int i = 0; i < NDegrees / 2+10; i++)
+	//{
+	//	x = half_width + Radius2 * cos(Teta*i);
+	//	y = half_height + Radius2 * sin(Teta*i);
+	//	R--;
+	//	DrawLine(glm::ivec2(half_width - Radius1+200 , half_height-300), glm::ivec2(x - 100, y), glm::vec3(1.0f, 0.0f, 0.0f));
+	//}
 
 }
 

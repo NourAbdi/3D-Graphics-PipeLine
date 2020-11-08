@@ -1,7 +1,3 @@
 ﻿  Renderer.cpp
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(281): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(282): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(288): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(289): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
   MeshViewer.vcxproj -> D:\computergraphics2021-nour-abdi\build\bin\Debug\MeshViewer.exe
   Copying Shaders
