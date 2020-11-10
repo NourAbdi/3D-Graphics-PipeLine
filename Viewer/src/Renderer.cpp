@@ -1,7 +1,7 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <algorithm>
-
+#include "Utils.h"
 #include "Renderer.h"
 #include "InitShader.h"
 
@@ -250,11 +250,54 @@ void Renderer::Render(const Scene& scene)
 	// TODO: Replace this code with real scene rendering code
 	int half_width = viewport_width_ / 2;
 	int half_height = viewport_height_ / 2;
-	int h1 = half_width;
-	int h2 = half_height;
-	int x = 0;
-	int y = 0; 
-	int R = Radius1;
+	glm::mat4 translate_center // Translation_center matrix  
+	(
+		glm::vec4(50.0f, 0.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 50.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 50.0f, 0.0f),
+		glm::vec4(half_width, half_height, 0.0f, 1.0f)
+	);
+	//active model is the last opened file ( last read obj file)
+	if (scene.GetModelCount() > 0) //this check if we loaded the mesh model
+	{
+		MeshModel model = scene.GetActiveModel(); // gets active model 
+		std::vector<glm::vec3> vertices = model.get_vertices(); // gets the vertices
+		
+		for (int faces_c = 0; faces_c < model.GetFacesCount(); faces_c++)
+		{
+			glm::vec3 p1 = vertices.at(model.GetFace(faces_c).GetVertexIndex(0)-1);
+			glm::vec3 p2 = vertices.at(model.GetFace(faces_c).GetVertexIndex(1)-1);
+			glm::vec3 p3 = vertices.at(model.GetFace(faces_c).GetVertexIndex(2)-1);
+
+			//from 1x3 to 1x4
+			glm::vec4 h1(p1, 1.0f);
+			glm::vec4 h2(p2, 1.0f);
+			glm::vec4 h3(p3, 1.0f);
+
+			//transformations.
+			h1 = translate_center * h1;
+			h2 = translate_center * h2;
+			h3 = translate_center * h3;
+			
+			//from 1x4 to 1x3
+			
+			//from 1x4 to 1x2
+			glm::vec2 d1(h1.x, h1.y);
+			glm::vec2 d2(h2.x, h2.y);
+			glm::vec2 d3(h3.x, h3.y);
+			DrawLine(d1,d2, glm::vec3(0.0f, 0.0f, 0.0f));
+			DrawLine(d1,d3, glm::vec3(0.0f, 0.0f, 0.0f));
+			DrawLine(d2,d3, glm::vec3(0.0f, 0.0f, 0.0f));
+			
+		}
+	}
+	
+	/*******************************************************************/
+	//int h1 = half_width;
+	//int h2 = half_height;
+	//int x = 0;
+	//int y = 0; 
+	//int R = Radius1;
 
 	//draw line: from (0,0)to (half_width, half_height)...
 	//DrawLine(glm::ivec2(0, 0),glm::ivec2(half_width, half_height),glm::vec3(1.0f, 0.0f,0.0f));
@@ -290,7 +333,7 @@ void Renderer::Render(const Scene& scene)
 	//	R--;
 	//	DrawLine(glm::ivec2(half_width - Radius1+200 , half_height-300), glm::ivec2(x - 100, y), glm::vec3(1.0f, 0.0f, 0.0f));
 	//}
-
+	/*******************************************************************/
 }
 
 int Renderer::GetViewportWidth() const

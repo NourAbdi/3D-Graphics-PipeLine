@@ -18,7 +18,7 @@
  */
 bool show_demo_window = false;
 bool show_another_window = false;
-glm::vec4 clear_color = glm::vec4(0.8f, 0.8f, 0.8f, 1.00f);
+glm::vec4 clear_color = glm::vec4(1.00f, 1.00f, 1.00f, 1.00f);
 
 /**
  * Function declarations
@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 		DrawImguiMenus(io, scene);
 		RenderFrame(window, scene, renderer, io);
     }
-	//DrawLine()
+
 	Cleanup(window);
     return 0;
 }
