@@ -1,9 +1,9 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <algorithm>
-#include "Utils.h"
 #include "Renderer.h"
 #include "InitShader.h"
+#include <iostream>
 
 #define INDEX(width,x,y,c) ((x)+(y)*(width))*3+(c)
 #define Z_INDEX(width,x,y) ((x)+(y)*(width))
@@ -12,6 +12,7 @@
 #define pi  3.14159 
 #define NDegrees 100
 #define Teta 2*pi/NDegrees
+
 
 Renderer::Renderer(int viewport_width, int viewport_height) :
 	viewport_width_(viewport_width),
@@ -250,6 +251,7 @@ void Renderer::Render(const Scene& scene)
 	// TODO: Replace this code with real scene rendering code
 	int half_width = viewport_width_ / 2;
 	int half_height = viewport_height_ / 2;
+
 	glm::mat4 translate_center // Translation_center matrix  
 	(
 		glm::vec4(50.0f, 0.0f, 0.0f, 0.0f),
@@ -257,6 +259,7 @@ void Renderer::Render(const Scene& scene)
 		glm::vec4(0.0f, 0.0f, 50.0f, 0.0f),
 		glm::vec4(half_width, half_height, 0.0f, 1.0f)
 	);
+
 	//active model is the last opened file ( last read obj file)
 	if (scene.GetModelCount() > 0) //this check if we loaded the mesh model
 	{
@@ -268,12 +271,12 @@ void Renderer::Render(const Scene& scene)
 			glm::vec3 p1 = vertices.at(model.GetFace(faces_c).GetVertexIndex(0)-1);
 			glm::vec3 p2 = vertices.at(model.GetFace(faces_c).GetVertexIndex(1)-1);
 			glm::vec3 p3 = vertices.at(model.GetFace(faces_c).GetVertexIndex(2)-1);
-
+			
 			//from 1x3 to 1x4
 			glm::vec4 h1(p1, 1.0f);
 			glm::vec4 h2(p2, 1.0f);
 			glm::vec4 h3(p3, 1.0f);
-
+		
 			//transformations.
 			h1 = translate_center * h1;
 			h2 = translate_center * h2;
