@@ -251,20 +251,42 @@ void Renderer::Render(const Scene& scene)
 	// TODO: Replace this code with real scene rendering code
 	int half_width = viewport_width_ / 2;
 	int half_height = viewport_height_ / 2;
+	float Max_x = 0.0f;
+	float Max_y = 0.0f;
+	float Min_x = 0.0f;
+	float Min_y = 0.0f;
+	float max1	= 0.0f;
+	float max2	= 0.0f;
+	float delta_x = 0.0f;
+	float delta_y = 0.0f;
 
-	glm::mat4 translate_center // Translation_center matrix  
+	glm::mat4 Translate_mat // Translation matrix to put the model in the right place
 	(
-		glm::vec4(50.0f, 0.0f, 0.0f, 0.0f),
-		glm::vec4(0.0f, 50.0f, 0.0f, 0.0f),
-		glm::vec4(0.0f, 0.0f, 50.0f, 0.0f),
+		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
 		glm::vec4(half_width, half_height, 0.0f, 1.0f)
 	);
+	glm::mat4 Scale_mat // Scaling matrix to adjust the size of the model
+	(
+		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
+	);
+	glm::mat4 Rotate_mat // Rotating matrix 
+	(
+		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
+	);
 
-	//active model is the last opened file ( last read obj file)
-	if (scene.GetModelCount() > 0) //this check if we loaded the mesh model
+	//Active model is the last opened file ( last read obj file)
+	if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
 	{
-		MeshModel model = scene.GetActiveModel(); // gets active model 
-		std::vector<glm::vec3> vertices = model.get_vertices(); // gets the vertices
+		MeshModel model = scene.GetActiveModel(); // Gets active model 
+		std::vector<glm::vec3> vertices = model.get_vertices(); // Gets the vertices
 		
 		for (int faces_c = 0; faces_c < model.GetFacesCount(); faces_c++)
 		{
@@ -273,70 +295,52 @@ void Renderer::Render(const Scene& scene)
 			glm::vec3 p3 = vertices.at(model.GetFace(faces_c).GetVertexIndex(2)-1);
 			
 			//from 1x3 to 1x4
-			glm::vec4 h1(p1, 1.0f);
-			glm::vec4 h2(p2, 1.0f);
-			glm::vec4 h3(p3, 1.0f);
-		
-			//transformations.
-			h1 = translate_center * h1;
-			h2 = translate_center * h2;
-			h3 = translate_center * h3;
+			glm::vec4 v1(p1, 1.0f);
+			glm::vec4 v2(p2, 1.0f);
+			glm::vec4 v3(p3, 1.0f);
+
+			//Check bounderies 0 < V < 1000
+			for (int i = 0; i < vertices.size(); i++)
+			{
+				Max_x =(Max_x < vertices[i].x)? vertices[i].x : Max_x;
+				Max_y =(Max_y < vertices[i].y)? vertices[i].y : Max_y;
+				Min_y =(Min_y > vertices[i].y)? vertices[i].y : Min_y;
+				Min_x =(Min_x > vertices[i].x)? vertices[i].x : Min_x;
+			}
+			max1 = (Max_x - Min_x);
+			max2 = (Max_y - Min_y);
+			delta_x = 1000/max1;
+			delta_y = 1000/max2;
+
+			glm::mat4 Scale1_mat // Scaling matrix to adjust the size of the model
+			(
+				glm::vec4(delta_x/4, 0.0f, 0.0f, 0.0f),
+				glm::vec4(0.0f, delta_y/4, 0.0f, 0.0f),
+				glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
+				glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
+			);
+
+			//Scale_mat = Scale_mat* Scale1_mat;
+
+			//Final matrix : in this case of multiplying matrices Order does matter...
+			glm::mat4 Final_mat = Translate_mat * Scale1_mat * Rotate_mat;
+
+			//Transformations = Final_mat*(V) 1X4
+			v1 = Final_mat * v1;
+			v2 = Final_mat * v2;
+			v3 = Final_mat * v3;
 			
-			//from 1x4 to 1x3
-			
-			//from 1x4 to 1x2
-			glm::vec2 d1(h1.x, h1.y);
-			glm::vec2 d2(h2.x, h2.y);
-			glm::vec2 d3(h3.x, h3.y);
+			//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
+			//Lines color is default black...
+			glm::vec2 d1(v1.x, v1.y);
+			glm::vec2 d2(v2.x, v2.y);
+			glm::vec2 d3(v3.x, v3.y);
+
 			DrawLine(d1,d2, glm::vec3(0.0f, 0.0f, 0.0f));
 			DrawLine(d1,d3, glm::vec3(0.0f, 0.0f, 0.0f));
 			DrawLine(d2,d3, glm::vec3(0.0f, 0.0f, 0.0f));
-			
 		}
 	}
-	
-	/*******************************************************************/
-	//int h1 = half_width;
-	//int h2 = half_height;
-	//int x = 0;
-	//int y = 0; 
-	//int R = Radius1;
-
-	//draw line: from (0,0)to (half_width, half_height)...
-	//DrawLine(glm::ivec2(0, 0),glm::ivec2(half_width, half_height),glm::vec3(1.0f, 0.0f,0.0f));
-	
-	//draw circle: from (half_width, half_height) to all directions ...
-	//for (int i = 0; i < NDegrees; i++)
-	//{
-	//	x = half_width + Radius * cos(Teta*i);
-	//	y = half_height + Radius * sin(Teta*i);
-	//	DrawLine(glm::ivec2(half_width, half_height), glm::ivec2(x, y), glm::vec3(1.0f,0.0f,0.0f));
-	//}
-
-	//drawing of my own pic :
-	//for (int i = 0; i < NDegrees/2; i++)
-	//{
-	//	x = h1 + Radius1 * cos(Teta*i);
-	//	y = h2 + Radius1 * sin(Teta*i);
-	//	R++;
-	//	DrawLine(glm::ivec2(half_width, half_height), glm::ivec2(x, y), glm::vec3(1.0f,0.0f,0.0f));
-	//}
-
-	//for (int i = -10; i < NDegrees / 2; i++)
-	//{
-	//	x = half_width + Radius2 * cos(Teta*i);
-	//	y = half_height + Radius2 * sin(Teta*i);
-	//	R--;
-	//	DrawLine(glm::ivec2(half_width - Radius1+200, half_height-300), glm::ivec2(x+100, y), glm::vec3(1.0f, 0.0f, 0.0f));
-	//}
-	//for (int i = 0; i < NDegrees / 2+10; i++)
-	//{
-	//	x = half_width + Radius2 * cos(Teta*i);
-	//	y = half_height + Radius2 * sin(Teta*i);
-	//	R--;
-	//	DrawLine(glm::ivec2(half_width - Radius1+200 , half_height-300), glm::ivec2(x - 100, y), glm::vec3(1.0f, 0.0f, 0.0f));
-	//}
-	/*******************************************************************/
 }
 
 int Renderer::GetViewportWidth() const
