@@ -2,7 +2,7 @@
 
 **1. Load a mesh and output it's vertices and face to the console (using cout) "demo model" :**
 ```
-//output model's vertices and face :
+//output model's vertices and faces :
 //active model is the last opened file ( last read obj file)
 int counterflag =0;
 if (scene.GetModelCount() > 0) //this check if we loaded the mesh model
