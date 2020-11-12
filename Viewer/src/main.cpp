@@ -1,4 +1,5 @@
 #define _USE_MATH_DEFINES
+#define pi  3.14159 
 #include <cmath>
 #include <imgui/imgui.h>
 #include <stdio.h>
@@ -245,6 +246,41 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::Text("Hello from another window!");
 		if (ImGui::Button("Close Me"))
 			show_another_window = false;
+		ImGui::End();
+	}
+
+	//Editor window :
+	{
+		static float rotation = 0.0;
+		static float scale[] = { 0.0, 0.0 };
+		//static int counter = 0;
+
+		ImGui::Begin("Editor");     // Create a window called "Editor" and append into it.
+		ImGui::Text("User Model control");
+		ImGui::SliderFloat2("scale", scale, -1.0, 1.0);
+
+		ImGui::SliderFloat("rotation", &rotation, 0, 2 * pi);
+
+		static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
+		// pass the parameters to the shader
+		//.setUniform("rotation", rotation);
+		//triangle_shader.setUniform("translation", translation[0], translation[1]);
+		// color picker
+		ImGui::ColorEdit3("color", color);
+		//multiply triangle's color with this color
+		//triangle_shader.setUniform("color", color[0], color[1], color[2]);
+
+		
+		
+		//ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+		//ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+		//
+		//if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+		//	counter++;
+		//ImGui::SameLine();
+		//ImGui::Text("counter = %d", counter);
+		//
+		//ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
 	}
 }

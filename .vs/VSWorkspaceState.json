@@ -1,10 +1,13 @@
 {
   "ExpandedNodes": [
     "",
+    "\\ThirdParty",
+    "\\ThirdParty\\imgui",
+    "\\ThirdParty\\imgui\\imgui",
     "\\Viewer",
     "\\Viewer\\include",
     "\\Viewer\\src"
   ],
-  "SelectedNode": "\\Viewer\\src\\Renderer.cpp",
+  "SelectedNode": "\\Viewer\\include\\InitShader.h",
   "PreviewInSolutionExplorer": false
 }
