@@ -263,17 +263,17 @@ void Renderer::Render(const Scene& scene)
 	float delta_x = 0.0f;
 	float delta_y = 0.0f;
 
+	//Drawing Axises :
+	DrawLine(glm::vec2(0, half_height), glm::vec2(viewport_width_, half_height), glm::vec3(0.0f, 0.0f, 1.0f));
+	DrawLine(glm::vec2(half_width, 0), glm::vec2(half_width, viewport_height_), glm::vec3(1.0f, 0.0f, 0.0f));
+
 	//Active model is the last opened file ( last read obj file)
 	if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
 	{
 		MeshModel model = scene.GetActiveModel(); // Gets active model 
 		std::vector<glm::vec3> vertices = model.get_vertices(); // Gets the vertices
 
-		//Drawing Axises :
-		DrawLine(glm::vec2(0, half_height), glm::vec2(viewport_width_, half_height), glm::vec3(0.0f, 0.0f, 1.0f));
-		DrawLine(glm::vec2(half_width, 0), glm::vec2(half_width, viewport_height_), glm::vec3(1.0f, 0.0f, 0.0f));
-
-		//Check bounderies 0 < V < 1000
+		// Check bounderies 0 < V < 1000
 		for (int i = 0; i < vertices.size(); i++)
 		{
 			Max_x = (Max_x < vertices[i].x) ? vertices[i].x : Max_x;
@@ -305,13 +305,6 @@ void Renderer::Render(const Scene& scene)
 			glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
 		);
-		glm::mat4 Rotate_mat // Rotating matrix 
-		(
-			glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
-			glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
-			glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-			glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
-		);
 
 		for (int faces_c = 0; faces_c < model.GetFacesCount(); faces_c++)
 		{
@@ -325,12 +318,14 @@ void Renderer::Render(const Scene& scene)
 			glm::vec4 v3(p3, 1.0f);
 
 			//Final matrix : in this case of multiplying matrices Order does matter...
-			glm::mat4 Final_mat = Translate_mat * Scale_mat * Rotate_mat;
-		
+			glm::mat4x4 Final_m = Translate_mat * Scale_mat;
+			Final_m = Final_m * scene.GetTranslate() * scene.GetScale();
+			//Final_m = Final_m * scene.GetScale();
+
 			//Transformations = Final_mat*(V) 1X4
-			v1 = Final_mat * v1;
-			v2 = Final_mat * v2;
-			v3 = Final_mat * v3;
+			v1 = Final_m * v1;
+			v2 = Final_m * v2;
+			v3 = Final_m * v3;
 			
 			//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 			//Lines color is default black...

@@ -6,7 +6,13 @@ Scene::Scene() :
 	active_camera_index_(0),
 	active_model_index_(0)
 {
-
+	//Inittiating the Transformation matrices
+	Transformation =  Translate = Scale = Rotate ={
+		glm::vec4(1.0f,0.0f,0.0f,0.0f),
+		glm::vec4(0.0f,1.0f,0.0f,0.0f),
+		glm::vec4(0.0f,0.0f,1.0f,0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+	};
 }
 
 void Scene::AddModel(const std::shared_ptr<MeshModel>& mesh_model)
@@ -67,4 +73,50 @@ void Scene::SetActiveModelIndex(int index)
 int Scene::GetActiveModelIndex() const
 {
 	return active_model_index_;
+}
+
+void Scene::SetLocalOrWorld(int index)
+{
+	LocalOrWorld = index;
+}
+int Scene::GetLocalOrWorld() const
+{
+	return LocalOrWorld;
+}
+
+/******************Setters&Getters*****************/
+const glm::mat4x4& Scene::GetTransformation() const
+{
+	return Transformation;
+}
+void Scene::SetTransformation(glm::mat4x4& mat)
+{
+	Transformation = mat ;
+}
+
+const glm::mat4x4& Scene::GetTranslate() const
+{
+	return Translate;
+}
+void Scene::SetTranslate(glm::mat4x4& mat)
+{
+	Translate = mat;
+}
+
+const glm::mat4x4& Scene::GetScale() const
+{
+	return Scale;
+}
+void Scene::SetScale(glm::mat4x4& mat)
+{
+	Scale = mat;
+}
+
+const glm::mat4x4& Scene::GetRotate() const
+{
+	return Rotate;
+}
+void Scene::SetRotate(glm::mat4x4& mat)
+{
+	Rotate = mat;
 }

@@ -251,36 +251,58 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 
 	//Editor window :
 	{
-		static float rotation = 0.0;
-		static float scale[] = { 0.0, 0.0 };
-		//static int counter = 0;
+		static float scale[] = { 0.0f, 0.0f };
+		static float position[] = { 0.0f, 0.0f };
+		static float Alpha = 0.0f;
 
 		ImGui::Begin("Editor");     // Create a window called "Editor" and append into it.
 		ImGui::Text("User Model control");
-		ImGui::SliderFloat2("scale", scale, -1.0, 1.0);
 
-		ImGui::SliderFloat("rotation", &rotation, 0, 2 * pi);
+		enum Mode
+		{
+			Local_Mode,
+			World_Mode
+		};
+		static int mode = 0;
+		if (ImGui::RadioButton("Local_Mode", mode == Local_Mode)) { mode = Local_Mode; } ImGui::SameLine();
+		if (ImGui::RadioButton("World_Mode", mode == World_Mode)) { mode = World_Mode; }
+				
+		ImGui::SliderFloat2("scale   X(0:2)", scale, -1.0f, 1.0f);
+		glm::mat4 Scaling = {
+		glm::vec4(scale[0]+1,0.0f,0.0f,0.0f),
+		glm::vec4(0.0f,scale[1]+1,0.0f,0.0f),
+		glm::vec4(0.0f,0.0f,1.0f,0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		scene.SetScale(Scaling);
+
+		ImGui::SliderFloat2("position (x,y)", position, -0.1f, 0.1f);
+		glm::mat4 Translate = {
+		glm::vec4(1.0f,0.0f,0.0f,0.0f),
+		glm::vec4(0.0f,1.0f,0.0f,0.0f),
+		glm::vec4(0.0f,0.0f,1.0f,0.0f),
+		glm::vec4(position[0],position[1],0.0f,1.0f)
+		};
+		scene.SetTranslate(Translate);
+
+		ImGui::SliderFloat("rotation (0-2pi)r", &Alpha, 0, 2 * pi);
+		glm::mat4 Rotate = {
+		glm::vec4(1.0f,0.0f,0.0f,0.0f),
+		glm::vec4(0.0f,1.0f,0.0f,0.0f),
+		glm::vec4(0.0f,0.0f,1.0f,0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		//scene.SetTransformation1(Rotate);
+
+		//scene.AddCamera(std::shared_ptr<Camera> camera);
+		//ImGui::SliderFloat3("camera", position, -1.0, 1.0);
+		//v1 = glm::vec3(position[0], position[1], position[2]);
+		//camera.SetCameraLookAt(v1,v2,v3);
 
 		static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
-		// pass the parameters to the shader
-		//.setUniform("rotation", rotation);
-		//triangle_shader.setUniform("translation", translation[0], translation[1]);
-		// color picker
+		
 		ImGui::ColorEdit3("color", color);
-		//multiply triangle's color with this color
-		//triangle_shader.setUniform("color", color[0], color[1], color[2]);
-
 		
-		
-		//ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-		//ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
-		//
-		//if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
-		//	counter++;
-		//ImGui::SameLine();
-		//ImGui::Text("counter = %d", counter);
-		//
-		//ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
 	}
 }

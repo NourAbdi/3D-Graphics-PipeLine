@@ -119,6 +119,8 @@ in the report.(blob model):**
 
 ![blob mesh](https://user-images.githubusercontent.com/34486030/98930727-b0f6b100-24e5-11eb-8058-79d404309395.png)
 
+**4. Create a GUI items to specify the local and world transformation that should be applied
+to the model**
 
 
 
