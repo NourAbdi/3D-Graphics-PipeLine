@@ -291,13 +291,20 @@ void Renderer::Render(const Scene& scene)
 		Avg_x = Avg_x * delta_x;
 		Avg_y = Avg_y * delta_y;
 
-		glm::mat4 Translate_mat // Translation matrix to put the model in the right place
+		glm::mat4 Translate_mat // Translation matrix to put the model in the midle of thes creen
 		(
 			glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
 			glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
 			glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
 			glm::vec4(half_width- Avg_x, half_height- Avg_y, 0.0f, 1.0f)
 		);
+		glm::mat4 Translate_Back_mat // Translation matrix to put the model in (0,0)
+		(
+			glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
+			glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
+			glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
+			glm::vec4(Avg_x - half_width, Avg_y - half_width, 0.0f, 1.0f)
+		); 
 		glm::mat4 Scale_mat // Scaling matrix to adjust the size of the model
 		(
 			glm::vec4(delta_x, 0.0f, 0.0f, 0.0f),
@@ -318,9 +325,30 @@ void Renderer::Render(const Scene& scene)
 			glm::vec4 v3(p3, 1.0f);
 
 			//Final matrix : in this case of multiplying matrices Order does matter...
-			glm::mat4x4 Final_m = Translate_mat * Scale_mat;
-			Final_m = Final_m * scene.GetTranslate() * scene.GetScale();
-			//Final_m = Final_m * scene.GetScale();
+			glm::mat4 Final_m ;
+			if (scene.GetLocalOrWorld()==1)			// World mode :
+			{
+				v1 = Translate_mat * Scale_mat * v1;
+				v2 = Translate_mat * Scale_mat * v2;
+				v3 = Translate_mat * Scale_mat * v3;
+				v1 = Translate_Back_mat * v1;
+				v2 = Translate_Back_mat * v2;
+				v3 = Translate_Back_mat * v3;
+				v1 = scene.GetRotate() * v1;
+				v2 = scene.GetRotate() * v2;
+				v3 = scene.GetRotate() * v3;
+				v1 = Translate_mat * v1;
+				v2 = Translate_mat * v2;
+				v3 = Translate_mat * v3;
+				//Final_m = Final_m * scene.GetRotate();
+				Final_m = scene.GetTranslate() * scene.GetScale() ;
+			}
+			else if (scene.GetLocalOrWorld()==0)	// Local mode :
+			{
+				//Final_m = Translate_Center_mat;
+				Final_m = Translate_mat * Scale_mat * scene.GetTranslate() * scene.GetScale() * scene.GetRotate();
+				//Final_m = Final_m * Translate_Back_mat;
+			}
 
 			//Transformations = Final_mat*(V) 1X4
 			v1 = Final_m * v1;

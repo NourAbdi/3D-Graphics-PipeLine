@@ -251,54 +251,67 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 
 	//Editor window :
 	{
-		static float scale[] = { 0.0f, 0.0f };
-		static float position[] = { 0.0f, 0.0f };
-		static float Alpha = 0.0f;
-
-		ImGui::Begin("Editor");     // Create a window called "Editor" and append into it.
-		ImGui::Text("User Model control");
-
 		enum Mode
 		{
 			Local_Mode,
 			World_Mode
 		};
 		static int mode = 0;
+		static float scale[] = { 0.0f, 0.0f };
+		static float position[] = { 0.0f, 0.0f };
+		static float Alpha_X = 0.0f;
+		static float Alpha_Y = 0.0f;
+		static float Alpha_Z = 0.0f;
+
+		ImGui::Begin("Editor");     // Create a window called "Editor" and append into it.
+		ImGui::Text("User Model control");
+
 		if (ImGui::RadioButton("Local_Mode", mode == Local_Mode)) { mode = Local_Mode; } ImGui::SameLine();
 		if (ImGui::RadioButton("World_Mode", mode == World_Mode)) { mode = World_Mode; }
+		scene.SetLocalOrWorld(mode);
 				
 		ImGui::SliderFloat2("scale   X(0:2)", scale, -1.0f, 1.0f);
 		glm::mat4 Scaling = {
-		glm::vec4(scale[0]+1,0.0f,0.0f,0.0f),
-		glm::vec4(0.0f,scale[1]+1,0.0f,0.0f),
-		glm::vec4(0.0f,0.0f,1.0f,0.0f),
-		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+			glm::vec4(scale[0]+1,0.0f,0.0f,0.0f),
+			glm::vec4(0.0f,scale[1]+1,0.0f,0.0f),
+			glm::vec4(0.0f,0.0f,1.0f,0.0f),
+			glm::vec4(0.0f,0.0f,0.0f,1.0f)
 		};
 		scene.SetScale(Scaling);
 
 		ImGui::SliderFloat2("position (x,y)", position, -0.1f, 0.1f);
 		glm::mat4 Translate = {
-		glm::vec4(1.0f,0.0f,0.0f,0.0f),
-		glm::vec4(0.0f,1.0f,0.0f,0.0f),
-		glm::vec4(0.0f,0.0f,1.0f,0.0f),
-		glm::vec4(position[0],position[1],0.0f,1.0f)
+			glm::vec4(1.0f,0.0f,0.0f,0.0f),
+			glm::vec4(0.0f,1.0f,0.0f,0.0f),
+			glm::vec4(0.0f,0.0f,1.0f,0.0f),
+			glm::vec4(position[0],position[1],0.0f,1.0f)
 		};
 		scene.SetTranslate(Translate);
 
-		ImGui::SliderFloat("rotation (0-2pi)r", &Alpha, 0, 2 * pi);
-		glm::mat4 Rotate = {
+		ImGui::SliderFloat("X-rotation (0~2pi)", &Alpha_X, 0, 2 * pi);
+		ImGui::SliderFloat("Y-rotation (0~2pi)", &Alpha_Y, 0, 2 * pi);
+		ImGui::SliderFloat("Z-rotation (0~2pi)", &Alpha_Z, 0, 2 * pi);
+		glm::mat4 Rotate_X = {
 		glm::vec4(1.0f,0.0f,0.0f,0.0f),
+		glm::vec4(0.0f,cos(Alpha_X),sin(Alpha_X),0.0f),
+		glm::vec4(0.0f,-sin(Alpha_X),cos(Alpha_X),0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		glm::mat4 Rotate_Y = {
+		glm::vec4(cos(Alpha_Y),0.0f,sin(Alpha_Y),0.0f),
 		glm::vec4(0.0f,1.0f,0.0f,0.0f),
+		glm::vec4(-sin(Alpha_Y),0.0f,cos(Alpha_Y),0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		glm::mat4 Rotate_Z = {
+		glm::vec4(cos(Alpha_Z),sin(Alpha_Z),0.0f,0.0f),
+		glm::vec4(-sin(Alpha_Z),cos(Alpha_Z),0.0f,0.0f),
 		glm::vec4(0.0f,0.0f,1.0f,0.0f),
 		glm::vec4(0.0f,0.0f,0.0f,1.0f)
 		};
-		//scene.SetTransformation1(Rotate);
-
-		//scene.AddCamera(std::shared_ptr<Camera> camera);
-		//ImGui::SliderFloat3("camera", position, -1.0, 1.0);
-		//v1 = glm::vec3(position[0], position[1], position[2]);
-		//camera.SetCameraLookAt(v1,v2,v3);
-
+		glm::mat4 Rotate = Rotate_X * Rotate_Y * Rotate_Z; ;
+		scene.SetRotate(Rotate);
+		
 		static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
 		
 		ImGui::ColorEdit3("color", color);
