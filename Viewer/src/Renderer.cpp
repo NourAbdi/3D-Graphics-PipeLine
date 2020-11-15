@@ -262,6 +262,7 @@ void Renderer::Render(const Scene& scene)
 	float Avg_y	= 0.0f;
 	float delta_x = 0.0f;
 	float delta_y = 0.0f;
+	float delta_z = 0.0f;
 
 	//Drawing Axises :
 	DrawLine(glm::vec2(0, half_height), glm::vec2(viewport_width_, half_height), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -270,8 +271,10 @@ void Renderer::Render(const Scene& scene)
 	//Active model is the last opened file ( last read obj file)
 	if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
 	{
-		MeshModel model = scene.GetActiveModel(); // Gets active model 
+		MeshModel &model = scene.GetActiveModel(); // Gets active model 
 		std::vector<glm::vec3> vertices = model.get_vertices(); // Gets the vertices
+		
+		glm::mat4 Final_m = model.DoTransformation();
 
 		// Check bounderies 0 < V < 1000
 		for (int i = 0; i < vertices.size(); i++)
@@ -288,6 +291,7 @@ void Renderer::Render(const Scene& scene)
 		Max = (max1 > max2) ? max1 : max2;
 		delta_x = half_width / Max;
 		delta_y = half_height / Max;
+		delta_z = half_height / Max;
 		Avg_x = Avg_x * delta_x;
 		Avg_y = Avg_y * delta_y;
 
@@ -298,18 +302,25 @@ void Renderer::Render(const Scene& scene)
 			glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
 			glm::vec4(half_width- Avg_x, half_height- Avg_y, 0.0f, 1.0f)
 		);
+		glm::mat4 Translate_Back_matt // Translation matrix to put the model in (0,0)
+		(
+			glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
+			glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
+			glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
+			glm::vec4( half_width, half_height, 0.0f, 1.0f)
+		); 
 		glm::mat4 Translate_Back_mat // Translation matrix to put the model in (0,0)
 		(
 			glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
 			glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
 			glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-			glm::vec4(Avg_x - half_width, Avg_y - half_width, 0.0f, 1.0f)
-		); 
+			glm::vec4(-Avg_x, -Avg_y, 0.0f, 1.0f)
+		);
 		glm::mat4 Scale_mat // Scaling matrix to adjust the size of the model
 		(
 			glm::vec4(delta_x, 0.0f, 0.0f, 0.0f),
 			glm::vec4(0.0f, delta_y, 0.0f, 0.0f),
-			glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
+			glm::vec4(0.0f, 0.0f, delta_z, 0.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
 		);
 
@@ -324,37 +335,23 @@ void Renderer::Render(const Scene& scene)
 			glm::vec4 v2(p2, 1.0f);
 			glm::vec4 v3(p3, 1.0f);
 
-			//Final matrix : in this case of multiplying matrices Order does matter...
-			glm::mat4 Final_m ;
-			if (scene.GetLocalOrWorld()==1)			// World mode :
+			glm::mat4 Transformations;
+			//In this case of multiplying matrices ,Order does matter... 
+			if (model.GetLocalOrWorld()==1)			// World mode :
 			{
-				v1 = Translate_mat * Scale_mat * v1;
-				v2 = Translate_mat * Scale_mat * v2;
-				v3 = Translate_mat * Scale_mat * v3;
-				v1 = Translate_Back_mat * v1;
-				v2 = Translate_Back_mat * v2;
-				v3 = Translate_Back_mat * v3;
-				v1 = scene.GetRotate() * v1;
-				v2 = scene.GetRotate() * v2;
-				v3 = scene.GetRotate() * v3;
-				v1 = Translate_mat * v1;
-				v2 = Translate_mat * v2;
-				v3 = Translate_mat * v3;
-				//Final_m = Final_m * scene.GetRotate();
-				Final_m = scene.GetTranslate() * scene.GetScale() ;
+				//Transformations = Final_mat*(V) 1X4
+				Transformations = Final_m * Translate_mat * Scale_mat ;
 			}
-			else if (scene.GetLocalOrWorld()==0)	// Local mode :
+			else if (model.GetLocalOrWorld()==0)	// Local mode :
 			{
-				//Final_m = Translate_Center_mat;
-				Final_m = Translate_mat * Scale_mat * scene.GetTranslate() * scene.GetScale() * scene.GetRotate();
-				//Final_m = Final_m * Translate_Back_mat;
+				//Transformations = Final_mat*(V) 1X4
+				Transformations = Translate_Back_matt * Final_m * Translate_Back_mat * Scale_mat;
 			}
 
-			//Transformations = Final_mat*(V) 1X4
-			v1 = Final_m * v1;
-			v2 = Final_m * v2;
-			v3 = Final_m * v3;
-			
+			v1 = Transformations * v1;
+			v2 = Transformations * v2;
+			v3 = Transformations * v3;
+
 			//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 			//Lines color is default black...
 			glm::vec2 d1(v1.x, v1.y);

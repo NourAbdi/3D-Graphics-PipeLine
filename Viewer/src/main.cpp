@@ -21,6 +21,18 @@ bool show_demo_window = false;
 bool show_another_window = false;
 glm::vec4 clear_color = glm::vec4(1.00f, 1.00f, 1.00f, 1.00f);
 
+enum Mode
+{
+	Local_Mode,
+	World_Mode
+};
+static int mode = 0;
+
+static float scale[] = { 0.0f, 0.0f };
+static float position[] = { 0.0f, 0.0f };
+static float Alpha_X = 0.0f;
+static float Alpha_Y = 0.0f;
+static float Alpha_Z = 0.0f;	
 /**
  * Function declarations
  */
@@ -251,24 +263,11 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 
 	//Editor window :
 	{
-		enum Mode
-		{
-			Local_Mode,
-			World_Mode
-		};
-		static int mode = 0;
-		static float scale[] = { 0.0f, 0.0f };
-		static float position[] = { 0.0f, 0.0f };
-		static float Alpha_X = 0.0f;
-		static float Alpha_Y = 0.0f;
-		static float Alpha_Z = 0.0f;
-
 		ImGui::Begin("Editor");     // Create a window called "Editor" and append into it.
 		ImGui::Text("User Model control");
 
 		if (ImGui::RadioButton("Local_Mode", mode == Local_Mode)) { mode = Local_Mode; } ImGui::SameLine();
 		if (ImGui::RadioButton("World_Mode", mode == World_Mode)) { mode = World_Mode; }
-		scene.SetLocalOrWorld(mode);
 				
 		ImGui::SliderFloat2("scale   X(0:2)", scale, -1.0f, 1.0f);
 		glm::mat4 Scaling = {
@@ -277,16 +276,14 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			glm::vec4(0.0f,0.0f,1.0f,0.0f),
 			glm::vec4(0.0f,0.0f,0.0f,1.0f)
 		};
-		scene.SetScale(Scaling);
 
-		ImGui::SliderFloat2("position (x,y)", position, -0.1f, 0.1f);
+		ImGui::SliderFloat2("position (x,y)", position, -1.0f, 1.0f);
 		glm::mat4 Translate = {
 			glm::vec4(1.0f,0.0f,0.0f,0.0f),
 			glm::vec4(0.0f,1.0f,0.0f,0.0f),
 			glm::vec4(0.0f,0.0f,1.0f,0.0f),
-			glm::vec4(position[0],position[1],0.0f,1.0f)
+			glm::vec4(position[0]*500,position[1]*350,0.0f,1.0f)
 		};
-		scene.SetTranslate(Translate);
 
 		ImGui::SliderFloat("X-rotation (0~2pi)", &Alpha_X, 0, 2 * pi);
 		ImGui::SliderFloat("Y-rotation (0~2pi)", &Alpha_Y, 0, 2 * pi);
@@ -309,8 +306,16 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		glm::vec4(0.0f,0.0f,1.0f,0.0f),
 		glm::vec4(0.0f,0.0f,0.0f,1.0f)
 		};
-		glm::mat4 Rotate = Rotate_X * Rotate_Y * Rotate_Z; ;
-		scene.SetRotate(Rotate);
+		glm::mat4 Rotate = Rotate_Z * Rotate_Y * Rotate_X; ;
+
+		if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
+		{
+			MeshModel &model = scene.GetActiveModel(); // Gets active model
+			model.SetLocalOrWorld(mode);
+			model.SetScale(Scaling);
+			model.SetTranslate(Translate);
+			model.SetRotate(Rotate);
+		}
 		
 		static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
 		
