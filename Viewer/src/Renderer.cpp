@@ -263,6 +263,27 @@ void Renderer::Render(const Scene& scene)
 	float delta_x = 0.0f;
 	float delta_y = 0.0f;
 	float delta_z = 0.0f;
+	glm::mat4 Transformations
+	(
+		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
+	);
+	glm::mat4 LTransformations
+	(
+		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
+	);
+	glm::mat4 WTransformations
+	(
+		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
+		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
+	);
 
 	//Drawing Axises :
 	DrawLine(glm::vec2(0, half_height), glm::vec2(viewport_width_, half_height), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -274,7 +295,9 @@ void Renderer::Render(const Scene& scene)
 		MeshModel &model = scene.GetActiveModel(); // Gets active model 
 		std::vector<glm::vec3> vertices = model.get_vertices(); // Gets the vertices
 		
-		glm::mat4 Final_m = model.DoTransformation();
+		glm::mat4 Final_L = model.DoLTransformation();
+		glm::mat4 Final_W = model.DoWTransformation();
+		glm::vec3 Model_Color = model.GetColor();
 
 		// Check bounderies 0 < V < 1000
 		for (int i = 0; i < vertices.size(); i++)
@@ -323,6 +346,21 @@ void Renderer::Render(const Scene& scene)
 			glm::vec4(0.0f, 0.0f, delta_z, 0.0f),
 			glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
 		);
+		
+		//In this case of multiplying matrices ,Order does matter... 
+		if (model.GetLocalOrWorld() == 1)			// World mode :
+		{
+			Final_W = model.DoWTransformation();
+			Transformations = Final_W * Translate_mat * Scale_mat;
+			model.SetWTransform(Final_W);
+		}
+		else if (model.GetLocalOrWorld() == 0)	// Local mode :
+		{
+			Transformations = Translate_Back_matt * Final_L * Translate_Back_mat * Scale_mat;
+			model.SetLTransform(Final_L) ;
+		}
+		//Transformations = Final_mat*(V) 1X4
+		//Transformations = model.GetLTransform() * model.GetWTransform();
 
 		for (int faces_c = 0; faces_c < model.GetFacesCount(); faces_c++)
 		{
@@ -334,20 +372,7 @@ void Renderer::Render(const Scene& scene)
 			glm::vec4 v1(p1, 1.0f);
 			glm::vec4 v2(p2, 1.0f);
 			glm::vec4 v3(p3, 1.0f);
-
-			glm::mat4 Transformations;
-			//In this case of multiplying matrices ,Order does matter... 
-			if (model.GetLocalOrWorld()==1)			// World mode :
-			{
-				//Transformations = Final_mat*(V) 1X4
-				Transformations = Final_m * Translate_mat * Scale_mat ;
-			}
-			else if (model.GetLocalOrWorld()==0)	// Local mode :
-			{
-				//Transformations = Final_mat*(V) 1X4
-				Transformations = Translate_Back_matt * Final_m * Translate_Back_mat * Scale_mat;
-			}
-
+			
 			v1 = Transformations * v1;
 			v2 = Transformations * v2;
 			v3 = Transformations * v3;
@@ -358,9 +383,9 @@ void Renderer::Render(const Scene& scene)
 			glm::vec2 d2(v2.x, v2.y);
 			glm::vec2 d3(v3.x, v3.y);
 		
-			DrawLine(d1,d2, glm::vec3(0.0f, 0.0f, 0.0f));
-			DrawLine(d1,d3, glm::vec3(0.0f, 0.0f, 0.0f));
-			DrawLine(d2,d3, glm::vec3(0.0f, 0.0f, 0.0f));
+			DrawLine(d1,d2, Model_Color);
+			DrawLine(d1,d3, Model_Color);
+			DrawLine(d2,d3, Model_Color);
 		}
 	}
 }

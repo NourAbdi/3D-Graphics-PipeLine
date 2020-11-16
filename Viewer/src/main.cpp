@@ -21,18 +21,6 @@ bool show_demo_window = false;
 bool show_another_window = false;
 glm::vec4 clear_color = glm::vec4(1.00f, 1.00f, 1.00f, 1.00f);
 
-enum Mode
-{
-	Local_Mode,
-	World_Mode
-};
-static int mode = 0;
-
-static float scale[] = { 0.0f, 0.0f };
-static float position[] = { 0.0f, 0.0f };
-static float Alpha_X = 0.0f;
-static float Alpha_Y = 0.0f;
-static float Alpha_Z = 0.0f;	
 /**
  * Function declarations
  */
@@ -263,64 +251,169 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 
 	//Editor window :
 	{
+		static int mode = 0;
+		static float Lscale[] = { 0.0f, 0.0f };
+		static float Lposition[] = { 0.0f, 0.0f };
+		static float LAlpha_X = 0.0f;
+		static float LAlpha_Y = 0.0f;
+		static float LAlpha_Z = 0.0f;
+		static float Wscale[] = { 0.0f, 0.0f };
+		static float Wposition[] = { 0.0f, 0.0f };
+		static float WAlpha_X = 0.0f;
+		static float WAlpha_Y = 0.0f;
+		static float WAlpha_Z = 0.0f;
+		static glm::vec3 color( 0.0f, 0.0f, 0.0f);
+		static glm::mat4 LScaling = {
+					glm::vec4(1.0f,0.0f,0.0f,0.0f),
+					glm::vec4(0.0f,1.0f,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		static glm::mat4 LTranslate = {
+					glm::vec4(1.0f,0.0f,0.0f,0.0f),
+					glm::vec4(0.0f,1.0f,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		static glm::mat4 LRotate = {
+					glm::vec4(1.0f,0.0f,0.0f,0.0f),
+					glm::vec4(0.0f,1.0f,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		static glm::mat4 WScaling = {
+					glm::vec4(1.0f,0.0f,0.0f,0.0f),
+					glm::vec4(0.0f,1.0f,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		static glm::mat4 WTranslate = {
+					glm::vec4(1.0f,0.0f,0.0f,0.0f),
+					glm::vec4(0.0f,1.0f,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		static glm::mat4 WRotate = {
+					glm::vec4(1.0f,0.0f,0.0f,0.0f),
+					glm::vec4(0.0f,1.0f,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+
 		ImGui::Begin("Editor");     // Create a window called "Editor" and append into it.
 		ImGui::Text("User Model control");
 
-		if (ImGui::RadioButton("Local_Mode", mode == Local_Mode)) { mode = Local_Mode; } ImGui::SameLine();
-		if (ImGui::RadioButton("World_Mode", mode == World_Mode)) { mode = World_Mode; }
-				
-		ImGui::SliderFloat2("scale   X(0:2)", scale, -1.0f, 1.0f);
-		glm::mat4 Scaling = {
-			glm::vec4(scale[0]+1,0.0f,0.0f,0.0f),
-			glm::vec4(0.0f,scale[1]+1,0.0f,0.0f),
-			glm::vec4(0.0f,0.0f,1.0f,0.0f),
-			glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
+		if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+		{
+			if (ImGui::BeginTabItem("Local_Mode"))
+			{
+				mode = 0;
+				ImGui::SliderFloat2("scale    (x,y)X(0~2)", Lscale, -1.0f, 1.0f);
+				LScaling = {
+					glm::vec4(Lscale[0] + 1,0.0f,0.0f,0.0f),
+					glm::vec4(0.0f,Lscale[1] + 1,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
 
-		ImGui::SliderFloat2("position (x,y)", position, -1.0f, 1.0f);
-		glm::mat4 Translate = {
-			glm::vec4(1.0f,0.0f,0.0f,0.0f),
-			glm::vec4(0.0f,1.0f,0.0f,0.0f),
-			glm::vec4(0.0f,0.0f,1.0f,0.0f),
-			glm::vec4(position[0]*500,position[1]*350,0.0f,1.0f)
-		};
+				ImGui::SliderFloat2("position (x+500,y+350)", Lposition, -1.0f, 1.0f);
+				LTranslate = {
+					glm::vec4(1.0f,0.0f,0.0f,0.0f),
+					glm::vec4(0.0f,1.0f,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(Lposition[0] * 500,Lposition[1] * 350,0.0f,1.0f)
+				};
 
-		ImGui::SliderFloat("X-rotation (0~2pi)", &Alpha_X, 0, 2 * pi);
-		ImGui::SliderFloat("Y-rotation (0~2pi)", &Alpha_Y, 0, 2 * pi);
-		ImGui::SliderFloat("Z-rotation (0~2pi)", &Alpha_Z, 0, 2 * pi);
-		glm::mat4 Rotate_X = {
-		glm::vec4(1.0f,0.0f,0.0f,0.0f),
-		glm::vec4(0.0f,cos(Alpha_X),sin(Alpha_X),0.0f),
-		glm::vec4(0.0f,-sin(Alpha_X),cos(Alpha_X),0.0f),
-		glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		glm::mat4 Rotate_Y = {
-		glm::vec4(cos(Alpha_Y),0.0f,sin(Alpha_Y),0.0f),
-		glm::vec4(0.0f,1.0f,0.0f,0.0f),
-		glm::vec4(-sin(Alpha_Y),0.0f,cos(Alpha_Y),0.0f),
-		glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		glm::mat4 Rotate_Z = {
-		glm::vec4(cos(Alpha_Z),sin(Alpha_Z),0.0f,0.0f),
-		glm::vec4(-sin(Alpha_Z),cos(Alpha_Z),0.0f,0.0f),
-		glm::vec4(0.0f,0.0f,1.0f,0.0f),
-		glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		glm::mat4 Rotate = Rotate_Z * Rotate_Y * Rotate_X; ;
+				ImGui::SliderFloat("X-rotation (0~2pi)", &LAlpha_X, 0, 2 * pi);
+				ImGui::SliderFloat("Y-rotation (0~2pi)", &LAlpha_Y, 0, 2 * pi);
+				ImGui::SliderFloat("Z-rotation (0~2pi)", &LAlpha_Z, 0, 2 * pi);
+				glm::mat4 Rotate_X = {
+				glm::vec4(1.0f,0.0f,0.0f,0.0f),
+				glm::vec4(0.0f,cos(LAlpha_X),sin(LAlpha_X),0.0f),
+				glm::vec4(0.0f,-sin(LAlpha_X),cos(LAlpha_X),0.0f),
+				glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
+				glm::mat4 Rotate_Y = {
+				glm::vec4(cos(LAlpha_Y),0.0f,sin(LAlpha_Y),0.0f),
+				glm::vec4(0.0f,1.0f,0.0f,0.0f),
+				glm::vec4(-sin(LAlpha_Y),0.0f,cos(LAlpha_Y),0.0f),
+				glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
+				glm::mat4 Rotate_Z = {
+				glm::vec4(cos(LAlpha_Z),sin(LAlpha_Z),0.0f,0.0f),
+				glm::vec4(-sin(LAlpha_Z),cos(LAlpha_Z),0.0f,0.0f),
+				glm::vec4(0.0f,0.0f,1.0f,0.0f),
+				glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
+				LRotate = Rotate_Z * Rotate_Y * Rotate_X; 
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("World_Mode"))
+			{
+				mode = 1;
+				ImGui::SliderFloat2("scale    (x,y)X(0~2)", Wscale, -1.0f, 1.0f);
+				WScaling = {
+					glm::vec4(Wscale[0] + 1,0.0f,0.0f,0.0f),
+					glm::vec4(0.0f,Wscale[1] + 1,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
+
+				ImGui::SliderFloat2("position (x+500,y+350)", Wposition, -1.0f, 1.0f);
+				WTranslate = {
+					glm::vec4(1.0f,0.0f,0.0f,0.0f),
+					glm::vec4(0.0f,1.0f,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(Wposition[0] * 500,Wposition[1] * 350,0.0f,1.0f)
+				};
+
+				ImGui::SliderFloat("X-rotation (0~2pi)", &WAlpha_X, 0, 2 * pi);
+				ImGui::SliderFloat("Y-rotation (0~2pi)", &WAlpha_Y, 0, 2 * pi);
+				ImGui::SliderFloat("Z-rotation (0~2pi)", &WAlpha_Z, 0, 2 * pi);
+				glm::mat4 Rotate_X = {
+				glm::vec4(1.0f,0.0f,0.0f,0.0f),
+				glm::vec4(0.0f,cos(WAlpha_X),sin(WAlpha_X),0.0f),
+				glm::vec4(0.0f,-sin(WAlpha_X),cos(WAlpha_X),0.0f),
+				glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
+				glm::mat4 Rotate_Y = {
+				glm::vec4(cos(WAlpha_Y),0.0f,sin(WAlpha_Y),0.0f),
+				glm::vec4(0.0f,1.0f,0.0f,0.0f),
+				glm::vec4(-sin(WAlpha_Y),0.0f,cos(WAlpha_Y),0.0f),
+				glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
+				glm::mat4 Rotate_Z = {
+				glm::vec4(cos(WAlpha_Z),sin(WAlpha_Z),0.0f,0.0f),
+				glm::vec4(-sin(WAlpha_Z),cos(WAlpha_Z),0.0f,0.0f),
+				glm::vec4(0.0f,0.0f,1.0f,0.0f),
+				glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
+				WRotate = Rotate_Z * Rotate_Y * Rotate_X; ;
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+		}
+
+		ImGui::ColorEdit3("color", (float*)&color);
 
 		if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
 		{
 			MeshModel &model = scene.GetActiveModel(); // Gets active model
 			model.SetLocalOrWorld(mode);
-			model.SetScale(Scaling);
-			model.SetTranslate(Translate);
-			model.SetRotate(Rotate);
+			model.SetColor(color);
+			if(mode==1)				// World mode
+			{
+				model.SetWScale(WScaling);
+				model.SetWTranslate(WTranslate);
+				model.SetWRotate(WRotate);
+			}
+			else if(mode == 0)		//Local mode
+			{
+				model.SetLScale(LScaling);
+				model.SetLTranslate(LTranslate);
+				model.SetLRotate(LRotate);
+			}
 		}
-		
-		static float color[4] = { 1.0f,1.0f,1.0f,1.0f };
-		
-		ImGui::ColorEdit3("color", color);
-		
 		ImGui::End();
 	}
 }

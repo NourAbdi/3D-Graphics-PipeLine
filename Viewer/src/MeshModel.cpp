@@ -6,13 +6,14 @@ MeshModel::MeshModel(std::vector<Face> faces, std::vector<glm::vec3> vertices, s
 	normals_(normals)
 {
 	//Inittiating the Transformation matrices
-	Translate = Scale = Rotate = {
+	LTransform = WTransform = LTranslate = LScale = LRotate = WTranslate = WScale = WRotate = {
 	   glm::vec4(1.0f,0.0f,0.0f,0.0f),
 	   glm::vec4(0.0f,1.0f,0.0f,0.0f),
 	   glm::vec4(0.0f,0.0f,1.0f,0.0f),
 	   glm::vec4(0.0f,0.0f,0.0f,1.0f)
 	};
 	LocalOrWorld = 0;
+	ModelColor = glm::vec3(0.0f, 0.0f, 0.0f);
 }
 
 MeshModel::~MeshModel()
@@ -48,35 +49,95 @@ int MeshModel::GetLocalOrWorld() const
 	return LocalOrWorld;
 }
 
-const glm::mat4x4& MeshModel::DoTransformation() const
+const glm::mat4x4& MeshModel::DoLTransformation() const
 {
-	glm::mat4x4 Trans = GetTranslate() * GetRotate() * GetScale();
+	glm::mat4x4 Trans = GetLTranslate() * GetLRotate() * GetLScale();
 	return Trans;
 }
 
-const glm::mat4x4& MeshModel::GetTranslate() const
+const glm::mat4x4& MeshModel::DoWTransformation() const
 {
-	return Translate;
-}
-void MeshModel::SetTranslate(glm::mat4x4& mat)
-{
-	Translate = mat;
+	glm::mat4x4 Trans = GetWTranslate() * GetWRotate() * GetWScale();
+	return Trans;
 }
 
-const glm::mat4x4& MeshModel::GetScale() const
+const glm::mat4x4& MeshModel::GetLTransform() const
 {
-	return Scale;
+	return LTransform;
 }
-void MeshModel::SetScale(glm::mat4x4& mat)
+void MeshModel::SetLTransform(glm::mat4x4& mat)
 {
-	Scale = mat;
+	LTransform = mat;
 }
 
-const glm::mat4x4& MeshModel::GetRotate() const
+const glm::mat4x4& MeshModel::GetWTransform() const
 {
-	return Rotate;
+	return WTransform;
 }
-void MeshModel::SetRotate(glm::mat4x4& mat)
+void MeshModel::SetWTransform(glm::mat4x4& mat)
 {
-	Rotate = mat;
+	WTransform = mat;
+}
+
+const glm::mat4x4& MeshModel::GetLTranslate() const
+{
+	return LTranslate;
+}
+void MeshModel::SetLTranslate(glm::mat4x4& mat)
+{
+	LTranslate = mat;
+}
+
+const glm::mat4x4& MeshModel::GetWTranslate() const
+{
+	return WTranslate;
+}
+void MeshModel::SetWTranslate(glm::mat4x4& mat)
+{
+	WTranslate = mat;
+}
+
+const glm::mat4x4& MeshModel::GetLScale() const
+{
+	return LScale;
+}
+void MeshModel::SetLScale(glm::mat4x4& mat)
+{
+	LScale = mat;
+}
+
+const glm::mat4x4& MeshModel::GetWScale() const
+{
+	return WScale;
+}
+void MeshModel::SetWScale(glm::mat4x4& mat)
+{
+	WScale = mat;
+}
+
+const glm::mat4x4& MeshModel::GetLRotate() const
+{
+	return LRotate;
+}
+void MeshModel::SetLRotate(glm::mat4x4& mat)
+{
+	LRotate = mat;
+}
+
+const glm::mat4x4& MeshModel::GetWRotate() const
+{
+	return WRotate;
+}
+void MeshModel::SetWRotate(glm::mat4x4& mat)
+{
+	WRotate = mat;
+}
+
+const glm::vec3& MeshModel::GetColor() const
+{
+	return ModelColor;
+}
+void MeshModel::SetColor(glm::vec3& vec)
+{
+	ModelColor = vec;
 }

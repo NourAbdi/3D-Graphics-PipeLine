@@ -122,10 +122,21 @@ in the report.(blob model):**
 **4. Create a GUI items to specify the local and world transformation that should be applied
 to the model**
 
+![BananaImgui](https://user-images.githubusercontent.com/34486030/99217802-94a68d00-27e1-11eb-9617-46d95a06f6a5.png)
 
+![bananana](https://user-images.githubusercontent.com/34486030/99251971-e4ec1200-2816-11eb-99e4-60a0801f472c.png)
 
+**5.Show two screenshots comparing the dierence between translating in the model frame and then
+rotating in the world frame, vs. translating in the world frame and then rotating in the
+local frame.**
 
+translating in the model frame and then rotating in the world frame:
 
+![11](https://user-images.githubusercontent.com/34486030/99251945-d867b980-2816-11eb-87e4-2d72be23c066.png)
+
+vs. translating in the world frame and then rotating in the local frame
+
+![222](https://user-images.githubusercontent.com/34486030/99252029-00571d00-2817-11eb-9be8-b85709e76bb5.png)
 
 
 
