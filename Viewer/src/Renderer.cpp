@@ -251,39 +251,17 @@ void Renderer::Render(const Scene& scene)
 	// TODO: Replace this code with real scene rendering code
 	int half_width = viewport_width_ / 2;
 	int half_height = viewport_height_ / 2;
-	float Max = 0.0f;
-	float Max_x = 0.0f;
-	float Max_y = 0.0f;
-	float Min_x = 0.0f;
-	float Min_y = 0.0f;
 	float max1	= 0.0f;
 	float max2	= 0.0f;
+	float max3	= 0.0f;
 	float Avg_x	= 0.0f;
 	float Avg_y	= 0.0f;
+	float Avg_z	= 0.0f;
 	float delta_x = 0.0f;
 	float delta_y = 0.0f;
 	float delta_z = 0.0f;
-	glm::mat4 Transformations
-	(
-		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
-		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
-		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
-	);
-	glm::mat4 LTransformations
-	(
-		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
-		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
-		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
-	);
-	glm::mat4 WTransformations
-	(
-		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
-		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
-		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
-	);
+	bool flag = FALSE;
+	glm::mat4 Transformations;
 
 	//Drawing Axises :
 	DrawLine(glm::vec2(0, half_height), glm::vec2(viewport_width_, half_height), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -294,37 +272,24 @@ void Renderer::Render(const Scene& scene)
 	{
 		MeshModel &model = scene.GetActiveModel(); // Gets active model 
 		std::vector<glm::vec3> vertices = model.get_vertices(); // Gets the vertices
-		
-		glm::mat4 Final_L = model.DoLTransformation();
-		glm::mat4 Final_W = model.DoWTransformation();
+		//flag = model.GetBounding_Box;
+		glm::mat4 Final_L = model.GetLTransform();
+		glm::mat4 Final_W = model.GetWTransform();
 		glm::vec3 Model_Color = model.GetColor();
 
-		// Check bounderies 0 < V < 1000
-		for (int i = 0; i < vertices.size(); i++)
-		{
-			Max_x = (Max_x < vertices[i].x) ? vertices[i].x : Max_x;
-			Max_y = (Max_y < vertices[i].y) ? vertices[i].y : Max_y;
-			Min_y = (Min_y > vertices[i].y) ? vertices[i].y : Min_y;
-			Min_x = (Min_x > vertices[i].x) ? vertices[i].x : Min_x;
-		}
-		Avg_x = (Max_x + Min_x) / 2;
-		Avg_y = (Max_y + Min_y) / 2;
-		max1 = (Max_x - Min_x);
-		max2 = (Max_y - Min_y);
-		Max = (max1 > max2) ? max1 : max2;
-		delta_x = half_width / Max;
-		delta_y = half_height / Max;
-		delta_z = half_height / Max;
+		Avg_x = (model.Getbuondes(0) + model.Getbuondes(3)) / 2;
+		Avg_y = (model.Getbuondes(1) + model.Getbuondes(4)) / 2;
+		Avg_z = (model.Getbuondes(2) + model.Getbuondes(5)) / 2;
+		max1 = (model.Getbuondes(0) - model.Getbuondes(3));
+		max2 = (model.Getbuondes(1) - model.Getbuondes(4));
+
+		delta_x = half_width / max1;
+		delta_y = half_height / max2;
+		delta_z = half_height / max2;
 		Avg_x = Avg_x * delta_x;
 		Avg_y = Avg_y * delta_y;
+		Avg_z = Avg_z * delta_z;
 
-		glm::mat4 Translate_mat // Translation matrix to put the model in the midle of thes creen
-		(
-			glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
-			glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
-			glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-			glm::vec4(half_width- Avg_x, half_height- Avg_y, 0.0f, 1.0f)
-		);
 		glm::mat4 Translate_Back_matt // Translation matrix to put the model in (0,0)
 		(
 			glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
@@ -337,7 +302,7 @@ void Renderer::Render(const Scene& scene)
 			glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
 			glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
 			glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-			glm::vec4(-Avg_x, -Avg_y, 0.0f, 1.0f)
+			glm::vec4(-Avg_x, -Avg_y, -Avg_z, 1.0f)
 		);
 		glm::mat4 Scale_mat // Scaling matrix to adjust the size of the model
 		(
@@ -348,19 +313,8 @@ void Renderer::Render(const Scene& scene)
 		);
 		
 		//In this case of multiplying matrices ,Order does matter... 
-		if (model.GetLocalOrWorld() == 1)			// World mode :
-		{
-			Final_W = model.DoWTransformation();
-			Transformations = Final_W * Translate_mat * Scale_mat;
-			model.SetWTransform(Final_W);
-		}
-		else if (model.GetLocalOrWorld() == 0)	// Local mode :
-		{
-			Transformations = Translate_Back_matt * Final_L * Translate_Back_mat * Scale_mat;
-			model.SetLTransform(Final_L) ;
-		}
-		//Transformations = Final_mat*(V) 1X4
-		//Transformations = model.GetLTransform() * model.GetWTransform();
+		Transformations = Final_W * Translate_Back_matt * Final_L * Translate_Back_mat * Scale_mat;
+		model.SetTransform(Transformations);
 
 		for (int faces_c = 0; faces_c < model.GetFacesCount(); faces_c++)
 		{
@@ -386,6 +340,51 @@ void Renderer::Render(const Scene& scene)
 			DrawLine(d1,d2, Model_Color);
 			DrawLine(d1,d3, Model_Color);
 			DrawLine(d2,d3, Model_Color);
+		}
+		if (1)
+		{
+			glm::vec4 u1(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(2), 1.0f);
+			glm::vec4 u2(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(5), 1.0f);
+			glm::vec4 u3(model.Getbuondes(0), model.Getbuondes(4), model.Getbuondes(2), 1.0f);
+			glm::vec4 u4(model.Getbuondes(0), model.Getbuondes(4), model.Getbuondes(5), 1.0f);
+			glm::vec4 u5(model.Getbuondes(3), model.Getbuondes(1), model.Getbuondes(2), 1.0f);
+			glm::vec4 u6(model.Getbuondes(3), model.Getbuondes(1), model.Getbuondes(5), 1.0f);
+			glm::vec4 u7(model.Getbuondes(3), model.Getbuondes(4), model.Getbuondes(2), 1.0f);
+			glm::vec4 u8(model.Getbuondes(3), model.Getbuondes(4), model.Getbuondes(5), 1.0f);
+
+			u1 = Transformations * u1;
+			u2 = Transformations * u2;
+			u3 = Transformations * u3;
+			u4 = Transformations * u4;
+			u5 = Transformations * u5;
+			u6 = Transformations * u6;
+			u7 = Transformations * u7;
+			u8 = Transformations * u8;
+			
+
+			//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
+			//Lines color is default black...
+			glm::vec2 s1(u1.x , u1.y);
+			glm::vec2 s2(u2.x , u2.y);
+			glm::vec2 s3(u3.x , u3.y);
+			glm::vec2 s4(u4.x , u4.y);
+			glm::vec2 s5(u5.x , u5.y);
+			glm::vec2 s6(u6.x , u6.y);
+			glm::vec2 s7(u7.x , u7.y);
+			glm::vec2 s8(u8.x , u8.y);
+
+			DrawLine(s1, s2, Model_Color);
+			DrawLine(s1, s3, Model_Color);
+			DrawLine(s1, s5, Model_Color);
+			DrawLine(s2, s4, Model_Color);
+			DrawLine(s2, s6, Model_Color);
+			DrawLine(s3, s4, Model_Color);
+			DrawLine(s3, s7, Model_Color);
+			DrawLine(s4, s8, Model_Color);
+			DrawLine(s5, s6, Model_Color);
+			DrawLine(s5, s7, Model_Color);
+			DrawLine(s6, s8, Model_Color);
+			DrawLine(s7, s8, Model_Color);
 		}
 	}
 }

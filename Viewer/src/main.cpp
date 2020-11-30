@@ -252,6 +252,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	//Editor window :
 	{
 		static int mode = 0;
+		//static bool test_window = FALSE;
 		static float Lscale[] = { 0.0f, 0.0f };
 		static float Lposition[] = { 0.0f, 0.0f };
 		static float LAlpha_X = 0.0f;
@@ -263,42 +264,12 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float WAlpha_Y = 0.0f;
 		static float WAlpha_Z = 0.0f;
 		static glm::vec3 color( 0.0f, 0.0f, 0.0f);
-		static glm::mat4 LScaling = {
-					glm::vec4(1.0f,0.0f,0.0f,0.0f),
-					glm::vec4(0.0f,1.0f,0.0f,0.0f),
-					glm::vec4(0.0f,0.0f,1.0f,0.0f),
-					glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		static glm::mat4 LTranslate = {
-					glm::vec4(1.0f,0.0f,0.0f,0.0f),
-					glm::vec4(0.0f,1.0f,0.0f,0.0f),
-					glm::vec4(0.0f,0.0f,1.0f,0.0f),
-					glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		static glm::mat4 LRotate = {
-					glm::vec4(1.0f,0.0f,0.0f,0.0f),
-					glm::vec4(0.0f,1.0f,0.0f,0.0f),
-					glm::vec4(0.0f,0.0f,1.0f,0.0f),
-					glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		static glm::mat4 WScaling = {
-					glm::vec4(1.0f,0.0f,0.0f,0.0f),
-					glm::vec4(0.0f,1.0f,0.0f,0.0f),
-					glm::vec4(0.0f,0.0f,1.0f,0.0f),
-					glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		static glm::mat4 WTranslate = {
-					glm::vec4(1.0f,0.0f,0.0f,0.0f),
-					glm::vec4(0.0f,1.0f,0.0f,0.0f),
-					glm::vec4(0.0f,0.0f,1.0f,0.0f),
-					glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		static glm::mat4 WRotate = {
-					glm::vec4(1.0f,0.0f,0.0f,0.0f),
-					glm::vec4(0.0f,1.0f,0.0f,0.0f),
-					glm::vec4(0.0f,0.0f,1.0f,0.0f),
-					glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
+		static glm::mat4 LScaling ;
+		static glm::mat4 LTranslate ;
+		static glm::mat4 LRotate ;
+		static glm::mat4 WScaling ;
+		static glm::mat4 WTranslate ;
+		static glm::mat4 WRotate ;
 
 		ImGui::Begin("Editor");     // Create a window called "Editor" and append into it.
 		ImGui::Text("User Model control");
@@ -392,6 +363,23 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();
+
+			//ImGui::Checkbox("Bounding Box", &test_window);
+			//if (test_window)
+			//{
+			//	model.
+			//	//ImGui::Begin("Title bar Hovered/Active tests", &test_window);
+			//	//if (ImGui::BeginPopupContextItem()) // <-- This is using IsItemHovered()
+			//	//{
+			//	//	if (ImGui::MenuItem("Close")) { test_window = false; }
+			//	//	ImGui::EndPopup();
+			//	//}
+			//	//ImGui::Text(
+			//	//	"IsItemHovered() after begin = %d (== is title bar hovered)\n"
+			//	//	"IsItemActive() after begin = %d (== is window being clicked/moved)\n",
+			//	//	ImGui::IsItemHovered(), ImGui::IsItemActive());
+			//	ImGui::End();
+			//}
 		}
 
 		ImGui::ColorEdit3("color", (float*)&color);
@@ -401,18 +389,15 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			MeshModel &model = scene.GetActiveModel(); // Gets active model
 			model.SetLocalOrWorld(mode);
 			model.SetColor(color);
-			if(mode==1)				// World mode
+			if (mode == 1)				// World mode
 			{
-				model.SetWScale(WScaling);
-				model.SetWTranslate(WTranslate);
-				model.SetWRotate(WRotate);
+				model.SetWTransform(WTranslate * WRotate * WScaling);
 			}
-			else if(mode == 0)		//Local mode
+			else if (mode == 0)		//Local mode
 			{
-				model.SetLScale(LScaling);
-				model.SetLTranslate(LTranslate);
-				model.SetLRotate(LRotate);
+				model.SetLTransform(LTranslate * LRotate * LScaling);
 			}
+			//model.SetBounding_Box(test_window);
 		}
 		ImGui::End();
 	}

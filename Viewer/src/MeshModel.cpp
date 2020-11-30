@@ -5,15 +5,37 @@ MeshModel::MeshModel(std::vector<Face> faces, std::vector<glm::vec3> vertices, s
 	vertices_(vertices),
 	normals_(normals)
 {
+	float Max_x = vertices[0].x;
+	float Max_y = vertices[0].y;
+	float Max_z = vertices[0].z;
+	float Min_x = vertices[0].x;
+	float Min_y = vertices[0].y;
+	float Min_z = vertices[0].z;
 	//Inittiating the Transformation matrices
-	LTransform = WTransform = LTranslate = LScale = LRotate = WTranslate = WScale = WRotate = {
+	Transform = LTransform = WTransform = {
 	   glm::vec4(1.0f,0.0f,0.0f,0.0f),
 	   glm::vec4(0.0f,1.0f,0.0f,0.0f),
 	   glm::vec4(0.0f,0.0f,1.0f,0.0f),
 	   glm::vec4(0.0f,0.0f,0.0f,1.0f)
 	};
-	LocalOrWorld = 0;
+	draw_bounding_box = LocalOrWorld = 0;
 	ModelColor = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	for (int i = 0; i < vertices.size(); i++)
+	{
+		Max_x = (Max_x < vertices[i].x) ? vertices[i].x : Max_x;
+		Max_y = (Max_y < vertices[i].y) ? vertices[i].y : Max_y;
+		Max_z = (Max_z < vertices[i].z) ? vertices[i].z : Max_z;
+		Min_z = (Min_z > vertices[i].z) ? vertices[i].z : Min_z;
+		Min_y = (Min_y > vertices[i].y) ? vertices[i].y : Min_y;
+		Min_x = (Min_x > vertices[i].x) ? vertices[i].x : Min_x;
+	}
+	buondes[0] = Max_x;
+	buondes[1] = Max_y;
+	buondes[2] = Max_z;
+	buondes[3] = Min_x;
+	buondes[4] = Min_y;
+	buondes[5] = Min_z;
 }
 
 MeshModel::~MeshModel()
@@ -49,16 +71,13 @@ int MeshModel::GetLocalOrWorld() const
 	return LocalOrWorld;
 }
 
-const glm::mat4x4& MeshModel::DoLTransformation() const
+const glm::mat4x4& MeshModel::GetTransform() const
 {
-	glm::mat4x4 Trans = GetLTranslate() * GetLRotate() * GetLScale();
-	return Trans;
+	return Transform;
 }
-
-const glm::mat4x4& MeshModel::DoWTransformation() const
+void MeshModel::SetTransform(glm::mat4x4& mat)
 {
-	glm::mat4x4 Trans = GetWTranslate() * GetWRotate() * GetWScale();
-	return Trans;
+	Transform = mat;
 }
 
 const glm::mat4x4& MeshModel::GetLTransform() const
@@ -79,58 +98,18 @@ void MeshModel::SetWTransform(glm::mat4x4& mat)
 	WTransform = mat;
 }
 
-const glm::mat4x4& MeshModel::GetLTranslate() const
+const float MeshModel::Getbuondes(int i) const
 {
-	return LTranslate;
-}
-void MeshModel::SetLTranslate(glm::mat4x4& mat)
-{
-	LTranslate = mat;
+	return buondes[i];
 }
 
-const glm::mat4x4& MeshModel::GetWTranslate() const
+bool MeshModel::GetBounding_Box() const
 {
-	return WTranslate;
+	return draw_bounding_box;
 }
-void MeshModel::SetWTranslate(glm::mat4x4& mat)
+void MeshModel::SetBounding_Box(bool i)
 {
-	WTranslate = mat;
-}
-
-const glm::mat4x4& MeshModel::GetLScale() const
-{
-	return LScale;
-}
-void MeshModel::SetLScale(glm::mat4x4& mat)
-{
-	LScale = mat;
-}
-
-const glm::mat4x4& MeshModel::GetWScale() const
-{
-	return WScale;
-}
-void MeshModel::SetWScale(glm::mat4x4& mat)
-{
-	WScale = mat;
-}
-
-const glm::mat4x4& MeshModel::GetLRotate() const
-{
-	return LRotate;
-}
-void MeshModel::SetLRotate(glm::mat4x4& mat)
-{
-	LRotate = mat;
-}
-
-const glm::mat4x4& MeshModel::GetWRotate() const
-{
-	return WRotate;
-}
-void MeshModel::SetWRotate(glm::mat4x4& mat)
-{
-	WRotate = mat;
+	draw_bounding_box = i;
 }
 
 const glm::vec3& MeshModel::GetColor() const
