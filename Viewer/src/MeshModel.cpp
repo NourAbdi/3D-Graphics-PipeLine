@@ -18,7 +18,7 @@ MeshModel::MeshModel(std::vector<Face> faces, std::vector<glm::vec3> vertices, s
 	   glm::vec4(0.0f,0.0f,1.0f,0.0f),
 	   glm::vec4(0.0f,0.0f,0.0f,1.0f)
 	};
-	draw_bounding_box = LocalOrWorld = 0;
+	bounding_box = LocalOrWorld = 0;
 	ModelColor = glm::vec3(0.0f, 0.0f, 0.0f);
 
 	for (int i = 0; i < vertices.size(); i++)
@@ -103,13 +103,31 @@ const float MeshModel::Getbuondes(int i) const
 	return buondes[i];
 }
 
-bool MeshModel::GetBounding_Box() const
+bool MeshModel::Getbounding_box() const
 {
-	return draw_bounding_box;
+	return bounding_box;
 }
-void MeshModel::SetBounding_Box(bool i)
+void MeshModel::Setbounding_box(bool i)
 {
-	draw_bounding_box = i;
+	bounding_box = i;
+}
+
+bool MeshModel::Getfaces_normals() const
+{
+	return faces_normals;
+}
+void MeshModel::Setfaces_normals(bool i)
+{
+	faces_normals = i;
+}
+
+bool MeshModel::Getvertices_normals() const
+{
+	return vertices_normals;
+}
+void MeshModel::Setvertices_normals(bool i)
+{
+	vertices_normals = i;
 }
 
 const glm::vec3& MeshModel::GetColor() const

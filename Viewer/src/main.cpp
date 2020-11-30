@@ -252,7 +252,9 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	//Editor window :
 	{
 		static int mode = 0;
-		//static bool test_window = FALSE;
+		static bool BoundingBox = FALSE;
+		static bool FacesNormals = FALSE;
+		static bool VerticesNormals = FALSE;
 		static float Lscale[] = { 0.0f, 0.0f };
 		static float Lposition[] = { 0.0f, 0.0f };
 		static float LAlpha_X = 0.0f;
@@ -364,25 +366,12 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			}
 			ImGui::EndTabBar();
 
-			//ImGui::Checkbox("Bounding Box", &test_window);
-			//if (test_window)
-			//{
-			//	model.
-			//	//ImGui::Begin("Title bar Hovered/Active tests", &test_window);
-			//	//if (ImGui::BeginPopupContextItem()) // <-- This is using IsItemHovered()
-			//	//{
-			//	//	if (ImGui::MenuItem("Close")) { test_window = false; }
-			//	//	ImGui::EndPopup();
-			//	//}
-			//	//ImGui::Text(
-			//	//	"IsItemHovered() after begin = %d (== is title bar hovered)\n"
-			//	//	"IsItemActive() after begin = %d (== is window being clicked/moved)\n",
-			//	//	ImGui::IsItemHovered(), ImGui::IsItemActive());
-			//	ImGui::End();
-			//}
+			ImGui::Checkbox("Bounding Box", &BoundingBox);
+			ImGui::Checkbox("Faces Normals", &FacesNormals);
+			ImGui::Checkbox("Vertices Normals", &VerticesNormals);
 		}
 
-		ImGui::ColorEdit3("color", (float*)&color);
+		ImGui::ColorEdit3("Model Color", (float*)&color);
 
 		if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
 		{
@@ -397,7 +386,9 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			{
 				model.SetLTransform(LTranslate * LRotate * LScaling);
 			}
-			//model.SetBounding_Box(test_window);
+				model.Setbounding_box(BoundingBox);
+				model.Setfaces_normals(FacesNormals);
+				model.Setvertices_normals(VerticesNormals);
 		}
 		ImGui::End();
 	}

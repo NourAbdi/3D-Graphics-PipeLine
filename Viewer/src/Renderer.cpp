@@ -13,6 +13,8 @@
 #define NDegrees 100
 #define Teta 2*pi/NDegrees
 
+static glm::vec3 black(0.0f, 0.0f, 0.0f);
+static glm::vec3 white(255.0f, 255.0f, 255.0f);
 
 Renderer::Renderer(int viewport_width, int viewport_height) :
 	viewport_width_(viewport_width),
@@ -340,52 +342,57 @@ void Renderer::Render(const Scene& scene)
 			DrawLine(d1,d2, Model_Color);
 			DrawLine(d1,d3, Model_Color);
 			DrawLine(d2,d3, Model_Color);
+			if (model.Getfaces_normals())
+			{
+				glm::vec2 c(v1.x, v1.y);
+			}
 		}
-		if (1)
+		
+		glm::vec4 u1(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(2), 1.0f);
+		glm::vec4 u2(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(5), 1.0f);
+		glm::vec4 u3(model.Getbuondes(0), model.Getbuondes(4), model.Getbuondes(2), 1.0f);
+		glm::vec4 u4(model.Getbuondes(0), model.Getbuondes(4), model.Getbuondes(5), 1.0f);
+		glm::vec4 u5(model.Getbuondes(3), model.Getbuondes(1), model.Getbuondes(2), 1.0f);
+		glm::vec4 u6(model.Getbuondes(3), model.Getbuondes(1), model.Getbuondes(5), 1.0f);
+		glm::vec4 u7(model.Getbuondes(3), model.Getbuondes(4), model.Getbuondes(2), 1.0f);
+		glm::vec4 u8(model.Getbuondes(3), model.Getbuondes(4), model.Getbuondes(5), 1.0f);
+
+		u1 = Transformations * u1;
+		u2 = Transformations * u2;
+		u3 = Transformations * u3;
+		u4 = Transformations * u4;
+		u5 = Transformations * u5;
+		u6 = Transformations * u6;
+		u7 = Transformations * u7;
+		u8 = Transformations * u8;
+		
+
+		//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
+		//Lines color is default black...
+		glm::vec2 s1(u1.x , u1.y);
+		glm::vec2 s2(u2.x , u2.y);
+		glm::vec2 s3(u3.x , u3.y);
+		glm::vec2 s4(u4.x , u4.y);
+		glm::vec2 s5(u5.x , u5.y);
+		glm::vec2 s6(u6.x , u6.y);
+		glm::vec2 s7(u7.x , u7.y);
+		glm::vec2 s8(u8.x , u8.y);
+		if (model.Getbounding_box())
 		{
-			glm::vec4 u1(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(2), 1.0f);
-			glm::vec4 u2(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(5), 1.0f);
-			glm::vec4 u3(model.Getbuondes(0), model.Getbuondes(4), model.Getbuondes(2), 1.0f);
-			glm::vec4 u4(model.Getbuondes(0), model.Getbuondes(4), model.Getbuondes(5), 1.0f);
-			glm::vec4 u5(model.Getbuondes(3), model.Getbuondes(1), model.Getbuondes(2), 1.0f);
-			glm::vec4 u6(model.Getbuondes(3), model.Getbuondes(1), model.Getbuondes(5), 1.0f);
-			glm::vec4 u7(model.Getbuondes(3), model.Getbuondes(4), model.Getbuondes(2), 1.0f);
-			glm::vec4 u8(model.Getbuondes(3), model.Getbuondes(4), model.Getbuondes(5), 1.0f);
-
-			u1 = Transformations * u1;
-			u2 = Transformations * u2;
-			u3 = Transformations * u3;
-			u4 = Transformations * u4;
-			u5 = Transformations * u5;
-			u6 = Transformations * u6;
-			u7 = Transformations * u7;
-			u8 = Transformations * u8;
-			
-
-			//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
-			//Lines color is default black...
-			glm::vec2 s1(u1.x , u1.y);
-			glm::vec2 s2(u2.x , u2.y);
-			glm::vec2 s3(u3.x , u3.y);
-			glm::vec2 s4(u4.x , u4.y);
-			glm::vec2 s5(u5.x , u5.y);
-			glm::vec2 s6(u6.x , u6.y);
-			glm::vec2 s7(u7.x , u7.y);
-			glm::vec2 s8(u8.x , u8.y);
-
-			DrawLine(s1, s2, Model_Color);
-			DrawLine(s1, s3, Model_Color);
-			DrawLine(s1, s5, Model_Color);
-			DrawLine(s2, s4, Model_Color);
-			DrawLine(s2, s6, Model_Color);
-			DrawLine(s3, s4, Model_Color);
-			DrawLine(s3, s7, Model_Color);
-			DrawLine(s4, s8, Model_Color);
-			DrawLine(s5, s6, Model_Color);
-			DrawLine(s5, s7, Model_Color);
-			DrawLine(s6, s8, Model_Color);
-			DrawLine(s7, s8, Model_Color);
+			DrawLine(s1, s2, black);
+			DrawLine(s1, s3, black);
+			DrawLine(s1, s5, black);
+			DrawLine(s2, s4, black);
+			DrawLine(s2, s6, black);
+			DrawLine(s3, s4, black);
+			DrawLine(s3, s7, black);
+			DrawLine(s4, s8, black);
+			DrawLine(s5, s6, black);
+			DrawLine(s5, s7, black);
+			DrawLine(s6, s8, black);
+			DrawLine(s7, s8, black);
 		}
+		
 	}
 }
 

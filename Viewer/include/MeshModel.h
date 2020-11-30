@@ -23,8 +23,12 @@ public:
 	const glm::mat4x4& GetWTransform() const;
 	void SetWTransform(glm::mat4x4& mat);
 	const float Getbuondes(int i) const;
-	bool GetBounding_Box() const;
-	void SetBounding_Box(bool i);
+	bool Getbounding_box() const;
+	void Setbounding_box(bool i);
+	bool Getfaces_normals() const;
+	void Setfaces_normals(bool i);
+	bool Getvertices_normals() const;
+	void Setvertices_normals(bool i);
 	const glm::vec3& GetColor() const;
 	void SetColor(glm::vec3& mat);
 
@@ -35,10 +39,12 @@ private:
 	std::string model_name_;
 
 	int LocalOrWorld;
-	bool draw_bounding_box;
+	bool bounding_box;
+	bool faces_normals;
+	bool vertices_normals;
 	glm::vec3 ModelColor;
 	glm::mat4x4 Transform;
 	glm::mat4x4 LTransform;
 	glm::mat4x4 WTransform;
-	float buondes[6];//[max.x,max.y,max.z,min.x,min.y,min.z]
+	float buondes[6];			//[max.x,max.y,max.z,min.x,min.y,min.z]
 };
