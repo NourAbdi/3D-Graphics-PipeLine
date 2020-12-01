@@ -10,10 +10,11 @@ public:
 	virtual ~MeshModel();
 	const Face& GetFace(int index) const;
 	int GetFacesCount() const;
+	int GetNormalsCount() const;
 	const std::string& GetModelName() const;
 	std::vector<glm::vec3>& get_vertices();
+	std::vector<glm::vec3>& get_normals();
 
-	//void draw_bounding_box(glm::mat4x4& mat);
 	void SetLocalOrWorld(int index);
 	int GetLocalOrWorld() const;
 	const glm::mat4x4& GetTransform() const;

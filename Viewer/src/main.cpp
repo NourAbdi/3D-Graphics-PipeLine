@@ -274,7 +274,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static glm::mat4 WRotate ;
 
 		ImGui::Begin("Editor");     // Create a window called "Editor" and append into it.
-		ImGui::Text("User Model control");
+		ImGui::Text("Model control");
 
 		if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
 		{
@@ -386,9 +386,9 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			{
 				model.SetLTransform(LTranslate * LRotate * LScaling);
 			}
-				model.Setbounding_box(BoundingBox);
-				model.Setfaces_normals(FacesNormals);
-				model.Setvertices_normals(VerticesNormals);
+			model.Setbounding_box(BoundingBox);
+			model.Setfaces_normals(FacesNormals);
+			model.Setvertices_normals(VerticesNormals);
 		}
 		ImGui::End();
 	}

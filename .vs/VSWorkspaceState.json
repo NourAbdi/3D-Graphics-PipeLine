@@ -5,6 +5,6 @@
     "\\Viewer\\include",
     "\\Viewer\\src"
   ],
-  "SelectedNode": "\\CMakeLists.txt",
+  "SelectedNode": "\\Viewer\\src\\main.cpp",
   "PreviewInSolutionExplorer": false
 }

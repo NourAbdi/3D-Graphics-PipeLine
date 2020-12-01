@@ -52,6 +52,11 @@ int MeshModel::GetFacesCount() const
 	return faces_.size();
 }
 
+int MeshModel::GetNormalsCount() const
+{
+	return normals_.size();
+}
+
 const std::string& MeshModel::GetModelName() const
 {
 	return model_name_;
@@ -61,6 +66,9 @@ std::vector<glm::vec3>& MeshModel::get_vertices() {
 	return vertices_;
 }
 
+std::vector<glm::vec3>& MeshModel::get_normals() {
+	return normals_;
+}
 /******************Setters&Getters*****************/
 void MeshModel::SetLocalOrWorld(int index)
 {

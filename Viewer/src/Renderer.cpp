@@ -262,7 +262,6 @@ void Renderer::Render(const Scene& scene)
 	float delta_x = 0.0f;
 	float delta_y = 0.0f;
 	float delta_z = 0.0f;
-	bool flag = FALSE;
 	glm::mat4 Transformations;
 
 	//Drawing Axises :
@@ -274,7 +273,7 @@ void Renderer::Render(const Scene& scene)
 	{
 		MeshModel &model = scene.GetActiveModel(); // Gets active model 
 		std::vector<glm::vec3> vertices = model.get_vertices(); // Gets the vertices
-		//flag = model.GetBounding_Box;
+		std::vector<glm::vec3> normals = model.get_normals(); // Gets the vertices normals
 		glm::mat4 Final_L = model.GetLTransform();
 		glm::mat4 Final_W = model.GetWTransform();
 		glm::vec3 Model_Color = model.GetColor();
@@ -323,31 +322,58 @@ void Renderer::Render(const Scene& scene)
 			glm::vec3 p1 = vertices.at(model.GetFace(faces_c).GetVertexIndex(0)-1);
 			glm::vec3 p2 = vertices.at(model.GetFace(faces_c).GetVertexIndex(1)-1);
 			glm::vec3 p3 = vertices.at(model.GetFace(faces_c).GetVertexIndex(2)-1);
+			glm::vec3 q1 = normals.at(model.GetFace(faces_c).GetNormalIndex(0)-1);
+			glm::vec3 q2 = normals.at(model.GetFace(faces_c).GetNormalIndex(1)-1);
+			glm::vec3 q3 = normals.at(model.GetFace(faces_c).GetNormalIndex(2)-1);
+			glm::vec3 s1 (((p1.x+p2.x+p3.x)/3), ((p1.y + p2.y + p3.y) / 3), ((p1.z + p2.z + p3.z) / 3));
+			glm::vec3 s2 (glm::normalize(glm::cross(p2-p1, p3-p1))+s1);
+			glm::vec3 s3 (((q1.x+q2.x+q3.x)/3, (q1.y + q2.y + q3.y) / 3, (q1.z + q2.z + q3.z) / 3 ) + p1);
+			//glm::vec3 s4 (glm::normalize(glm::cross(p2-p1, p3-p1)) +p2);
+			//glm::vec3 s5 (glm::normalize(glm::cross(p2-p1, p3-p1)) +p3);
 			
 			//from 1x3 to 1x4
 			glm::vec4 v1(p1, 1.0f);
 			glm::vec4 v2(p2, 1.0f);
 			glm::vec4 v3(p3, 1.0f);
+			glm::vec4 v4(s1, 1.0f);
+			glm::vec4 v5(s2, 1.0f);
+			glm::vec4 u1(s3, 1.0f);
+			//glm::vec4 u2(q2, 1.0f);
+			//glm::vec4 u3(q3, 1.0f);
 			
 			v1 = Transformations * v1;
 			v2 = Transformations * v2;
 			v3 = Transformations * v3;
+			v4 = Transformations * v4;
+			v5 = Transformations * v5;
+			u1 = Transformations * u1;
+			//u2 = Transformations * u2;
+			//u3 = Transformations * u3;
 
 			//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 			//Lines color is default black...
 			glm::vec2 d1(v1.x, v1.y);
 			glm::vec2 d2(v2.x, v2.y);
 			glm::vec2 d3(v3.x, v3.y);
+			glm::vec2 d4(v4.x, v4.y);
+			glm::vec2 d5(v5.x, v5.y);
+			glm::vec2 d6(u1.x, u1.y);
+			//glm::vec2 d7(u2.x, u2.y);
+			//glm::vec2 d8(u3.x, u3.y);
 		
-			DrawLine(d1,d2, Model_Color);
-			DrawLine(d1,d3, Model_Color);
-			DrawLine(d2,d3, Model_Color);
+			//DrawLine(d1,d2, Model_Color);
+			//DrawLine(d1,d3, Model_Color);
+			//DrawLine(d2,d3, Model_Color);
 			if (model.Getfaces_normals())
 			{
-				glm::vec2 c(v1.x, v1.y);
+				DrawLine(d4, d5, black);
+			}
+			if (model.Getvertices_normals())
+			{
+				DrawLine(u1, d1, black);
+				//DrawLine(d7, d8, black);
 			}
 		}
-		
 		glm::vec4 u1(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(2), 1.0f);
 		glm::vec4 u2(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(5), 1.0f);
 		glm::vec4 u3(model.Getbuondes(0), model.Getbuondes(4), model.Getbuondes(2), 1.0f);
