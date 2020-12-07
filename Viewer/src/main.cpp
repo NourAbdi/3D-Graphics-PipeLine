@@ -1,12 +1,12 @@
 #define _USE_MATH_DEFINES
-#define pi  3.14159 
+#define Pi  3.14159 
 #include <cmath>
 #include <imgui/imgui.h>
 #include <stdio.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <nfd.h>
-
+#include <memory>
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 
@@ -126,6 +126,8 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 	if (frameBufferWidth != renderer.GetViewportWidth() || frameBufferHeight != renderer.GetViewportHeight())
 	{
 		// TODO: Set new aspect ratio
+		//renderer.SetViewportWidth(frameBufferWidth);
+		//renderer.SetViewportHeight(frameBufferHeight);
 	}
 
 	if (!io.WantCaptureKeyboard)
@@ -252,16 +254,18 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	//Editor window :
 	{
 		static int mode = 0;
+		static int ONCE = 0;
 		static bool BoundingBox = FALSE;
 		static bool FacesNormals = FALSE;
 		static bool VerticesNormals = FALSE;
-		static float Lscale[] = { 0.0f, 0.0f };
-		static float Lposition[] = { 0.0f, 0.0f };
+		static bool Proj_or_Ortho = FALSE;
+		static float Lscale[] = { 0.0f, 0.0f, 0.0f };
+		static float Lposition[] = { 0.0f, 0.0f, 0.0f };
 		static float LAlpha_X = 0.0f;
 		static float LAlpha_Y = 0.0f;
 		static float LAlpha_Z = 0.0f;
-		static float Wscale[] = { 0.0f, 0.0f };
-		static float Wposition[] = { 0.0f, 0.0f };
+		static float Wscale[] = { 0.0f, 0.0f, 0.0f };
+		static float Wposition[] = { 0.0f, 0.0f, 0.0f };
 		static float WAlpha_X = 0.0f;
 		static float WAlpha_Y = 0.0f;
 		static float WAlpha_Z = 0.0f;
@@ -272,34 +276,42 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static glm::mat4 WScaling ;
 		static glm::mat4 WTranslate ;
 		static glm::mat4 WRotate ;
+		static glm::mat4 CRotate ;
+		static float  l = -1.0f, r = 1.0f, b = -1.0f, t = 1.0f;
+		static float  fovy = 1.0f, nearP = -1.0f, farP = -10.0f;
+		static float Cposition[] = { 0.0f, 0.0f, 100.0f };
+		static float Zoom = 1.0f;
+		static float CAlpha_X = 0.0f;
+		static float CAlpha_Y = 0.0f;
+		static float CAlpha_Z = 0.0f;
+		static glm::mat4 CTranslate;
+		
 
-		ImGui::Begin("Editor");     // Create a window called "Editor" and append into it.
-		ImGui::Text("Model control");
-
+		ImGui::Begin("Model Control");     // Create a window called "Model Control" and append into it.
 		if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
 		{
-			if (ImGui::BeginTabItem("Local_Mode"))
+			if (ImGui::BeginTabItem("Model Frame"))
 			{
 				mode = 0;
-				ImGui::SliderFloat2("scale    (x,y)X(0~2)", Lscale, -1.0f, 1.0f);
+				ImGui::SliderFloat3("scale (x,y,z)X(0~2)", Lscale, -1.0f, 1.0f);
 				LScaling = {
 					glm::vec4(Lscale[0] + 1,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,Lscale[1] + 1,0.0f,0.0f),
-					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,Lscale[2] + 1,0.0f),
 					glm::vec4(0.0f,0.0f,0.0f,1.0f)
 				};
 
-				ImGui::SliderFloat2("position (x+500,y+350)", Lposition, -1.0f, 1.0f);
+				ImGui::SliderFloat3("position(x,y,z)", Lposition, -1.0f, 1.0f);
 				LTranslate = {
 					glm::vec4(1.0f,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,1.0f,0.0f,0.0f),
 					glm::vec4(0.0f,0.0f,1.0f,0.0f),
-					glm::vec4(Lposition[0] * 500,Lposition[1] * 350,0.0f,1.0f)
+					glm::vec4(Lposition[0] ,Lposition[1] ,Lposition[2],1.0f)
 				};
 
-				ImGui::SliderFloat("X-rotation (0~2pi)", &LAlpha_X, 0, 2 * pi);
-				ImGui::SliderFloat("Y-rotation (0~2pi)", &LAlpha_Y, 0, 2 * pi);
-				ImGui::SliderFloat("Z-rotation (0~2pi)", &LAlpha_Z, 0, 2 * pi);
+				ImGui::SliderFloat("X-rotation (0~2pi)", &LAlpha_X, 0, 2 * Pi);
+				ImGui::SliderFloat("Y-rotation (0~2pi)", &LAlpha_Y, 0, 2 * Pi);
+				ImGui::SliderFloat("Z-rotation (0~2pi)", &LAlpha_Z, 0, 2 * Pi);
 				glm::mat4 Rotate_X = {
 				glm::vec4(1.0f,0.0f,0.0f,0.0f),
 				glm::vec4(0.0f,cos(LAlpha_X),sin(LAlpha_X),0.0f),
@@ -321,28 +333,28 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				LRotate = Rotate_Z * Rotate_Y * Rotate_X; 
 				ImGui::EndTabItem();
 			}
-			if (ImGui::BeginTabItem("World_Mode"))
+			if (ImGui::BeginTabItem("World Frame"))
 			{
 				mode = 1;
-				ImGui::SliderFloat2("scale    (x,y)X(0~2)", Wscale, -1.0f, 1.0f);
+				ImGui::SliderFloat3("scale  (x,y,z)X(0~2)", Wscale, -1.0f, 1.0f);
 				WScaling = {
 					glm::vec4(Wscale[0] + 1,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,Wscale[1] + 1,0.0f,0.0f),
-					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(0.0f,0.0f,Wscale[2] + 1,0.0f),
 					glm::vec4(0.0f,0.0f,0.0f,1.0f)
 				};
 
-				ImGui::SliderFloat2("position (x+500,y+350)", Wposition, -1.0f, 1.0f);
+				ImGui::SliderFloat3("position (x,y,z)", Wposition, -1.0f, 1.0f);
 				WTranslate = {
 					glm::vec4(1.0f,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,1.0f,0.0f,0.0f),
 					glm::vec4(0.0f,0.0f,1.0f,0.0f),
-					glm::vec4(Wposition[0] * 500,Wposition[1] * 350,0.0f,1.0f)
+					glm::vec4(Wposition[0] ,Wposition[1] ,Wposition[2],1.0f)
 				};
 
-				ImGui::SliderFloat("X-rotation (0~2pi)", &WAlpha_X, 0, 2 * pi);
-				ImGui::SliderFloat("Y-rotation (0~2pi)", &WAlpha_Y, 0, 2 * pi);
-				ImGui::SliderFloat("Z-rotation (0~2pi)", &WAlpha_Z, 0, 2 * pi);
+				ImGui::SliderFloat("X-rotation (0~2pi)", &WAlpha_X, 0, 2 * Pi);
+				ImGui::SliderFloat("Y-rotation (0~2pi)", &WAlpha_Y, 0, 2 * Pi);
+				ImGui::SliderFloat("Z-rotation (0~2pi)", &WAlpha_Z, 0, 2 * Pi);
 				glm::mat4 Rotate_X = {
 				glm::vec4(1.0f,0.0f,0.0f,0.0f),
 				glm::vec4(0.0f,cos(WAlpha_X),sin(WAlpha_X),0.0f),
@@ -370,9 +382,86 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			ImGui::Checkbox("Faces Normals", &FacesNormals);
 			ImGui::Checkbox("Vertices Normals", &VerticesNormals);
 		}
-
 		ImGui::ColorEdit3("Model Color", (float*)&color);
-
+		ImGui::End();
+		/***********************************************************************************************************/
+		ImGui::Begin("Camera Control");     // Create a window called "Model Control" and append into it.
+		if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+		{
+			if (ImGui::BeginTabItem("Orthographic"))
+			{
+				Proj_or_Ortho = false;
+				ImGui::SliderFloat("left", &l, -5.0f, 5.0f);
+				ImGui::SliderFloat("right", &r, -5.0f, 5.0f);
+				ImGui::SliderFloat("bottom", &b, -5.0f, 5.0f);
+				ImGui::SliderFloat("top", &t, -5.0f, 5.0f);
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Perspective"))
+			{
+				Proj_or_Ortho = true;
+				ImGui::SliderFloat("fovy", &fovy, -2.0f, 2.0f);
+				ImGui::SliderFloat("near", &nearP, 0.0f, 5.0f);
+				ImGui::SliderFloat("far", &farP, 0.0f, 100.0f);
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+		}
+		ImGui::SliderFloat3("position(x,y,z)", Cposition, -500.0f, 500.0f);
+		CTranslate = {
+			glm::vec4(1.0f,0.0f,0.0f,0.0f),
+			glm::vec4(0.0f,1.0f,0.0f,0.0f),
+			glm::vec4(0.0f,0.0f,1.0f,0.0f),
+			glm::vec4(Cposition[0],Cposition[1] ,Cposition[2],1.0f)
+		};
+		ImGui::SliderFloat("Zoom", &Zoom, -2.0f, 2.0f);
+		ImGui::SliderFloat("X-rotation (0~2pi)", &CAlpha_X, 0, 2 * Pi);
+		ImGui::SliderFloat("Y-rotation (0~2pi)", &CAlpha_Y, 0, 2 * Pi);
+		ImGui::SliderFloat("Z-rotation (0~2pi)", &CAlpha_Z, 0, 2 * Pi);
+		glm::mat4 Rotate_X = {
+		glm::vec4(1.0f,0.0f,0.0f,0.0f),
+		glm::vec4(0.0f,cos(CAlpha_X),sin(CAlpha_X),0.0f),
+		glm::vec4(0.0f,-sin(CAlpha_X),cos(CAlpha_X),0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+  		glm::mat4 Rotate_Y = {
+		glm::vec4(cos(CAlpha_Y),0.0f,sin(CAlpha_Y),0.0f),
+		glm::vec4(0.0f,1.0f,0.0f,0.0f),
+		glm::vec4(-sin(CAlpha_Y),0.0f,cos(CAlpha_Y),0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		glm::mat4 Rotate_Z = {
+		glm::vec4(cos(CAlpha_Z),sin(CAlpha_Z),0.0f,0.0f),
+		glm::vec4(-sin(CAlpha_Z),cos(CAlpha_Z),0.0f,0.0f),
+		glm::vec4(0.0f,0.0f,1.0f,0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		CRotate = Rotate_Z * Rotate_Y * Rotate_X;
+		/*********************************************************************************************************/
+		if (!ONCE)
+		{
+			std::shared_ptr<Camera> camera = std::make_shared<Camera>();
+			scene.AddCamera (camera);
+			ONCE++;
+		}
+		if (scene.GetCameraCount() > 0) //This check if we loaded a camera
+		{
+			Camera &camera = scene.GetActiveCamera();
+			camera.SetOrthoOrProj(Proj_or_Ortho);
+			camera.SetZoom(Zoom);
+			camera.SetViewTransformation(CRotate);
+			camera.SetCameraPosition(glm::vec3(Cposition[0], Cposition[1], Cposition[2]));
+			if (!Proj_or_Ortho)
+			{
+				camera.SetProjectionTransformation(glm::ortho(l, r, b, t));
+			}
+			if (Proj_or_Ortho)
+			{
+				camera.Setfovy(fovy);
+				camera.Setnear(nearP);
+				camera.Setfar(farP);
+			}
+		}
 		if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
 		{
 			MeshModel &model = scene.GetActiveModel(); // Gets active model
@@ -382,7 +471,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			{
 				model.SetWTransform(WTranslate * WRotate * WScaling);
 			}
-			else if (mode == 0)		//Local mode
+			if (mode == 0)		//Local mode
 			{
 				model.SetLTransform(LTranslate * LRotate * LScaling);
 			}
