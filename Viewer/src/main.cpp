@@ -407,14 +407,14 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			}
 			ImGui::EndTabBar();
 		}
-		ImGui::SliderFloat3("position(x,y,z)", Cposition, -500.0f, 500.0f);
+		ImGui::SliderFloat3("position(x,y,z)", Cposition, 0.0f, 500.0f);
 		CTranslate = {
 			glm::vec4(1.0f,0.0f,0.0f,0.0f),
 			glm::vec4(0.0f,1.0f,0.0f,0.0f),
 			glm::vec4(0.0f,0.0f,1.0f,0.0f),
 			glm::vec4(Cposition[0],Cposition[1] ,Cposition[2],1.0f)
 		};
-		ImGui::SliderFloat("Zoom", &Zoom, -2.0f, 2.0f);
+		ImGui::SliderFloat("Zoom", &Zoom, -2.0f, 5.0f);
 		ImGui::SliderFloat("X-rotation (0~2pi)", &CAlpha_X, 0, 2 * Pi);
 		ImGui::SliderFloat("Y-rotation (0~2pi)", &CAlpha_Y, 0, 2 * Pi);
 		ImGui::SliderFloat("Z-rotation (0~2pi)", &CAlpha_Z, 0, 2 * Pi);

@@ -329,7 +329,7 @@ void Renderer::Render(const Scene& scene)
 				glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
 				glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
 				glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-				glm::vec4(half_width, half_height, 0.0f, 1.0f)
+				glm::vec4(half_width , half_height , 0.0f, 1.0f)
 			);
 			glm::mat4 Translate_Back_mat // Translation matrix to put the model in (0,0)
 			(
