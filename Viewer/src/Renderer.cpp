@@ -94,6 +94,186 @@ void Renderer::plotLineHigh(const glm::ivec2& p1, const glm::ivec2& p2, const gl
 			D = D + 2 * dx;
 	}
 }
+void Renderer::TopTriangle(const glm::ivec2& medp, const glm::ivec2& med2p, const glm::ivec2& minp, const glm::vec3& color)
+{
+	//find the line equation for both sides :
+	int zeroFlag1 = 0;
+	int zeroFlag2 = 0;
+	int i = 0;
+	int x1, y1, x2, y2;
+	float m1,m2,n1,n2;
+	x1 = medp.x;
+	x2 = med2p.x;
+	y1 = medp.y;
+	y2 = med2p.y;
+
+	if ((medp.x - minp.x) == 0)
+	{
+		zeroFlag1 = 1;
+	}
+	if ((medp.x - minp.x) != 0)
+	{
+		m1 = (float)(medp.y - minp.y) / (float)(medp.x - minp.x);
+		n1 = (float)(medp.y - (float)(m1 * medp.x));
+	}
+
+	if ((med2p.x - minp.x) == 0)
+	{
+		zeroFlag2 = 1;
+	}
+	if ((med2p.x - minp.x) != 0)
+	{
+		m2 = (float)(med2p.y - minp.y) / (float)(med2p.x - minp.x);
+		n2 = (float)(med2p.y - (float)(m2 * med2p.x));
+	}
+
+	while (y1 >= minp.y)
+	{
+		y1 = medp.y - i;
+		if (zeroFlag1 == 0)
+		{
+			x1 = (y1 - n1) / m1;
+		}
+		y2 = med2p.y - i;
+		if (zeroFlag2 == 0)
+		{
+			x2 = (y2 - n2) / m2;
+		}
+		DrawLine(glm::vec2(x1, y1), glm::vec2(x2, y2), color);
+		i++;
+	}
+}
+void Renderer::BotTriangle(const glm::ivec2& maxp, const glm::ivec2& medp, const glm::ivec2& med2p, const glm::vec3& color)
+{
+	//find the line equation for both sides :
+	int zeroFlag1 = 0;
+	int zeroFlag2 = 0;
+	int i = 0;
+	int x1, y1, x2, y2;
+	float m1, m2, n1, n2;
+	x1 = medp.x;
+	x2 = med2p.x;
+	y1 = medp.y;
+	y2 = med2p.y;
+
+	if ((medp.x - maxp.x) == 0)
+	{
+		zeroFlag1 = 1;
+	}
+	if ((medp.x - maxp.x) != 0)
+	{
+		m1 = (float)(medp.y - maxp.y) / (float)(medp.x - maxp.x);
+		n1 = (float)(medp.y - (float)(m1 * medp.x));
+	}
+
+	if ((med2p.x - maxp.x) == 0)
+	{
+		zeroFlag2 = 1;
+	}
+	if ((med2p.x - maxp.x) != 0)
+	{
+		m2 = (float)(med2p.y - maxp.y) / (float)(med2p.x - maxp.x);
+		n2 = (float)(med2p.y - (float)(m2 * med2p.x));
+	}
+
+	while (y1 <= maxp.y)
+	{
+		y1 = medp.y + i;
+		if (zeroFlag1 == 0)
+		{
+			x1 = (y1 - n1) / m1;
+		}
+		y2 = med2p.y + i;
+		if (zeroFlag2 == 0)
+		{
+			x2 = (y2 - n2) / m2;
+		}
+		DrawLine(glm::vec2(x1, y1), glm::vec2(x2, y2), color);
+		i++;
+	}
+	
+}
+void Renderer::DrawTriangle(const glm::ivec2& p1, const glm::ivec2& p2, const glm::ivec2& p3, const glm::vec3& color)
+{
+	glm::vec2 maxp;
+	glm::vec2 medp;
+	glm::vec2 minp;
+	glm::vec2 med2p;
+	//find the line equation for both sides :
+	int x1, y1;
+	float m,n;
+	//find min ,max ,med for 3 points :
+	int max = (p1.y >= p2.y) ? p1.y : p2.y;
+	max = (max >= p3.y) ? max : p3.y;
+	int min = (p1.y <= p2.y) ? p1.y : p2.y;
+	min = (min <= p3.y) ? min : p3.y;
+	if (max == p1.y)
+	{
+		maxp = p1;
+		if (min == p2.y)
+		{
+			minp = p2;
+			medp = p3;
+		}
+		if (min == p3.y)
+		{
+			minp = p3;
+			medp = p2;
+		}
+	}
+	if (max == p2.y)
+	{
+		maxp = p2;
+		if (min == p1.y)
+		{
+			minp = p1;
+			medp = p3;
+		}
+		if (min == p3.y)
+		{
+			minp = p3;
+			medp = p1;
+		}
+	}
+	if (max == p3.y)
+	{
+		maxp = p3;
+		if (min == p2.y)
+		{
+			minp = p2;
+			medp = p1;
+		}
+		if (min == p1.y)
+		{
+			minp = p1;
+			medp = p2;
+		}
+	}
+	if (p1 == p2 || p1 == p3 || p2 == p3)
+		return;
+	if (maxp.y == medp.y)
+		TopTriangle(maxp, medp, minp, color);
+	else if (minp.y == medp.y)
+		BotTriangle(maxp, medp, minp, color);
+	else
+	{
+		y1 = medp.y;
+		if ((maxp.x - minp.x) != 0)
+		{
+			m = (float)(maxp.y - minp.y) / (float)(maxp.x - minp.x);
+			n = maxp.y - m * maxp.x;
+			x1 = (y1 - n) / m;
+		}
+		if ((maxp.x - minp.x) == 0)
+		{
+			x1 = maxp.x;
+		}
+		
+		med2p = glm::vec2(x1, y1);
+		TopTriangle(medp, med2p, minp, color);
+		BotTriangle(maxp, medp, med2p, color);
+	}
+}
 
 void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
 {
@@ -389,7 +569,9 @@ void Renderer::Render(const Scene& scene)
 				glm::vec2 d6(u1.x/u1.w, u1.y/u1.w);
 				glm::vec2 d7(u2.x/u2.w, u2.y/u2.w);
 				glm::vec2 d8(u3.x/u3.w, u3.y/u3.w);
-			
+
+				glm::vec3 rand_color((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
+				DrawTriangle(d1, d2, d3, rand_color);
 				DrawLine(d1,d2, Model_Color);
 				DrawLine(d1,d3, Model_Color);
 				DrawLine(d2,d3, Model_Color);
@@ -450,154 +632,6 @@ void Renderer::Render(const Scene& scene)
 			}
 		}
 	}
-	//Active model is the last opened file ( last read obj file)
-	//if ((scene.GetModelCount() > 0) && (!scene.Getuse_camera())) //This check if we loaded the mesh model
-	//{
-	//	MeshModel &model = scene.GetActiveModel(); // Gets active model 
-	//	std::vector<glm::vec3> vertices = model.get_vertices(); // Gets the vertices
-	//	std::vector<glm::vec3> normals = model.get_normals(); // Gets the vertices normals
-	//	glm::mat4 Final_L = model.GetLTransform();
-	//	glm::mat4 Final_W = model.GetWTransform();
-	//	glm::vec3 Model_Color = model.GetColor();
-	//
-	//	Avg_x = (model.Getbuondes(0) + model.Getbuondes(3)) / 2;
-	//	Avg_y = (model.Getbuondes(1) + model.Getbuondes(4)) / 2;
-	//	Avg_z = (model.Getbuondes(2) + model.Getbuondes(5)) / 2;
-	//	max1 = (model.Getbuondes(0) - model.Getbuondes(3));
-	//	max2 = (model.Getbuondes(1) - model.Getbuondes(4));
-	//	delta_x = half_width / max1;
-	//	delta_y = half_height / max2;
-	//	delta_z = half_height / max2;
-	//	Avg_x = Avg_x * delta_x;
-	//	Avg_y = Avg_y * delta_y;
-	//	Avg_z = Avg_z * delta_z;
-	//
-	//	glm::mat4 Translate_Back_matt // Translation matrix to put the model in (0,0)
-	//	(
-	//		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
-	//		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
-	//		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-	//		glm::vec4( half_width, half_height, 0.0f, 1.0f)
-	//	); 
-	//	glm::mat4 Translate_Back_mat // Translation matrix to put the model in (0,0)
-	//	(
-	//		glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
-	//		glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
-	//		glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-	//		glm::vec4(-Avg_x, -Avg_y, -Avg_z, 1.0f)
-	//	);
-	//	glm::mat4 Scale_mat // Scaling matrix to adjust the size of the model
-	//	(
-	//		glm::vec4(delta_x, 0.0f, 0.0f, 0.0f),
-	//		glm::vec4(0.0f, delta_y, 0.0f, 0.0f),
-	//		glm::vec4(0.0f, 0.0f, delta_z, 0.0f),
-	//		glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
-	//	);
-	//	
-	//	//In this case of multiplying matrices ,Order does matter... 
-	//	Transformations = Final_W * Translate_Back_matt * Final_L * Translate_Back_mat * Scale_mat;
-	//	//model.SetTransform(Transformations);
-	//
-	//	for (int faces_c = 0; faces_c < model.GetFacesCount(); faces_c++)
-	//	{
-	//		glm::vec3 p1 = vertices.at(model.GetFace(faces_c).GetVertexIndex(0)-1);
-	//		glm::vec3 p2 = vertices.at(model.GetFace(faces_c).GetVertexIndex(1)-1);
-	//		glm::vec3 p3 = vertices.at(model.GetFace(faces_c).GetVertexIndex(2)-1);
-	//		glm::vec3 n1 = (normals.at(model.GetFace(faces_c).GetNormalIndex(0)-1)+p1);
-	//		glm::vec3 n2 = (normals.at(model.GetFace(faces_c).GetNormalIndex(1)-1)+p2);
-	//		glm::vec3 n3 = (normals.at(model.GetFace(faces_c).GetNormalIndex(2)-1)+p3);
-	//		glm::vec3 s1 (((p1.x+p2.x+p3.x)/3), ((p1.y + p2.y + p3.y) / 3), ((p1.z + p2.z + p3.z) / 3));
-	//		glm::vec3 s2 (glm::normalize(glm::cross(p2-p1, p3-p1))+s1);
-	//		
-	//		//from 1x3 to 1x4
-	//		glm::vec4 v1(p1, 1.0f);
-	//		glm::vec4 v2(p2, 1.0f);
-	//		glm::vec4 v3(p3, 1.0f);
-	//		glm::vec4 v4(s1, 1.0f);
-	//		glm::vec4 v5(s2, 1.0f);
-	//		glm::vec4 u1(n1, 1.0f);
-	//		glm::vec4 u2(n2, 1.0f);
-	//		glm::vec4 u3(n3, 1.0f);
-	//		
-	//		v1 = Transformations * v1;
-	//		v2 = Transformations * v2;
-	//		v3 = Transformations * v3;
-	//		v4 = Transformations * v4;
-	//		v5 = Transformations * v5;
-	//		u1 = Transformations * u1;
-	//		u2 = Transformations * u2;
-	//		u3 = Transformations * u3;
-	//
-	//		//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
-	//		//Lines color is default black...
-	//		glm::vec2 d1(v1.x, v1.y);
-	//		glm::vec2 d2(v2.x, v2.y);
-	//		glm::vec2 d3(v3.x, v3.y);
-	//		glm::vec2 d4(v4.x, v4.y);
-	//		glm::vec2 d5(v5.x, v5.y);
-	//		glm::vec2 d6(u1.x, u1.y);
-	//		glm::vec2 d7(u2.x, u2.y);
-	//		glm::vec2 d8(u3.x, u3.y);
-	//	
-	//		DrawLine(d1,d2, Model_Color);
-	//		DrawLine(d1,d3, Model_Color);
-	//		DrawLine(d2,d3, Model_Color);
-	//		if (model.Getfaces_normals())
-	//		{
-	//			DrawLine(d4, d5, black);
-	//		}
-	//		if (model.Getvertices_normals())
-	//		{
-	//			DrawLine(d6, d1, black);
-	//			DrawLine(d7, d2, black);
-	//			DrawLine(d8, d3, black);
-	//		}
-	//	}
-	//	glm::vec4 u1(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(2), 1.0f);
-	//	glm::vec4 u2(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(5), 1.0f);
-	//	glm::vec4 u3(model.Getbuondes(0), model.Getbuondes(4), model.Getbuondes(2), 1.0f);
-	//	glm::vec4 u4(model.Getbuondes(0), model.Getbuondes(4), model.Getbuondes(5), 1.0f);
-	//	glm::vec4 u5(model.Getbuondes(3), model.Getbuondes(1), model.Getbuondes(2), 1.0f);
-	//	glm::vec4 u6(model.Getbuondes(3), model.Getbuondes(1), model.Getbuondes(5), 1.0f);
-	//	glm::vec4 u7(model.Getbuondes(3), model.Getbuondes(4), model.Getbuondes(2), 1.0f);
-	//	glm::vec4 u8(model.Getbuondes(3), model.Getbuondes(4), model.Getbuondes(5), 1.0f);
-	//
-	//	u1 = Transformations * u1;
-	//	u2 = Transformations * u2;
-	//	u3 = Transformations * u3;
-	//	u4 = Transformations * u4;
-	//	u5 = Transformations * u5;
-	//	u6 = Transformations * u6;
-	//	u7 = Transformations * u7;
-	//	u8 = Transformations * u8;
-	//	
-	//
-	//	//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
-	//	//Lines color is default black...
-	//	glm::vec2 s1(u1.x , u1.y);
-	//	glm::vec2 s2(u2.x , u2.y);
-	//	glm::vec2 s3(u3.x , u3.y);
-	//	glm::vec2 s4(u4.x , u4.y);
-	//	glm::vec2 s5(u5.x , u5.y);
-	//	glm::vec2 s6(u6.x , u6.y);
-	//	glm::vec2 s7(u7.x , u7.y);
-	//	glm::vec2 s8(u8.x , u8.y);
-	//	if (model.Getbounding_box())
-	//	{
-	//		DrawLine(s1, s2, black);
-	//		DrawLine(s1, s3, black);
-	//		DrawLine(s1, s5, black);
-	//		DrawLine(s2, s4, black);
-	//		DrawLine(s2, s6, black);
-	//		DrawLine(s3, s4, black);
-	//		DrawLine(s3, s7, black);
-	//		DrawLine(s4, s8, black);
-	//		DrawLine(s5, s6, black);
-	//		DrawLine(s5, s7, black);
-	//		DrawLine(s6, s8, black);
-	//		DrawLine(s7, s8, black);
-	//	}
-	//}
 }
 
 void Renderer::SetViewportWidth(int i)

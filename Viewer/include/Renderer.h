@@ -18,6 +18,9 @@ public:
 	
 private:
 	void PutPixel(const int i, const int j, const glm::vec3& color);
+	void TopTriangle(const glm::ivec2& medp, const glm::ivec2& med2p, const glm::ivec2& minp, const glm::vec3& color);
+	void BotTriangle(const glm::ivec2& maxp, const glm::ivec2& medp, const glm::ivec2& med2p, const glm::vec3& color);
+	void DrawTriangle(const glm::ivec2& p1, const glm::ivec2& p2, const glm::ivec2& p3, const glm::vec3& color);
 	void DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color);
 	void plotLineLow(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color);
 	void plotLineHigh(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color);
