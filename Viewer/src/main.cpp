@@ -9,9 +9,7 @@
 #include <memory>
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-
 #include "Renderer.h"
-
 #include "Scene.h"
 #include "Utils.h"
 
@@ -260,6 +258,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static bool FacesNormals = FALSE;
 		static bool VerticesNormals = FALSE;
 		static bool Proj_or_Ortho = FALSE;
+		static bool PointOrParallel = FALSE;
 		static float Lscale[] = { 0.0f, 0.0f, 0.0f };
 		static float Lposition[] = { 0.0f, 0.0f, 0.0f };
 		static float LAlpha_X = 0.0f;
@@ -271,6 +270,9 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float WAlpha_Y = 0.0f;
 		static float WAlpha_Z = 0.0f;
 		static glm::vec3 color( 0.0f, 0.0f, 0.0f);
+		static glm::vec3 ambient( 0.0f, 0.0f, 0.0f);
+		static glm::vec3 diffuse( 0.0f, 0.0f, 0.0f);
+		static glm::vec3 specular( 0.0f, 0.0f, 0.0f);
 		static glm::mat4 LScaling ;
 		static glm::mat4 LTranslate ;
 		static glm::mat4 LRotate ;
@@ -278,14 +280,20 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static glm::mat4 WTranslate ;
 		static glm::mat4 WRotate ;
 		static glm::mat4 CRotate ;
+		static glm::mat4 LLRotate ;
 		static float  l = -1.0f, r = 1.0f, b = -1.0f, t = 1.0f;
 		static float  fovy = 1.0f, nearP = -1.0f, farP = -10.0f;
 		static float Cposition[] = { 0.0f, 0.0f, 100.0f };
+		static float Lposition[] = { 0.0f, 10.0f, 0.0f };
 		static float Zoom = 1.0f;
 		static float CAlpha_X = 0.0f;
 		static float CAlpha_Y = 0.0f;
 		static float CAlpha_Z = 0.0f;
+		static float LAlpha_X = 0.0f;
+		static float LAlpha_Y = 0.0f;
+		static float LAlpha_Z = 0.0f;
 		static glm::mat4 CTranslate;
+		static glm::mat4 LTranslate;
 		
 
 		ImGui::Begin("Model Control");     // Create a window called "Model Control" and append into it.
@@ -463,6 +471,60 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				camera.Setfar(farP);
 			}
 		}
+		/***********************************************************************************************************/
+		//ImGui::Begin("Light Source Control");     // Create a window called "Light Source Control" and append into it.
+		//if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+		//{
+		//	if (ImGui::BeginTabItem("Point"))
+		//	{
+		//		PointOrParallel = false;
+		//		ImGui::SliderFloat("ambient", &ambient, 0.0f, 1.0f);
+		//		ImGui::SliderFloat("diffuse", &diffuse, 0.0f, 1.0f);
+		//		ImGui::SliderFloat("specular", &specular, 0.0f, 1.0f);
+		//		ImGui::EndTabItem();
+		//	}
+		//	if (ImGui::BeginTabItem("Parallel"))
+		//	{
+		//		PointOrParallel = true;
+		//		ImGui::SliderFloat("ambient", &ambient, 0.0f, 1.0f);
+		//		ImGui::SliderFloat("diffuse", &diffuse, 0.0f, 1.0f);
+		//		ImGui::SliderFloat("specular", &specular, 0.0f, 1.0f);
+		//		ImGui::EndTabItem();
+		//	}
+		//	ImGui::EndTabBar();
+		//}
+		//ImGui::SliderFloat3("position(x,y,z)", Lposition, 0.0f, 500.0f);
+		//LTranslate = {
+		//	glm::vec4(1.0f,0.0f,0.0f,0.0f),
+		//	glm::vec4(0.0f,1.0f,0.0f,0.0f),
+		//	glm::vec4(0.0f,0.0f,1.0f,0.0f),
+		//	glm::vec4(Lposition[0],Lposition[1] ,Lposition[2],1.0f)
+		//};
+		//ImGui::SliderFloat("X-rotation (0~2pi)", &LAlpha_X, 0, 2 * Pi);
+		//ImGui::SliderFloat("Y-rotation (0~2pi)", &LAlpha_Y, 0, 2 * Pi);
+		//ImGui::SliderFloat("Z-rotation (0~2pi)", &LAlpha_Z, 0, 2 * Pi);
+		//glm::mat4 Rotate_X = {
+		//glm::vec4(1.0f,0.0f,0.0f,0.0f),
+		//glm::vec4(0.0f,cos(LAlpha_X),sin(LAlpha_X),0.0f),
+		//glm::vec4(0.0f,-sin(LAlpha_X),cos(LAlpha_X),0.0f),
+		//glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		//};
+		//glm::mat4 Rotate_Y = {
+		//glm::vec4(cos(LAlpha_Y),0.0f,sin(LAlpha_Y),0.0f),
+		//glm::vec4(0.0f,1.0f,0.0f,0.0f),
+		//glm::vec4(-sin(LAlpha_Y),0.0f,cos(LAlpha_Y),0.0f),
+		//glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		//};
+		//glm::mat4 Rotate_Z = {
+		//glm::vec4(cos(LAlpha_Z),sin(LAlpha_Z),0.0f,0.0f),
+		//glm::vec4(-sin(LAlpha_Z),cos(LAlpha_Z),0.0f,0.0f),
+		//glm::vec4(0.0f,0.0f,1.0f,0.0f),
+		//glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		//};
+		//LLRotate = Rotate_Z * Rotate_Y * Rotate_X;
+		/*********************************************************************************************************/
+		
+		/***********************************************************************************************************/
 		if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
 		{
 			MeshModel &model = scene.GetActiveModel(); // Gets active model
@@ -479,6 +541,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			model.Setbounding_box(BoundingBox);
 			model.Setfaces_normals(FacesNormals);
 			model.Setvertices_normals(VerticesNormals);
+
 		}
 		ImGui::End();
 	}

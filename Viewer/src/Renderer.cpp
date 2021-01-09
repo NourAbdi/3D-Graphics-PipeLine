@@ -45,7 +45,7 @@ void Renderer::PutPixel(const int i, const int j, const float z, const glm::vec3
 {
 	if (i < 0) return; if (i >= viewport_width_) return;
 	if (j < 0) return; if (j >= viewport_height_) return;
-	if (z > z_buffer_[i*viewport_height_ + j])
+	if (z > z_buffer_[i*viewport_height_ + j]+0.1)
 	{
 		z_buffer_[i*viewport_height_ + j] = z;
 		color_buffer_[INDEX(viewport_width_, i, j, 0)] = color.x;
@@ -243,84 +243,6 @@ void Renderer::DrawTriangle(const glm::ivec3& p1, const glm::ivec3& p2, const gl
 			}
 		}
 	}
-	//glm::vec2 maxp;
-	//glm::vec2 medp;
-	//glm::vec2 minp;
-	//glm::vec2 med2p;
-	////find the line equation for both sides :
-	//int x1, y1;
-	//float m,n;
-	////find min ,max ,med for 3 points :
-	//int max = (p1.y >= p2.y) ? p1.y : p2.y;
-	//max = (max >= p3.y) ? max : p3.y;
-	//int min = (p1.y <= p2.y) ? p1.y : p2.y;
-	//min = (min <= p3.y) ? min : p3.y;
-	//if (max == p1.y)
-	//{
-	//	maxp = p1;
-	//	if (min == p2.y)
-	//	{
-	//		minp = p2;
-	//		medp = p3;
-	//	}
-	//	if (min == p3.y)
-	//	{
-	//		minp = p3;
-	//		medp = p2;
-	//	}
-	//}
-	//if (max == p2.y)
-	//{
-	//	maxp = p2;
-	//	if (min == p1.y)
-	//	{
-	//		minp = p1;
-	//		medp = p3;
-	//	}
-	//	if (min == p3.y)
-	//	{
-	//		minp = p3;
-	//		medp = p1;
-	//	}
-	//}
-	//if (max == p3.y)
-	//{
-	//	maxp = p3;
-	//	if (min == p2.y)
-	//	{
-	//		minp = p2;
-	//		medp = p1;
-	//	}
-	//	if (min == p1.y)
-	//	{
-	//		minp = p1;
-	//		medp = p2;
-	//	}
-	//}
-	//if (p1.x == p2.x == p3.x || p1.y == p2.y == p3.y)
-	//	return;
-	//if (maxp.y == medp.y)
-	//	TopTriangle(maxp, medp, minp, color);
-	//else if (minp.y == medp.y)
-	//	BotTriangle(maxp, medp, minp, color);
-	//else
-	//{
-	//	y1 = medp.y;
-	//	if ((maxp.x - minp.x) != 0)
-	//	{
-	//		m = (float)(maxp.y - minp.y) / (float)(maxp.x - minp.x);
-	//		n = (float)(maxp.y - (float)(m * maxp.x));
-	//		x1 = (y1 - n) / m;
-	//	}
-	//	if ((maxp.x - minp.x) == 0)
-	//	{
-	//		x1 = maxp.x;
-	//	}
-	//	
-	//	med2p = glm::vec2(x1, y1);
-	//	TopTriangle(medp, med2p, minp, color);
-	//	BotTriangle(maxp, medp, med2p, color);
-	//}
 }
 
 void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
@@ -610,7 +532,7 @@ void Renderer::Render(const Scene& scene)
 				u3 = Transformations * u3;
 				
 				glm::vec3 rand_color((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
-				DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, rand_color);
+				DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, Model_Color);
 
 				//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 				//Lines color is default black...

@@ -31,7 +31,9 @@
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ZBuffer.cpp" />
+    <ClCompile Include="Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\Camera.h">
@@ -61,7 +63,7 @@
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\imgui_impl_opengl3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ZBuffer.h">
+    <ClInclude Include="Light.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
