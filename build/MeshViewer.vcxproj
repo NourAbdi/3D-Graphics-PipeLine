@@ -371,6 +371,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\imgui_impl_glfw.cpp" />
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\imgui_impl_opengl3.cpp" />
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp" />
+    <ClCompile Include="ZBuffer.cpp" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\Camera.h" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\Face.h" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\InitShader.h" />
@@ -380,6 +381,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\Utils.h" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\imgui_impl_glfw.h" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\imgui_impl_opengl3.h" />
+    <ClInclude Include="ZBuffer.h" />
     <None Include="D:\computergraphics2021-nour-abdi\Viewer\shaders\fshader.glsl">
     </None>
     <None Include="D:\computergraphics2021-nour-abdi\Viewer\shaders\vshader.glsl">

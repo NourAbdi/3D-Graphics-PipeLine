@@ -29,6 +29,7 @@ Renderer::Renderer(int viewport_width, int viewport_height) :
 Renderer::~Renderer()
 {
 	delete[] color_buffer_;
+	delete[] z_buffer_;
 }
 
 void Renderer::PutPixel(int i, int j, const glm::vec3& color)
@@ -39,6 +40,18 @@ void Renderer::PutPixel(int i, int j, const glm::vec3& color)
 	color_buffer_[INDEX(viewport_width_, i, j, 0)] = color.x;
 	color_buffer_[INDEX(viewport_width_, i, j, 1)] = color.y;
 	color_buffer_[INDEX(viewport_width_, i, j, 2)] = color.z;
+}
+void Renderer::PutPixel(const int i, const int j, const float z, const glm::vec3& color)
+{
+	if (i < 0) return; if (i >= viewport_width_) return;
+	if (j < 0) return; if (j >= viewport_height_) return;
+	if (z > z_buffer_[i*viewport_height_ + j])
+	{
+		z_buffer_[i*viewport_height_ + j] = z;
+		color_buffer_[INDEX(viewport_width_, i, j, 0)] = color.x;
+		color_buffer_[INDEX(viewport_width_, i, j, 1)] = color.y;
+		color_buffer_[INDEX(viewport_width_, i, j, 2)] = color.z;
+	}
 }
 
 void Renderer::plotLineLow(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
@@ -191,88 +204,123 @@ void Renderer::BotTriangle(const glm::ivec2& maxp, const glm::ivec2& medp, const
 		DrawLine(glm::vec2(x1, y1), glm::vec2(x2, y2), color);
 		i++;
 	}
-	
 }
-void Renderer::DrawTriangle(const glm::ivec2& p1, const glm::ivec2& p2, const glm::ivec2& p3, const glm::vec3& color)
+float Renderer::max_point(const float x, const float y, const float z)
 {
-	glm::vec2 maxp;
-	glm::vec2 medp;
-	glm::vec2 minp;
-	glm::vec2 med2p;
-	//find the line equation for both sides :
-	int x1, y1;
-	float m,n;
-	//find min ,max ,med for 3 points :
-	int max = (p1.y >= p2.y) ? p1.y : p2.y;
-	max = (max >= p3.y) ? max : p3.y;
-	int min = (p1.y <= p2.y) ? p1.y : p2.y;
-	min = (min <= p3.y) ? min : p3.y;
-	if (max == p1.y)
+	return ((x >= y) ? x : y) >= z ? ((x >= y) ? x : y):z ;
+}
+float Renderer::min_point(const float x, const float y, const float z)
+{
+	return ((x <= y) ? x : y) <= z ? ((x <= y) ? x : y) : z;
+}
+float Renderer::cal_area(const glm::ivec2& a, const glm::ivec2& b, const glm::ivec2& c)
+{
+	return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x);
+}
+void Renderer::DrawTriangle(const glm::ivec3& p1, const glm::ivec3& p2, const glm::ivec3& p3, const glm::vec3& color)
+{
+	float Maxx = max_point(p1.x, p2.x, p3.x);
+	float Maxy = max_point(p1.y, p2.y, p3.y);
+	float Minx = min_point(p1.x, p2.x, p3.x);
+	float Miny = min_point(p1.y, p2.y, p3.y);
+	float AREA = cal_area(p1, p2, p3);
+	float A ;
+	float B ;
+	float C ;
+
+	for (int j = Miny; j < Maxy; j++)
 	{
-		maxp = p1;
-		if (min == p2.y)
+		for (int i = Minx; i < Maxx; i++)
 		{
-			minp = p2;
-			medp = p3;
-		}
-		if (min == p3.y)
-		{
-			minp = p3;
-			medp = p2;
+			A = cal_area(p2, p3, glm::vec2(i , j));
+			B = cal_area(p3, p1, glm::vec2(i , j));
+			C = cal_area(p1, p2, glm::vec2(i , j));
+
+			if (A >= 0 && B >= 0 && C >= 0)
+			{
+				float Z=(A/AREA)*p1.z + (B/AREA)*p2.z + (C/AREA)*p3.z ;
+				PutPixel(i, j , Z , color);
+			}
 		}
 	}
-	if (max == p2.y)
-	{
-		maxp = p2;
-		if (min == p1.y)
-		{
-			minp = p1;
-			medp = p3;
-		}
-		if (min == p3.y)
-		{
-			minp = p3;
-			medp = p1;
-		}
-	}
-	if (max == p3.y)
-	{
-		maxp = p3;
-		if (min == p2.y)
-		{
-			minp = p2;
-			medp = p1;
-		}
-		if (min == p1.y)
-		{
-			minp = p1;
-			medp = p2;
-		}
-	}
-	if (p1 == p2 || p1 == p3 || p2 == p3)
-		return;
-	if (maxp.y == medp.y)
-		TopTriangle(maxp, medp, minp, color);
-	else if (minp.y == medp.y)
-		BotTriangle(maxp, medp, minp, color);
-	else
-	{
-		y1 = medp.y;
-		if ((maxp.x - minp.x) != 0)
-		{
-			m = (float)(maxp.y - minp.y) / (float)(maxp.x - minp.x);
-			n = maxp.y - m * maxp.x;
-			x1 = (y1 - n) / m;
-		}
-		if ((maxp.x - minp.x) == 0)
-		{
-			x1 = maxp.x;
-		}
-		
-		med2p = glm::vec2(x1, y1);
-		TopTriangle(medp, med2p, minp, color);
-		BotTriangle(maxp, medp, med2p, color);
-	}
+	//glm::vec2 maxp;
+	//glm::vec2 medp;
+	//glm::vec2 minp;
+	//glm::vec2 med2p;
+	////find the line equation for both sides :
+	//int x1, y1;
+	//float m,n;
+	////find min ,max ,med for 3 points :
+	//int max = (p1.y >= p2.y) ? p1.y : p2.y;
+	//max = (max >= p3.y) ? max : p3.y;
+	//int min = (p1.y <= p2.y) ? p1.y : p2.y;
+	//min = (min <= p3.y) ? min : p3.y;
+	//if (max == p1.y)
+	//{
+	//	maxp = p1;
+	//	if (min == p2.y)
+	//	{
+	//		minp = p2;
+	//		medp = p3;
+	//	}
+	//	if (min == p3.y)
+	//	{
+	//		minp = p3;
+	//		medp = p2;
+	//	}
+	//}
+	//if (max == p2.y)
+	//{
+	//	maxp = p2;
+	//	if (min == p1.y)
+	//	{
+	//		minp = p1;
+	//		medp = p3;
+	//	}
+	//	if (min == p3.y)
+	//	{
+	//		minp = p3;
+	//		medp = p1;
+	//	}
+	//}
+	//if (max == p3.y)
+	//{
+	//	maxp = p3;
+	//	if (min == p2.y)
+	//	{
+	//		minp = p2;
+	//		medp = p1;
+	//	}
+	//	if (min == p1.y)
+	//	{
+	//		minp = p1;
+	//		medp = p2;
+	//	}
+	//}
+	//if (p1.x == p2.x == p3.x || p1.y == p2.y == p3.y)
+	//	return;
+	//if (maxp.y == medp.y)
+	//	TopTriangle(maxp, medp, minp, color);
+	//else if (minp.y == medp.y)
+	//	BotTriangle(maxp, medp, minp, color);
+	//else
+	//{
+	//	y1 = medp.y;
+	//	if ((maxp.x - minp.x) != 0)
+	//	{
+	//		m = (float)(maxp.y - minp.y) / (float)(maxp.x - minp.x);
+	//		n = (float)(maxp.y - (float)(m * maxp.x));
+	//		x1 = (y1 - n) / m;
+	//	}
+	//	if ((maxp.x - minp.x) == 0)
+	//	{
+	//		x1 = maxp.x;
+	//	}
+	//	
+	//	med2p = glm::vec2(x1, y1);
+	//	TopTriangle(medp, med2p, minp, color);
+	//	BotTriangle(maxp, medp, med2p, color);
+	//}
 }
 
 void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
@@ -303,6 +351,7 @@ void Renderer::CreateBuffers(int w, int h)
 {
 	CreateOpenGLBuffer(); //Do not remove this line.
 	color_buffer_ = new float[3 * w * h];
+	z_buffer_ = new float[w * h];
 	ClearColorBuffer(glm::vec3(0.0f, 0.0f, 0.0f));
 }
 
@@ -425,6 +474,7 @@ void Renderer::ClearColorBuffer(const glm::vec3& color)
 	{
 		for (int j = 0; j < viewport_height_; j++)
 		{
+			z_buffer_[i*viewport_height_ + j] = -1 * INFINITY;
 			PutPixel(i, j, color);
 		}
 	}
@@ -522,7 +572,7 @@ void Renderer::Render(const Scene& scene)
 			(
 				glm::vec4(delta_x, 0.0f, 0.0f, 0.0f),
 				glm::vec4(0.0f, delta_y, 0.0f, 0.0f),
-				glm::vec4(0.0f, 0.0f, delta_z, 0.0f),
+				glm::vec4(0.0f, 0.0f, 1.f, 0.0f),
 				glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
 			);
 
@@ -558,7 +608,10 @@ void Renderer::Render(const Scene& scene)
 				u1 = Transformations * u1;
 				u2 = Transformations * u2;
 				u3 = Transformations * u3;
-		
+				
+				glm::vec3 rand_color((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
+				DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, rand_color);
+
 				//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 				//Lines color is default black...
 				glm::vec2 d1(v1.x/v1.w, v1.y/v1.w);
@@ -570,11 +623,10 @@ void Renderer::Render(const Scene& scene)
 				glm::vec2 d7(u2.x/u2.w, u2.y/u2.w);
 				glm::vec2 d8(u3.x/u3.w, u3.y/u3.w);
 
-				glm::vec3 rand_color((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
-				DrawTriangle(d1, d2, d3, rand_color);
-				DrawLine(d1,d2, Model_Color);
-				DrawLine(d1,d3, Model_Color);
-				DrawLine(d2,d3, Model_Color);
+				
+				//DrawLine(d1,d2, Model_Color);
+				//DrawLine(d1,d3, Model_Color);
+				//DrawLine(d2,d3, Model_Color);
 				if (model.Getfaces_normals())
 				{
 					DrawLine(d4, d5, black);

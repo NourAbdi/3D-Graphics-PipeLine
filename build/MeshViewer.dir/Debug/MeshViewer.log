@@ -1,18 +1,34 @@
 ﻿  Renderer.cpp
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(135): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(140): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(184): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(189): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(260): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(148): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(153): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(197): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(202): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(218): warning C4244: 'return': conversion from 'T' to 'float', possible loss of data
           with
           [
-              T=float
+              T=glm::i32
           ]
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(265): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(269): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(222): warning C4244: 'argument': conversion from 'const T' to 'const float', possible loss of data
           with
           [
-              T=float
+              T=glm::i32
           ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(223): warning C4244: 'argument': conversion from 'const T' to 'const float', possible loss of data
+          with
+          [
+              T=glm::i32
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(224): warning C4244: 'argument': conversion from 'const T' to 'const float', possible loss of data
+          with
+          [
+              T=glm::i32
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(225): warning C4244: 'argument': conversion from 'const T' to 'const float', possible loss of data
+          with
+          [
+              T=glm::i32
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(231): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(233): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
   MeshViewer.vcxproj -> D:\computergraphics2021-nour-abdi\build\bin\Debug\MeshViewer.exe
   Copying Shaders
