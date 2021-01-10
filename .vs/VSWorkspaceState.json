@@ -5,6 +5,6 @@
     "\\Viewer\\include",
     "\\Viewer\\src"
   ],
-  "SelectedNode": "\\Viewer\\src\\main.cpp",
+  "SelectedNode": "\\Viewer\\include\\Scene.h",
   "PreviewInSolutionExplorer": false
 }

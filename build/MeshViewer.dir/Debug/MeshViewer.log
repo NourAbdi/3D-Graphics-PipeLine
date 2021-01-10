@@ -1,78 +1,12 @@
 ﻿  main.cpp
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(287): error C2374: 'Lposition': redefinition; multiple initialization
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(263): note: see declaration of 'Lposition'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(292): error C2374: 'LAlpha_X': redefinition; multiple initialization
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(264): note: see declaration of 'LAlpha_X'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(293): error C2374: 'LAlpha_Y': redefinition; multiple initialization
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(265): note: see declaration of 'LAlpha_Y'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(294): error C2374: 'LAlpha_Z': redefinition; multiple initialization
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(266): note: see declaration of 'LAlpha_Z'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(296): error C2086: 'glm::mat4 LTranslate': redefinition
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(277): note: see declaration of 'LTranslate'
 D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(321): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(322): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(323): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(326): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(326): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(327): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(327): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(324): error C2440: 'initializing': cannot convert from 'initializer list' to 'glm::mat<4,4,glm::f32,0>'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(329): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(331): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(331): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(333): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(333): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(330): error C2440: 'initializing': cannot convert from 'initializer list' to 'glm::mat<4,4,glm::f32,0>'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(335): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(337): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(337): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(338): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(338): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(336): error C2440: 'initializing': cannot convert from 'initializer list' to 'glm::mat<4,4,glm::f32,0>'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(341): note: No constructor could take the source type, or constructor overload resolution was ambiguous
 D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(364): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(365): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(366): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(427): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(428): warning C4305: 'argument': truncation from 'double' to 'float'
 D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(429): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(481): error C2664: 'bool ImGui::SliderFloat(const char *,float *,float,float,const char *,float)': cannot convert argument 2 from 'glm::vec3 *' to 'float *'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(481): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(482): error C2664: 'bool ImGui::SliderFloat(const char *,float *,float,float,const char *,float)': cannot convert argument 2 from 'glm::vec3 *' to 'float *'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(482): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(483): error C2664: 'bool ImGui::SliderFloat(const char *,float *,float,float,const char *,float)': cannot convert argument 2 from 'glm::vec3 *' to 'float *'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(483): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(489): error C2664: 'bool ImGui::SliderFloat(const char *,float *,float,float,const char *,float)': cannot convert argument 2 from 'glm::vec3 *' to 'float *'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(489): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(490): error C2664: 'bool ImGui::SliderFloat(const char *,float *,float,float,const char *,float)': cannot convert argument 2 from 'glm::vec3 *' to 'float *'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(490): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(491): error C2664: 'bool ImGui::SliderFloat(const char *,float *,float,float,const char *,float)': cannot convert argument 2 from 'glm::vec3 *' to 'float *'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(491): note: Types pointed to are unrelated; conversion requires reinterpret_cast, C-style cast or function-style cast
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(503): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(504): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(505): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(506): error C2374: 'Rotate_X': redefinition; multiple initialization
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(430): note: see declaration of 'Rotate_X'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(508): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(508): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(509): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(509): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(506): error C2440: 'initializing': cannot convert from 'initializer list' to 'glm::mat<4,4,glm::f32,0>'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(511): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(512): error C2374: 'Rotate_Y': redefinition; multiple initialization
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(436): note: see declaration of 'Rotate_Y'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(513): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(513): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(515): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(515): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(512): error C2440: 'initializing': cannot convert from 'initializer list' to 'glm::mat<4,4,glm::f32,0>'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(517): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(518): error C2374: 'Rotate_Z': redefinition; multiple initialization
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(442): note: see declaration of 'Rotate_Z'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(519): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(519): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(520): error C2440: '<function-style-cast>': cannot convert from 'initializer list' to 'glm::vec4'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(520): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(518): error C2440: 'initializing': cannot convert from 'initializer list' to 'glm::mat<4,4,glm::f32,0>'
-  D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(523): note: No constructor could take the source type, or constructor overload resolution was ambiguous
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(524): error C2088: '*': illegal for struct
+  MeshViewer.vcxproj -> D:\computergraphics2021-nour-abdi\build\bin\Debug\MeshViewer.exe
+  Copying Shaders

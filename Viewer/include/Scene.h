@@ -21,6 +21,14 @@ public:
 	Camera& GetCamera(int index) const;
 	Camera& GetActiveCamera() const;
 
+	void AddLight(const std::shared_ptr<Light>& light);
+	int GetLightCount() const;
+	Light& GetLight(int index) const;
+	Light& GetActiveLight() const;
+
+	void SetActiveLightIndex(int index);
+	int GetActiveLightIndex() const;
+
 	void SetActiveCameraIndex(int index);
 	int GetActiveCameraIndex() const;
 

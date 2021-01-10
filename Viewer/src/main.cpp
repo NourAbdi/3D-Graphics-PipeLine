@@ -284,16 +284,16 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float  l = -1.0f, r = 1.0f, b = -1.0f, t = 1.0f;
 		static float  fovy = 1.0f, nearP = -1.0f, farP = -10.0f;
 		static float Cposition[] = { 0.0f, 0.0f, 100.0f };
-		static float Lposition[] = { 0.0f, 10.0f, 0.0f };
+		static float LLposition[] = { 0.0f, 10.0f, 0.0f };
 		static float Zoom = 1.0f;
 		static float CAlpha_X = 0.0f;
 		static float CAlpha_Y = 0.0f;
 		static float CAlpha_Z = 0.0f;
-		static float LAlpha_X = 0.0f;
-		static float LAlpha_Y = 0.0f;
-		static float LAlpha_Z = 0.0f;
+		static float LLAlpha_X = 0.0f;
+		static float LLAlpha_Y = 0.0f;
+		static float LLAlpha_Z = 0.0f;
 		static glm::mat4 CTranslate;
-		static glm::mat4 LTranslate;
+		static glm::mat4 LLTranslate;
 		
 
 		ImGui::Begin("Model Control");     // Create a window called "Model Control" and append into it.
@@ -493,12 +493,12 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		//	}
 		//	ImGui::EndTabBar();
 		//}
-		//ImGui::SliderFloat3("position(x,y,z)", Lposition, 0.0f, 500.0f);
-		//LTranslate = {
+		//ImGui::SliderFloat3("position(x,y,z)", LLposition, 0.0f, 500.0f);
+		//LLTranslate = {
 		//	glm::vec4(1.0f,0.0f,0.0f,0.0f),
 		//	glm::vec4(0.0f,1.0f,0.0f,0.0f),
 		//	glm::vec4(0.0f,0.0f,1.0f,0.0f),
-		//	glm::vec4(Lposition[0],Lposition[1] ,Lposition[2],1.0f)
+		//	glm::vec4(LLposition[0],LLposition[1] ,LLposition[2],1.0f)
 		//};
 		//ImGui::SliderFloat("X-rotation (0~2pi)", &LAlpha_X, 0, 2 * Pi);
 		//ImGui::SliderFloat("Y-rotation (0~2pi)", &LAlpha_Y, 0, 2 * Pi);
