@@ -17,6 +17,6 @@ pictures of the color buffer and z-buffer, for several models or viewpoints.**
 
 ![dolphin_Z-buffer](https://user-images.githubusercontent.com/34486030/104119372-82575400-5337-11eb-9935-ac709bdbcd01.png)
 
-![teapotfill](https://user-images.githubusercontent.com/34486030/104119379-8be0bc00-5337-11eb-8dec-587d86788021.png)
+![teaPot_Z-bufer](https://user-images.githubusercontent.com/34486030/104119416-c77b8600-5337-11eb-9c3f-d1c8aed280ba.png)
 
 ![bunny_Z-Buffer](https://user-images.githubusercontent.com/34486030/104119389-9dc25f00-5337-11eb-84cb-35fbcf53cccc.png)
