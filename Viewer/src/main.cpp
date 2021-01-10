@@ -18,6 +18,8 @@
  */
 bool show_demo_window = false;
 bool show_another_window = false;
+static glm::vec3 black(0.0f, 0.0f, 0.0f);
+static glm::vec3 white(255.0f, 255.0f, 255.0f);
 glm::vec4 clear_color = glm::vec4(1.00f, 1.00f, 1.00f, 1.00f);
 
 /**
@@ -254,6 +256,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 	{
 		static int mode = 0;
 		static int ONCE = 0;
+		static int ONCEE = 0;
 		static bool BoundingBox = FALSE;
 		static bool FacesNormals = FALSE;
 		static bool VerticesNormals = FALSE;
@@ -270,9 +273,12 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float WAlpha_Y = 0.0f;
 		static float WAlpha_Z = 0.0f;
 		static glm::vec3 color( 0.0f, 0.0f, 0.0f);
-		static glm::vec3 ambient( 0.0f, 0.0f, 0.0f);
-		static glm::vec3 diffuse( 0.0f, 0.0f, 0.0f);
-		static glm::vec3 specular( 0.0f, 0.0f, 0.0f);
+		static float ambientt[] = { 0.0f, 0.0f, 0.0f };
+		static float diffusee[] = { 0.0f, 0.0f, 0.0f };
+		static float specularr[] = { 0.0f, 0.0f, 0.0f };
+		static glm::vec3 ambient(0.0f, 0.0f, 0.0f);
+		static glm::vec3 diffuse(0.0f, 0.0f, 0.0f);
+		static glm::vec3 specular(0.0f, 0.0f, 0.0f);
 		static glm::mat4 LScaling ;
 		static glm::mat4 LTranslate ;
 		static glm::mat4 LRotate ;
@@ -446,11 +452,63 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		glm::vec4(0.0f,0.0f,0.0f,1.0f)
 		};
 		CRotate = Rotate_Z * Rotate_Y * Rotate_X;
+		ImGui::End();
+		/***********************************************************************************************************/
+		ImGui::Begin("Light Source Control");     // Create a window called "Light Source Control" and append into it.
+		if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
+		{
+			if (ImGui::BeginTabItem("Point"))
+			{
+				PointOrParallel = true;
+				ImGui::EndTabItem();
+			}
+			if (ImGui::BeginTabItem("Parallel"))
+			{
+				PointOrParallel = false;
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+		}
+		ImGui::SliderFloat3("ambient [RGB]", ambientt, 0.0f, 1.0f);
+		ImGui::SliderFloat3("diffuse [RGB]", diffusee, 0.0f, 1.0f);
+		ImGui::SliderFloat3("specular[RGB]", specularr, 0.0f, 1.0f);
+		ambient = glm::vec3(ambientt[0], ambientt[1], ambientt[2]);
+		diffuse = glm::vec3(diffusee[0], diffusee[1], diffusee[2]);
+		specular = glm::vec3(specularr[0], specularr[1], specularr[2]);
+		ImGui::SliderFloat3("position(x,y,z)", LLposition, 0.0f, 500.0f);
+		LLTranslate = {
+			glm::vec4(1.0f,0.0f,0.0f,0.0f),
+			glm::vec4(0.0f,1.0f,0.0f,0.0f),
+			glm::vec4(0.0f,0.0f,1.0f,0.0f),
+			glm::vec4(LLposition[0],LLposition[1] ,LLposition[2],1.0f)
+		};
+		ImGui::SliderFloat("X-rotation (0~2pi)", &LLAlpha_X, 0, 2 * Pi);
+		ImGui::SliderFloat("Y-rotation (0~2pi)", &LLAlpha_Y, 0, 2 * Pi);
+		ImGui::SliderFloat("Z-rotation (0~2pi)", &LLAlpha_Z, 0, 2 * Pi);
+		glm::mat4 Rotate_x = {
+		glm::vec4(1.0f,0.0f,0.0f,0.0f),
+		glm::vec4(0.0f,cos(LLAlpha_X),sin(LLAlpha_X),0.0f),
+		glm::vec4(0.0f,-sin(LLAlpha_X),cos(LLAlpha_X),0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		glm::mat4 Rotate_y = {
+		glm::vec4(cos(LLAlpha_Y),0.0f,sin(LLAlpha_Y),0.0f),
+		glm::vec4(0.0f,1.0f,0.0f,0.0f),
+		glm::vec4(-sin(LLAlpha_Y),0.0f,cos(LLAlpha_Y),0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		glm::mat4 Rotate_z = {
+		glm::vec4(cos(LLAlpha_Z),sin(LLAlpha_Z),0.0f,0.0f),
+		glm::vec4(-sin(LLAlpha_Z),cos(LLAlpha_Z),0.0f,0.0f),
+		glm::vec4(0.0f,0.0f,1.0f,0.0f),
+		glm::vec4(0.0f,0.0f,0.0f,1.0f)
+		};
+		LLRotate = Rotate_z * Rotate_y * Rotate_x;
 		/*********************************************************************************************************/
 		if (!ONCE)
 		{
 			std::shared_ptr<Camera> camera = std::make_shared<Camera>();
-			scene.AddCamera (camera);
+			scene.AddCamera(camera);
 			ONCE++;
 		}
 		if (scene.GetCameraCount() > 0) //This check if we loaded a camera
@@ -471,59 +529,23 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				camera.Setfar(farP);
 			}
 		}
-		/***********************************************************************************************************/
-		//ImGui::Begin("Light Source Control");     // Create a window called "Light Source Control" and append into it.
-		//if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
-		//{
-		//	if (ImGui::BeginTabItem("Point"))
-		//	{
-		//		PointOrParallel = false;
-		//		ImGui::SliderFloat("ambient", &ambient, 0.0f, 1.0f);
-		//		ImGui::SliderFloat("diffuse", &diffuse, 0.0f, 1.0f);
-		//		ImGui::SliderFloat("specular", &specular, 0.0f, 1.0f);
-		//		ImGui::EndTabItem();
-		//	}
-		//	if (ImGui::BeginTabItem("Parallel"))
-		//	{
-		//		PointOrParallel = true;
-		//		ImGui::SliderFloat("ambient", &ambient, 0.0f, 1.0f);
-		//		ImGui::SliderFloat("diffuse", &diffuse, 0.0f, 1.0f);
-		//		ImGui::SliderFloat("specular", &specular, 0.0f, 1.0f);
-		//		ImGui::EndTabItem();
-		//	}
-		//	ImGui::EndTabBar();
-		//}
-		//ImGui::SliderFloat3("position(x,y,z)", LLposition, 0.0f, 500.0f);
-		//LLTranslate = {
-		//	glm::vec4(1.0f,0.0f,0.0f,0.0f),
-		//	glm::vec4(0.0f,1.0f,0.0f,0.0f),
-		//	glm::vec4(0.0f,0.0f,1.0f,0.0f),
-		//	glm::vec4(LLposition[0],LLposition[1] ,LLposition[2],1.0f)
-		//};
-		//ImGui::SliderFloat("X-rotation (0~2pi)", &LAlpha_X, 0, 2 * Pi);
-		//ImGui::SliderFloat("Y-rotation (0~2pi)", &LAlpha_Y, 0, 2 * Pi);
-		//ImGui::SliderFloat("Z-rotation (0~2pi)", &LAlpha_Z, 0, 2 * Pi);
-		//glm::mat4 Rotate_X = {
-		//glm::vec4(1.0f,0.0f,0.0f,0.0f),
-		//glm::vec4(0.0f,cos(LAlpha_X),sin(LAlpha_X),0.0f),
-		//glm::vec4(0.0f,-sin(LAlpha_X),cos(LAlpha_X),0.0f),
-		//glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		//};
-		//glm::mat4 Rotate_Y = {
-		//glm::vec4(cos(LAlpha_Y),0.0f,sin(LAlpha_Y),0.0f),
-		//glm::vec4(0.0f,1.0f,0.0f,0.0f),
-		//glm::vec4(-sin(LAlpha_Y),0.0f,cos(LAlpha_Y),0.0f),
-		//glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		//};
-		//glm::mat4 Rotate_Z = {
-		//glm::vec4(cos(LAlpha_Z),sin(LAlpha_Z),0.0f,0.0f),
-		//glm::vec4(-sin(LAlpha_Z),cos(LAlpha_Z),0.0f,0.0f),
-		//glm::vec4(0.0f,0.0f,1.0f,0.0f),
-		//glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		//};
-		//LLRotate = Rotate_Z * Rotate_Y * Rotate_X;
 		/*********************************************************************************************************/
-		
+		if (!ONCEE)
+		{
+			std::shared_ptr<Light> light = std::make_shared<Light>();
+			scene.AddLight(light);
+			ONCEE++;
+		}
+		if (scene.GetLightCount() > 0) //This check if we loaded a camera
+		{
+			Light &light = scene.GetActiveLight();
+			light.SetPointOrParallel(PointOrParallel);
+			light.SetTransformation(LLRotate);
+			light.SetPosition(glm::vec3(LLposition[0], LLposition[1], LLposition[2]));
+			light.Setambient(ambient);
+			light.Setdiffuse(diffuse);
+			light.Setspecular(specular);
+		}
 		/***********************************************************************************************************/
 		if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
 		{

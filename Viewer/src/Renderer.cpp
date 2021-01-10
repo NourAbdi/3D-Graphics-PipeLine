@@ -45,7 +45,7 @@ void Renderer::PutPixel(const int i, const int j, const float z, const glm::vec3
 {
 	if (i < 0) return; if (i >= viewport_width_) return;
 	if (j < 0) return; if (j >= viewport_height_) return;
-	if (z > z_buffer_[i*viewport_height_ + j]+0.1)
+	if (z > z_buffer_[i*viewport_height_ + j])
 	{
 		z_buffer_[i*viewport_height_ + j] = z;
 		color_buffer_[INDEX(viewport_width_, i, j, 0)] = color.x;
@@ -107,104 +107,104 @@ void Renderer::plotLineHigh(const glm::ivec2& p1, const glm::ivec2& p2, const gl
 			D = D + 2 * dx;
 	}
 }
-void Renderer::TopTriangle(const glm::ivec2& medp, const glm::ivec2& med2p, const glm::ivec2& minp, const glm::vec3& color)
-{
-	//find the line equation for both sides :
-	int zeroFlag1 = 0;
-	int zeroFlag2 = 0;
-	int i = 0;
-	int x1, y1, x2, y2;
-	float m1,m2,n1,n2;
-	x1 = medp.x;
-	x2 = med2p.x;
-	y1 = medp.y;
-	y2 = med2p.y;
-
-	if ((medp.x - minp.x) == 0)
-	{
-		zeroFlag1 = 1;
-	}
-	if ((medp.x - minp.x) != 0)
-	{
-		m1 = (float)(medp.y - minp.y) / (float)(medp.x - minp.x);
-		n1 = (float)(medp.y - (float)(m1 * medp.x));
-	}
-
-	if ((med2p.x - minp.x) == 0)
-	{
-		zeroFlag2 = 1;
-	}
-	if ((med2p.x - minp.x) != 0)
-	{
-		m2 = (float)(med2p.y - minp.y) / (float)(med2p.x - minp.x);
-		n2 = (float)(med2p.y - (float)(m2 * med2p.x));
-	}
-
-	while (y1 >= minp.y)
-	{
-		y1 = medp.y - i;
-		if (zeroFlag1 == 0)
-		{
-			x1 = (y1 - n1) / m1;
-		}
-		y2 = med2p.y - i;
-		if (zeroFlag2 == 0)
-		{
-			x2 = (y2 - n2) / m2;
-		}
-		DrawLine(glm::vec2(x1, y1), glm::vec2(x2, y2), color);
-		i++;
-	}
-}
-void Renderer::BotTriangle(const glm::ivec2& maxp, const glm::ivec2& medp, const glm::ivec2& med2p, const glm::vec3& color)
-{
-	//find the line equation for both sides :
-	int zeroFlag1 = 0;
-	int zeroFlag2 = 0;
-	int i = 0;
-	int x1, y1, x2, y2;
-	float m1, m2, n1, n2;
-	x1 = medp.x;
-	x2 = med2p.x;
-	y1 = medp.y;
-	y2 = med2p.y;
-
-	if ((medp.x - maxp.x) == 0)
-	{
-		zeroFlag1 = 1;
-	}
-	if ((medp.x - maxp.x) != 0)
-	{
-		m1 = (float)(medp.y - maxp.y) / (float)(medp.x - maxp.x);
-		n1 = (float)(medp.y - (float)(m1 * medp.x));
-	}
-
-	if ((med2p.x - maxp.x) == 0)
-	{
-		zeroFlag2 = 1;
-	}
-	if ((med2p.x - maxp.x) != 0)
-	{
-		m2 = (float)(med2p.y - maxp.y) / (float)(med2p.x - maxp.x);
-		n2 = (float)(med2p.y - (float)(m2 * med2p.x));
-	}
-
-	while (y1 <= maxp.y)
-	{
-		y1 = medp.y + i;
-		if (zeroFlag1 == 0)
-		{
-			x1 = (y1 - n1) / m1;
-		}
-		y2 = med2p.y + i;
-		if (zeroFlag2 == 0)
-		{
-			x2 = (y2 - n2) / m2;
-		}
-		DrawLine(glm::vec2(x1, y1), glm::vec2(x2, y2), color);
-		i++;
-	}
-}
+//void Renderer::TopTriangle(const glm::ivec2& medp, const glm::ivec2& med2p, const glm::ivec2& minp, const glm::vec3& color)
+//{
+//	//find the line equation for both sides :
+//	int zeroFlag1 = 0;
+//	int zeroFlag2 = 0;
+//	int i = 0;
+//	int x1, y1, x2, y2;
+//	float m1,m2,n1,n2;
+//	x1 = medp.x;
+//	x2 = med2p.x;
+//	y1 = medp.y;
+//	y2 = med2p.y;
+//
+//	if ((medp.x - minp.x) == 0)
+//	{
+//		zeroFlag1 = 1;
+//	}
+//	if ((medp.x - minp.x) != 0)
+//	{
+//		m1 = (float)(medp.y - minp.y) / (float)(medp.x - minp.x);
+//		n1 = (float)(medp.y - (float)(m1 * medp.x));
+//	}
+//
+//	if ((med2p.x - minp.x) == 0)
+//	{
+//		zeroFlag2 = 1;
+//	}
+//	if ((med2p.x - minp.x) != 0)
+//	{
+//		m2 = (float)(med2p.y - minp.y) / (float)(med2p.x - minp.x);
+//		n2 = (float)(med2p.y - (float)(m2 * med2p.x));
+//	}
+//
+//	while (y1 >= minp.y)
+//	{
+//		y1 = medp.y - i;
+//		if (zeroFlag1 == 0)
+//		{
+//			x1 = (y1 - n1) / m1;
+//		}
+//		y2 = med2p.y - i;
+//		if (zeroFlag2 == 0)
+//		{
+//			x2 = (y2 - n2) / m2;
+//		}
+//		DrawLine(glm::vec2(x1, y1), glm::vec2(x2, y2), color);
+//		i++;
+//	}
+//}
+//void Renderer::BotTriangle(const glm::ivec2& maxp, const glm::ivec2& medp, const glm::ivec2& med2p, const glm::vec3& color)
+//{
+//	//find the line equation for both sides :
+//	int zeroFlag1 = 0;
+//	int zeroFlag2 = 0;
+//	int i = 0;
+//	int x1, y1, x2, y2;
+//	float m1, m2, n1, n2;
+//	x1 = medp.x;
+//	x2 = med2p.x;
+//	y1 = medp.y;
+//	y2 = med2p.y;
+//
+//	if ((medp.x - maxp.x) == 0)
+//	{
+//		zeroFlag1 = 1;
+//	}
+//	if ((medp.x - maxp.x) != 0)
+//	{
+//		m1 = (float)(medp.y - maxp.y) / (float)(medp.x - maxp.x);
+//		n1 = (float)(medp.y - (float)(m1 * medp.x));
+//	}
+//
+//	if ((med2p.x - maxp.x) == 0)
+//	{
+//		zeroFlag2 = 1;
+//	}
+//	if ((med2p.x - maxp.x) != 0)
+//	{
+//		m2 = (float)(med2p.y - maxp.y) / (float)(med2p.x - maxp.x);
+//		n2 = (float)(med2p.y - (float)(m2 * med2p.x));
+//	}
+//
+//	while (y1 <= maxp.y)
+//	{
+//		y1 = medp.y + i;
+//		if (zeroFlag1 == 0)
+//		{
+//			x1 = (y1 - n1) / m1;
+//		}
+//		y2 = med2p.y + i;
+//		if (zeroFlag2 == 0)
+//		{
+//			x2 = (y2 - n2) / m2;
+//		}
+//		DrawLine(glm::vec2(x1, y1), glm::vec2(x2, y2), color);
+//		i++;
+//	}
+//}
 float Renderer::max_point(const float x, const float y, const float z)
 {
 	return ((x >= y) ? x : y) >= z ? ((x >= y) ? x : y):z ;
@@ -274,7 +274,7 @@ void Renderer::CreateBuffers(int w, int h)
 	CreateOpenGLBuffer(); //Do not remove this line.
 	color_buffer_ = new float[3 * w * h];
 	z_buffer_ = new float[w * h];
-	ClearColorBuffer(glm::vec3(0.0f, 0.0f, 0.0f));
+	ClearColorBuffer(black);
 }
 
 //##############################
@@ -532,7 +532,7 @@ void Renderer::Render(const Scene& scene)
 				u3 = Transformations * u3;
 				
 				glm::vec3 rand_color((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
-				DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, Model_Color);
+				DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, rand_color);
 
 				//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 				//Lines color is default black...

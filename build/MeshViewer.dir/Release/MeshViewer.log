@@ -1,41 +1,12 @@
-﻿  Building Custom Rule D:/computergraphics2021-nour-abdi/CMakeLists.txt
-  Camera.cpp
-  Face.cpp
-  InitShader.cpp
-  MeshModel.cpp
-  Renderer.cpp
-  Scene.cpp
-  Utils.cpp
-  imgui_impl_glfw.cpp
-  imgui_impl_opengl3.cpp
-  main.cpp
-D:\computergraphics2021-nour-abdi\Viewer\src\MeshModel.cpp(24): warning C4018: '<': signed/unsigned mismatch
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(312): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(313): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(314): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(355): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(356): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(357): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(418): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(419): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(420): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(135): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(140): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(259): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(260): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(261): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
-D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(262): warning C4244: '=': conversion from 'T' to 'int', possible loss of data
-          with
-          [
-              T=float
-          ]
+﻿  main.cpp
+D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(325): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(326): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(327): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(368): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(369): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(370): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(431): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(432): warning C4305: 'argument': truncation from 'double' to 'float'
+D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(433): warning C4305: 'argument': truncation from 'double' to 'float'
   MeshViewer.vcxproj -> D:\computergraphics2021-nour-abdi\build\bin\Release\MeshViewer.exe
   Copying Shaders
