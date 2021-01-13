@@ -15,8 +15,6 @@ the back might be occluding triangles in the front.**
 The z-buffer can be visualized as a grey scale image (as in the lecture). Show side-by-side
 pictures of the color buffer and z-buffer, for several models or viewpoints.**
 
-![dolphin_Z-buffer](https://user-images.githubusercontent.com/34486030/104119372-82575400-5337-11eb-9935-ac709bdbcd01.png)
-
-![teaPot_Z-bufer](https://user-images.githubusercontent.com/34486030/104119416-c77b8600-5337-11eb-9c3f-d1c8aed280ba.png)
-
-![bunny_Z-Buffer](https://user-images.githubusercontent.com/34486030/104119389-9dc25f00-5337-11eb-84cb-35fbcf53cccc.png)
+![fsdfad](https://user-images.githubusercontent.com/34486030/104501430-5f9f9680-55e8-11eb-8d23-3febe622b5e7.png)
+![xczxc](https://user-images.githubusercontent.com/34486030/104501434-60382d00-55e8-11eb-9391-6247792c6eb8.png)
+![vcfssd](https://user-images.githubusercontent.com/34486030/104501435-60d0c380-55e8-11eb-9a45-944866ecf800.png)
