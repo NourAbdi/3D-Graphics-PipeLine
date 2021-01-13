@@ -19,8 +19,6 @@ public:
 private:
 	void PutPixel(const int i, const int j, const glm::vec3& color);
 	void PutPixel(const int i, const int j,const float z, const glm::vec3& color);
-	//void TopTriangle(const glm::ivec2& medp, const glm::ivec2& med2p, const glm::ivec2& minp, const glm::vec3& color);
-	//void BotTriangle(const glm::ivec2& maxp, const glm::ivec2& medp, const glm::ivec2& med2p, const glm::vec3& color);
 	float max_point(const float x, const float y, const float z);
 	float min_point(const float x, const float y, const float z);
 	float cal_area(const glm::vec2& p1, const glm::vec2& p2, const glm::vec2& p3);
