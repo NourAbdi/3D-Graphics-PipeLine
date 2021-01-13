@@ -24,8 +24,10 @@ the whole screen, and not to short, that they look like points). Translate the m
 the x direction, and compare the results**
 
 Here is bethoven model is transformed and obviously converting the normals in line with the model ...
+Transforming the faces normals :
 ![11](https://user-images.githubusercontent.com/34486030/104460780-3286c000-55b7-11eb-82c0-564e748216d5.png)
 ![22](https://user-images.githubusercontent.com/34486030/104460833-3f0b1880-55b7-11eb-9d7c-456b0576a1ce.png)
+and now the same transformations on vertices normals ...
 ![33](https://user-images.githubusercontent.com/34486030/104460874-46cabd00-55b7-11eb-88d5-5c220504120f.png)
 ![44](https://user-images.githubusercontent.com/34486030/104460904-4d593480-55b7-11eb-8b80-7baadf3be70a.png)
 
