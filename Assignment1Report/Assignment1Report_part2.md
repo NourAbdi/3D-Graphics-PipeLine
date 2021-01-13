@@ -3,6 +3,7 @@
 **Part 2 of the first assignment is to load a mesh, display it, and apply simple transformations
 to it. The goal is to ensure that mesh transformation are correct before starting to implement
 camera transformations.**
+
 **1. Loading a mesh and outputing it's vertices and face to the console (using cout)
 I chose the "demo model" to display it's vertices and face , Here is my implemintation for the code :**
 ```
