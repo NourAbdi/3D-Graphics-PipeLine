@@ -23,6 +23,7 @@ normals. Make sure the the normals are scaled reasonably (not too long that they
 the whole screen, and not to short, that they look like points). Translate the model in
 the x direction, and compare the results**
 
+Here is bethoven model transformed toward the 
 ![5](https://user-images.githubusercontent.com/34486030/101336758-81885980-3883-11eb-8931-80125ebb8044.png)
 ![4](https://user-images.githubusercontent.com/34486030/101336761-8220f000-3883-11eb-98ff-db2bb9bd58be.png)
 
