@@ -3,7 +3,8 @@
 **1.Load a mesh and make sure that it's visible on screen. Pick an axis (i.e. x; y or z), and
 rotate the model around the axis. Scale the model such that it is always visible, no matter
 the rotation. Apply the rotation around that axis in increments of 45degrees. Put screenshots
-of the results in your report, and mention which axis you chose.**
+of the results in your report, and mention which axis you chose.** 
+
 I chose the bethovenmodel and applied rotation around the y axis in increments of 45 degrees :
 
 ![45alpha](https://user-images.githubusercontent.com/34486030/101330747-ab3d8280-387b-11eb-8e67-d21137549b3b.png)
