@@ -327,6 +327,7 @@ void Renderer::Render(const Scene& scene)
 	float Avg_x	= 0.0f;
 	float Avg_y	= 0.0f;
 	float Avg_z	= 0.0f;
+	float delta = 0.0f;
 	float delta_x = 0.0f;
 	float delta_y = 0.0f;
 	float delta_z = 0.0f;
@@ -387,8 +388,10 @@ void Renderer::Render(const Scene& scene)
 			max1 = (model.Getbuondes(0) - model.Getbuondes(3));
 			max2 = (model.Getbuondes(1) - model.Getbuondes(4));
 			Max = (max1 < max2) ? max2 : max1;
+			
 			delta_x = half_width / Max;
 			delta_y = half_height / Max;
+			delta = (delta_x > delta_y) ? delta_y : delta_x;
 			//delta_z = half_height / Max;
 			Avg_x = Avg_x * delta_x;
 			Avg_y = Avg_y * delta_y;
@@ -410,9 +413,9 @@ void Renderer::Render(const Scene& scene)
 			);
 			glm::mat4 Scale_mat // Scaling matrix to adjust the size of the model
 			(
-				glm::vec4(delta_x, 0.0f, 0.0f, 0.0f),
-				glm::vec4(0.0f, delta_y, 0.0f, 0.0f),
-				glm::vec4(0.0f, 0.0f, 1.f, 0.0f),
+				glm::vec4(delta, 0.0f, 0.0f, 0.0f),
+				glm::vec4(0.0f, delta, 0.0f, 0.0f),
+				glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
 				glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
 			);
 
