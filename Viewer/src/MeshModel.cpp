@@ -146,3 +146,30 @@ void MeshModel::SetColor(glm::vec3& vec)
 {
 	ModelColor = vec;
 }
+
+void MeshModel::Setambient(const glm::vec3& vec)
+{
+	ambient = vec;
+}
+const glm::vec3& MeshModel::Getambient() const
+{
+	return ambient;
+}
+
+void MeshModel::Setdiffuse(const glm::vec3& vec)
+{
+	diffuse = vec;
+}
+const glm::vec3& MeshModel::Getdiffuse() const
+{
+	return diffuse;
+}
+
+void MeshModel::Setspecular(const glm::vec3& vec)
+{
+	specular = vec;
+}
+const glm::vec3& MeshModel::Getspecular() const
+{
+	return specular;
+}

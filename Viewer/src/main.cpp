@@ -19,8 +19,8 @@
 bool show_demo_window = false;
 bool show_another_window = false;
 static glm::vec3 black(0.0f, 0.0f, 0.0f);
-static glm::vec3 white(255.0f, 255.0f, 255.0f);
-glm::vec4 clear_color = glm::vec4(1.00f, 1.00f, 1.00f, 1.00f);
+static glm::vec3 white(1.0f, 1.0f, 1.0f);
+glm::vec4 clear_color = glm::vec4(0.8f, 0.8f, 0.8f, 1.00f);
 
 /**
  * Function declarations
@@ -272,13 +272,14 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float WAlpha_X = 0.0f;
 		static float WAlpha_Y = 0.0f;
 		static float WAlpha_Z = 0.0f;
-		static glm::vec3 color( 0.0f, 0.0f, 0.0f);
-		static float ambientt[] = { 0.0f, 0.0f, 0.0f };
-		static float diffusee[] = { 0.0f, 0.0f, 0.0f };
-		static float specularr[] = { 0.0f, 0.0f, 0.0f };
-		static glm::vec3 ambient(0.0f, 0.0f, 0.0f);
-		static glm::vec3 diffuse(0.0f, 0.0f, 0.0f);
-		static glm::vec3 specular(0.0f, 0.0f, 0.0f);
+		static glm::vec3 color( 1.0f, 1.0f, 1.0f);
+		static glm::vec3 ambient_color(1.0f, 1.0f, 1.0f);
+		static glm::vec3 diffuse_color(1.0f, 1.0f, 1.0f);
+		static glm::vec3 specular_color(1.0f, 1.0f, 1.0f);
+		static glm::vec3 ambient_light(1.0f, 1.0f, 1.0f);
+		static glm::vec3 diffuse_light(1.0f, 1.0f, 1.0f);
+		static glm::vec3 specular_light(1.0f, 1.0f, 1.0f);
+		static float ambient_light_intensity = 0.4f;
 		static glm::mat4 LScaling ;
 		static glm::mat4 LTranslate ;
 		static glm::mat4 LRotate ;
@@ -290,7 +291,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float  l = -1.0f, r = 1.0f, b = -1.0f, t = 1.0f;
 		static float  fovy = 1.0f, nearP = -1.0f, farP = -10.0f;
 		static float Cposition[] = { 0.0f, 0.0f, 100.0f };
-		static float LLposition[] = { 0.0f, 10.0f, 0.0f };
+		static float LLposition[] = { 0.0f, 100.0f, 0.0f };
+		static float Ldirection[] = { 0.0f, -1.0f, 0.0f };
 		static float Zoom = 1.0f;
 		static float CAlpha_X = 0.0f;
 		static float CAlpha_Y = 0.0f;
@@ -301,7 +303,6 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static glm::mat4 CTranslate;
 		static glm::mat4 LLTranslate;
 		
-
 		ImGui::Begin("Model Control");     // Create a window called "Model Control" and append into it.
 		if (ImGui::BeginTabBar("##tabs", ImGuiTabBarFlags_None))
 		{
@@ -312,7 +313,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				LScaling = {
 					glm::vec4(Lscale[0] + 1,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,Lscale[1] + 1,0.0f,0.0f),
-					glm::vec4(0.0f,0.0f,Lscale[2] + 1,0.0f),
+					glm::vec4(0.0f,0.0f,1,0.0f),
 					glm::vec4(0.0f,0.0f,0.0f,1.0f)
 				};
 
@@ -355,7 +356,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 				WScaling = {
 					glm::vec4(Wscale[0] + 1,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,Wscale[1] + 1,0.0f,0.0f),
-					glm::vec4(0.0f,0.0f,Wscale[2] + 1,0.0f),
+					glm::vec4(0.0f,0.0f, 1,0.0f),
 					glm::vec4(0.0f,0.0f,0.0f,1.0f)
 				};
 
@@ -398,6 +399,9 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			ImGui::Checkbox("Vertices Normals", &VerticesNormals);
 		}
 		ImGui::ColorEdit3("Model Color", (float*)&color);
+		ImGui::ColorEdit3("Ambient Color", (float*)&ambient_color);
+		ImGui::ColorEdit3("Diffuse Color", (float*)&diffuse_color);
+		ImGui::ColorEdit3("Specular Color", (float*)&specular_color);
 		ImGui::End();
 		/***********************************************************************************************************/
 		ImGui::Begin("Camera Control");     // Create a window called "Model Control" and append into it.
@@ -460,50 +464,58 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			if (ImGui::BeginTabItem("Point"))
 			{
 				PointOrParallel = true;
+				ImGui::InputFloat3("position (x,y,z)", LLposition);
+				LLTranslate = {
+					glm::vec4(1.0f,0.0f,0.0f,0.0f),		
+					glm::vec4(0.0f,1.0f,0.0f,0.0f),
+					glm::vec4(0.0f,0.0f,1.0f,0.0f),
+					glm::vec4(LLposition[0],LLposition[1] ,LLposition[2],1.0f)
+				};
+				ImGui::SliderFloat("X-rotation (0~2pi)", &LLAlpha_X, 0, 2 * Pi);
+				ImGui::SliderFloat("Y-rotation (0~2pi)", &LLAlpha_Y, 0, 2 * Pi);
+				ImGui::SliderFloat("Z-rotation (0~2pi)", &LLAlpha_Z, 0, 2 * Pi);
+				glm::mat4 Rotate_x = {
+				glm::vec4(1.0f,0.0f,0.0f,0.0f),
+				glm::vec4(0.0f,cos(LLAlpha_X),sin(LLAlpha_X),0.0f),
+				glm::vec4(0.0f,-sin(LLAlpha_X),cos(LLAlpha_X),0.0f),
+				glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
+				glm::mat4 Rotate_y = {
+				glm::vec4(cos(LLAlpha_Y),0.0f,sin(LLAlpha_Y),0.0f),
+				glm::vec4(0.0f,1.0f,0.0f,0.0f),
+				glm::vec4(-sin(LLAlpha_Y),0.0f,cos(LLAlpha_Y),0.0f),
+				glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
+				glm::mat4 Rotate_z = {
+				glm::vec4(cos(LLAlpha_Z),sin(LLAlpha_Z),0.0f,0.0f),
+				glm::vec4(-sin(LLAlpha_Z),cos(LLAlpha_Z),0.0f,0.0f),
+				glm::vec4(0.0f,0.0f,1.0f,0.0f),
+				glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				};
+				LLRotate = Rotate_z * Rotate_y * Rotate_x;
 				ImGui::EndTabItem();
 			}
 			if (ImGui::BeginTabItem("Parallel"))
 			{
 				PointOrParallel = false;
+				ImGui::SliderFloat3("direction ->(x,y,z)", Ldirection, -1.0f, 1.0f);
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();
 		}
-		ImGui::SliderFloat3("ambient [RGB]", ambientt, 0.0f, 1.0f);
-		ImGui::SliderFloat3("diffuse [RGB]", diffusee, 0.0f, 1.0f);
-		ImGui::SliderFloat3("specular[RGB]", specularr, 0.0f, 1.0f);
-		ambient = glm::vec3(ambientt[0], ambientt[1], ambientt[2]);
-		diffuse = glm::vec3(diffusee[0], diffusee[1], diffusee[2]);
-		specular = glm::vec3(specularr[0], specularr[1], specularr[2]);
-		ImGui::SliderFloat3("position(x,y,z)", LLposition, 0.0f, 500.0f);
-		LLTranslate = {
-			glm::vec4(1.0f,0.0f,0.0f,0.0f),
-			glm::vec4(0.0f,1.0f,0.0f,0.0f),
-			glm::vec4(0.0f,0.0f,1.0f,0.0f),
-			glm::vec4(LLposition[0],LLposition[1] ,LLposition[2],1.0f)
-		};
-		ImGui::SliderFloat("X-rotation (0~2pi)", &LLAlpha_X, 0, 2 * Pi);
-		ImGui::SliderFloat("Y-rotation (0~2pi)", &LLAlpha_Y, 0, 2 * Pi);
-		ImGui::SliderFloat("Z-rotation (0~2pi)", &LLAlpha_Z, 0, 2 * Pi);
-		glm::mat4 Rotate_x = {
-		glm::vec4(1.0f,0.0f,0.0f,0.0f),
-		glm::vec4(0.0f,cos(LLAlpha_X),sin(LLAlpha_X),0.0f),
-		glm::vec4(0.0f,-sin(LLAlpha_X),cos(LLAlpha_X),0.0f),
-		glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		glm::mat4 Rotate_y = {
-		glm::vec4(cos(LLAlpha_Y),0.0f,sin(LLAlpha_Y),0.0f),
-		glm::vec4(0.0f,1.0f,0.0f,0.0f),
-		glm::vec4(-sin(LLAlpha_Y),0.0f,cos(LLAlpha_Y),0.0f),
-		glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		glm::mat4 Rotate_z = {
-		glm::vec4(cos(LLAlpha_Z),sin(LLAlpha_Z),0.0f,0.0f),
-		glm::vec4(-sin(LLAlpha_Z),cos(LLAlpha_Z),0.0f,0.0f),
-		glm::vec4(0.0f,0.0f,1.0f,0.0f),
-		glm::vec4(0.0f,0.0f,0.0f,1.0f)
-		};
-		LLRotate = Rotate_z * Rotate_y * Rotate_x;
+		ImGui::ColorEdit3("ambient light ", (float*)&ambient_light);
+		ImGui::SliderFloat("ambient intensity", &ambient_light_intensity,0.0f,1.0f);
+		ImGui::ColorEdit3("diffuse light ", (float*)&diffuse_light);
+		ImGui::ColorEdit3("specular light ", (float*)&specular_light);
+
+		ImGui::Text("shading :  "); ImGui::SameLine();
+		static int e = 0;
+		ImGui::RadioButton("Flat", &e, 0); ImGui::SameLine();
+		ImGui::RadioButton("Gouraud", &e, 1); ImGui::SameLine();
+		ImGui::RadioButton("Phong", &e, 2);
+
+		static bool Fog = false;
+		ImGui::Checkbox("Enable Fog", &Fog);
 		/*********************************************************************************************************/
 		if (!ONCE)
 		{
@@ -540,11 +552,13 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		{
 			Light &light = scene.GetActiveLight();
 			light.SetPointOrParallel(PointOrParallel);
-			light.SetTransformation(LLRotate);
+			light.SetTransformation(LLRotate*LLTranslate);
 			light.SetPosition(glm::vec3(LLposition[0], LLposition[1], LLposition[2]));
-			light.Setambient(ambient);
-			light.Setdiffuse(diffuse);
-			light.Setspecular(specular);
+			light.SetDirection(glm::vec3(Ldirection[0], Ldirection[1], Ldirection[2]));
+			light.Setambient(ambient_light);
+			light.Setambientintensity(ambient_light_intensity);
+			light.Setdiffuse(diffuse_light);
+			light.Setspecular(specular_light);
 		}
 		/***********************************************************************************************************/
 		if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
@@ -552,6 +566,9 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			MeshModel &model = scene.GetActiveModel(); // Gets active model
 			model.SetLocalOrWorld(mode);
 			model.SetColor(color);
+			model.Setambient(ambient_color);
+			model.Setdiffuse(diffuse_color);
+			model.Setspecular(specular_color);
 			if (mode == 1)				// World mode
 			{
 				model.SetWTransform(WTranslate * WRotate * WScaling);

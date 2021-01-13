@@ -14,8 +14,14 @@ public:
 	void SetPosition(const glm::vec3& position);
 	const glm::vec3& GetPosition() const;
 
+	void SetDirection(const glm::vec3& direction);
+	const glm::vec3& GetDirection() const;
+
 	void Setambient(const glm::vec3& vec);
 	const glm::vec3& Getambient() const;
+
+	void Setambientintensity(const float intensity);
+	const float Getambientintensity() const;
 
 	void Setdiffuse(const glm::vec3& vec);
 	const glm::vec3& Getdiffuse() const;
@@ -30,7 +36,9 @@ private:
 
 	glm::mat4x4 transformation_;
 	glm::vec3 Position;
+	glm::vec3 Direction;
 	glm::vec3 ambient;
+	float ambientintensity;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
 	bool PointOrParallel;

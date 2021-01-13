@@ -33,6 +33,13 @@ public:
 	const glm::vec3& GetColor() const;
 	void SetColor(glm::vec3& mat);
 
+	void Setambient(const glm::vec3& vec);
+	const glm::vec3& Getambient() const;
+	void Setdiffuse(const glm::vec3& vec);
+	const glm::vec3& Getdiffuse() const;
+	void Setspecular(const glm::vec3& vec);
+	const glm::vec3& Getspecular() const;
+
 private:
 	std::vector<Face> faces_;
 	std::vector<glm::vec3> vertices_;
@@ -44,6 +51,9 @@ private:
 	bool faces_normals;
 	bool vertices_normals;
 	glm::vec3 ModelColor;
+	glm::vec3 ambient;
+	glm::vec3 diffuse;
+	glm::vec3 specular;
 	glm::mat4x4 Transform;
 	glm::mat4x4 LTransform;
 	glm::mat4x4 WTransform;

@@ -45,7 +45,7 @@ void Renderer::PutPixel(const int i, const int j, const float z, const glm::vec3
 {
 	if (i < 0) return; if (i >= viewport_width_) return;
 	if (j < 0) return; if (j >= viewport_height_) return;
-	if (z > z_buffer_[i*viewport_height_ + j])
+	if (z < z_buffer_[i*viewport_height_ + j])
 	{
 		z_buffer_[i*viewport_height_ + j] = z;
 		color_buffer_[INDEX(viewport_width_, i, j, 0)] = color.x;
@@ -54,7 +54,7 @@ void Renderer::PutPixel(const int i, const int j, const float z, const glm::vec3
 	}
 }
 
-void Renderer::plotLineLow(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
+void Renderer::plotLineLow(const glm::vec2& p1, const glm::vec2& p2, const glm::vec3& color)
 {
 	int y, D;
 	int dx = p2.x - p1.x;
@@ -81,7 +81,7 @@ void Renderer::plotLineLow(const glm::ivec2& p1, const glm::ivec2& p2, const glm
 	}
 }
 
-void Renderer::plotLineHigh(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
+void Renderer::plotLineHigh(const glm::vec2& p1, const glm::vec2& p2, const glm::vec3& color)
 {
 	int x, D;
 	int dx = p2.x - p1.x;
@@ -213,39 +213,40 @@ float Renderer::min_point(const float x, const float y, const float z)
 {
 	return ((x <= y) ? x : y) <= z ? ((x <= y) ? x : y) : z;
 }
-float Renderer::cal_area(const glm::ivec2& a, const glm::ivec2& b, const glm::ivec2& c)
+float Renderer::cal_area(const glm::vec2& a, const glm::vec2& b, const glm::vec2& c)
 {
-	return (c.x - a.x) * (b.y - a.y) - (c.y - a.y) * (b.x - a.x);
+	return ((float)((c.x - a.x) * (b.y - a.y)) - (float)((c.y - a.y) * (b.x - a.x)));
 }
-void Renderer::DrawTriangle(const glm::ivec3& p1, const glm::ivec3& p2, const glm::ivec3& p3, const glm::vec3& color)
+void Renderer::DrawTriangle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, const glm::vec3& color)
 {
 	float Maxx = max_point(p1.x, p2.x, p3.x);
 	float Maxy = max_point(p1.y, p2.y, p3.y);
 	float Minx = min_point(p1.x, p2.x, p3.x);
 	float Miny = min_point(p1.y, p2.y, p3.y);
-	float AREA = cal_area(p1, p2, p3);
+	float AREA = cal_area(p3, p2, p1);
 	float A ;
 	float B ;
 	float C ;
+	float Z ;
 
 	for (int j = Miny; j < Maxy; j++)
 	{
 		for (int i = Minx; i < Maxx; i++)
 		{
-			A = cal_area(p2, p3, glm::vec2(i , j));
-			B = cal_area(p3, p1, glm::vec2(i , j));
-			C = cal_area(p1, p2, glm::vec2(i , j));
+			A = cal_area(p3, p2, glm::vec2(i , j));
+			B = cal_area(p1, p3, glm::vec2(i , j));
+			C = cal_area(p2, p1, glm::vec2(i , j));
 
 			if (A >= 0 && B >= 0 && C >= 0)
 			{
-				float Z=(A/AREA)*p1.z + (B/AREA)*p2.z + (C/AREA)*p3.z ;
+				Z=(A/AREA)*p1.z + (B/AREA)*p2.z + (C/AREA)*p3.z ;
 				PutPixel(i, j , Z , color);
 			}
 		}
 	}
 }
 
-void Renderer::DrawLine(const glm::ivec2& p1, const glm::ivec2& p2, const glm::vec3& color)
+void Renderer::DrawLine(const glm::vec2& p1, const glm::vec2& p2, const glm::vec3& color)
 {
 	// TODO: Implement bresenham algorithm
 	// https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
@@ -396,7 +397,7 @@ void Renderer::ClearColorBuffer(const glm::vec3& color)
 	{
 		for (int j = 0; j < viewport_height_; j++)
 		{
-			z_buffer_[i*viewport_height_ + j] = -1 * INFINITY;
+			z_buffer_[i*viewport_height_ + j] = INFINITY;
 			PutPixel(i, j, color);
 		}
 	}
@@ -417,6 +418,7 @@ void Renderer::Render(const Scene& scene)
 	float delta_y = 0.0f;
 	float delta_z = 0.0f;
 	glm::mat4 Transformations;
+	glm::mat4 ViewTransformations;
 
 	//Drawing Axises :
 	DrawLine(glm::vec2(0, half_height), glm::vec2(viewport_width_, half_height), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -426,10 +428,10 @@ void Renderer::Render(const Scene& scene)
 	{
 		Camera &camera = scene.GetActiveCamera(); // Gets active camera 
 		glm::mat4x4 Tc = camera.GetViewTransformation();
-		//glm::mat4x4 Cinv = glm::inverse(Tc);
+		glm::mat4x4 Cinv = glm::inverse(Tc);
 		glm::vec3 position=camera.GetCameraPosition();
 		glm::vec3 up(0.0f, 1.0f, 0.0f);
-		glm::vec3 at(0.0f,0.0f,-1.0f);
+		glm::vec3 at(0.0f,0.0f,1.0f);
 		glm::mat4x4 ViewMatrix = glm::lookAt(position, at,up);
 		glm::mat4x4 projection;
 		
@@ -462,6 +464,9 @@ void Renderer::Render(const Scene& scene)
 			glm::mat4 Final_L = model.GetLTransform();
 			glm::mat4 Final_W = model.GetWTransform();
 			glm::vec3 Model_Color = model.GetColor();
+			glm::vec3 Model_Ambient_Color = model.Getambient();
+			glm::vec3 Model_Diffuse_Color = model.Getdiffuse();
+			glm::vec3 Model_Specular_Color = model.Getspecular();
 
 			Avg_x = (model.Getbuondes(0) + model.Getbuondes(3)) / 2;
 			Avg_y = (model.Getbuondes(1) + model.Getbuondes(4)) / 2;
@@ -469,14 +474,14 @@ void Renderer::Render(const Scene& scene)
 			max1 = (model.Getbuondes(0) - model.Getbuondes(3));
 			max2 = (model.Getbuondes(1) - model.Getbuondes(4));
 			Max = (max1 < max2) ? max2 : max1;
-			delta_x = half_width / Max;
-			delta_y = half_height / Max;
+			delta_x = half_width / Max/2;
+			delta_y = half_height / Max/2;
 			//delta_z = half_height / Max;
 			Avg_x = Avg_x * delta_x;
 			Avg_y = Avg_y * delta_y;
 			Avg_z = Avg_z * delta_z;
 			
-			glm::mat4 Translate_Back_matt // Translation matrix to put the model in (0,0)
+			glm::mat4 Translate_center // Translation matrix to put the model in (0,0)
 			(
 				glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
 				glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
@@ -488,7 +493,7 @@ void Renderer::Render(const Scene& scene)
 				glm::vec4(1.0f, 0.0f, 0.0f, 0.0f),
 				glm::vec4(0.0f, 1.0f, 0.0f, 0.0f),
 				glm::vec4(0.0f, 0.0f, 1.0f, 0.0f),
-				glm::vec4(-Avg_x, -Avg_y, -Avg_z, 1.0f)
+				glm::vec4(-Avg_x, -Avg_y, 1.0f, 1.0f)
 			);
 			glm::mat4 Scale_mat // Scaling matrix to adjust the size of the model
 			(
@@ -499,7 +504,8 @@ void Renderer::Render(const Scene& scene)
 			);
 
 			//In this case of multiplying matrices ,Order does matter... 
-			Transformations =  Translate_Back_matt * Zooom * Scale_mat * projection *  ViewMatrix *Tc * Final_W *  Final_L ;
+			Transformations = Translate_center * Zooom * Scale_mat *projection*ViewMatrix*Cinv* Final_W *  Final_L ;
+			ViewTransformations =  Final_W *  Final_L ;
 
 			for (int faces_c = 0; faces_c < model.GetFacesCount(); faces_c++)
 			{
@@ -511,6 +517,7 @@ void Renderer::Render(const Scene& scene)
 				glm::vec3 n3 = (normals.at(model.GetFace(faces_c).GetNormalIndex(2)-1)+p3);
 				glm::vec3 s1 (((p1.x+p2.x+p3.x)/3), ((p1.y + p2.y + p3.y) / 3), ((p1.z + p2.z + p3.z) / 3));
 				glm::vec3 s2 (glm::normalize(glm::cross(p2-p1, p3-p1))+s1);
+				glm::vec3 s3 (glm::normalize(glm::cross(p2-p1, p3-p1)));
 				
 				//from 1x3 to 1x4
 				glm::vec4 v1(p1, 1.0f);
@@ -518,6 +525,7 @@ void Renderer::Render(const Scene& scene)
 				glm::vec4 v3(p3, 1.0f);
 				glm::vec4 v4(s1, 1.0f);
 				glm::vec4 v5(s2, 1.0f);
+				glm::vec4 v6(s3, 1.0f);
 				glm::vec4 u1(n1, 1.0f);
 				glm::vec4 u2(n2, 1.0f);
 				glm::vec4 u3(n3, 1.0f);
@@ -525,14 +533,73 @@ void Renderer::Render(const Scene& scene)
 				v1 = Transformations * v1;
 				v2 = Transformations * v2;
 				v3 = Transformations * v3;
-				v4 = Transformations * v4;
-				v5 = Transformations * v5;
+				//v4 = Transformations * v4;
+				//v5 = Transformations * v5;
 				u1 = Transformations * u1;
 				u2 = Transformations * u2;
 				u3 = Transformations * u3;
-				
+				v4 = ViewTransformations * v4;
+				v5 = ViewTransformations * v5;
+				v6 = ViewTransformations * v6;
+				glm::vec3 q1(v4.x / v4.w,v4.y / v4.w,v4.z / v4.w);
+				glm::vec3 q2(v5.x / v5.w,v5.y / v5.w,v5.z / v5.w);
+				glm::vec3 q3(v6.x / v6.w,v6.y / v6.w,v6.z / v6.w);
+				q1 = glm::normalize(q1);
+				q3 = glm::normalize(q3);
 				glm::vec3 rand_color((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
-				DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, rand_color);
+				glm::vec3 result(black);
+				if (scene.GetLightCount() > 0) //This check if we loaded light
+				{
+					Light &light = scene.GetActiveLight();
+					bool PointOrParallel = light.GetPointOrParallel();
+					glm::mat4x4 light_transformation = light.GetTransformation();
+					glm::vec3 ambient_light = light.Getambient();
+					float ambient_intensity = light.Getambientintensity();
+					glm::vec3 diffuse_light = light.Getdiffuse();
+					glm::vec3 specular_light = light.Getspecular();
+					glm::vec3 light_position = light.GetPosition();
+					glm::vec3 ambient;
+					glm::vec3 diffuse;
+					glm::vec3 specular;
+					
+					if (PointOrParallel)
+					{
+						//// ambient
+						ambient = Model_Ambient_Color * ambient_light * ambient_intensity;
+						//// diffuse 
+						glm::vec3 norm = glm::normalize(q3);
+						glm::vec3 lightDir = glm::normalize(glm::normalize(light_position) - glm::normalize(q1));
+						float diff = glm::max(glm::dot(glm::normalize(q3 +q1), lightDir), 0.0f);
+						diffuse = diff * Model_Diffuse_Color * diffuse_light;
+						//// specular
+						float specularStrength = 0.5;
+						glm::vec3 viewDir = glm::normalize(q3);
+						glm::vec3 reflectDir = glm::reflect(-lightDir, norm);
+						float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
+						specular = specularStrength * spec * specular_light * Model_Specular_Color;
+					}
+					else
+					{
+						//// ambient
+						ambient = Model_Ambient_Color * ambient_light * ambient_intensity;
+						//// diffuse 
+						glm::vec3 norm = glm::normalize(-q2);
+						glm::vec3 lightDir = glm::normalize(light.GetDirection());
+						float diff = glm::max(glm::dot(norm, lightDir), 0.0f);
+						diffuse = diff * Model_Diffuse_Color * diffuse_light;
+						//// specular
+						float specularStrength = 0.5;
+						glm::vec3 viewDir = glm::normalize(q2-q1); 
+						glm::vec3 reflectDir = glm::reflect(-lightDir, norm);
+						float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
+						specular = specularStrength * spec * specular_light * Model_Specular_Color ;
+					}
+					result = (ambient + diffuse ) * Model_Color;
+					result.x = (result.x > 1) ? 1.0f : result.x;
+					result.y = (result.y > 1) ? 1.0f : result.y;
+					result.z = (result.z > 1) ? 1.0f : result.z;
+				}
+				DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, result);
 
 				//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 				//Lines color is default black...
@@ -545,7 +612,6 @@ void Renderer::Render(const Scene& scene)
 				glm::vec2 d7(u2.x/u2.w, u2.y/u2.w);
 				glm::vec2 d8(u3.x/u3.w, u3.y/u3.w);
 
-				
 				//DrawLine(d1,d2, Model_Color);
 				//DrawLine(d1,d3, Model_Color);
 				//DrawLine(d2,d3, Model_Color);
@@ -578,7 +644,6 @@ void Renderer::Render(const Scene& scene)
 			u7 = Transformations * u7;
 			u8 = Transformations * u8;
 			
-		
 			//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 			//Lines color is default black...
 			glm::vec2 s1(u1.x/u1.w , u1.y/u1.w);

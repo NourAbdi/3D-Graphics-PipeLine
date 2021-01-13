@@ -40,6 +40,15 @@ const glm::vec3& Light::GetPosition() const
 	return Position;
 }
 
+void Light::SetDirection(const glm::vec3& direction)
+{
+	Direction = direction;
+}
+const glm::vec3& Light::GetDirection() const
+{
+	return Direction;
+}
+
 void Light::Setambient(const glm::vec3& vec)
 {
 	ambient = vec;
@@ -47,6 +56,14 @@ void Light::Setambient(const glm::vec3& vec)
 const glm::vec3& Light::Getambient() const
 {
 	return ambient;
+}
+void Light::Setambientintensity(const float intensity)
+{
+	ambientintensity = intensity;
+}
+const float Light::Getambientintensity() const
+{
+	return ambientintensity;
 }
 
 void Light::Setdiffuse(const glm::vec3& vec)
