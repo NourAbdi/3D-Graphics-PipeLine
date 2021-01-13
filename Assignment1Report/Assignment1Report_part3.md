@@ -54,3 +54,11 @@ world frame.**
 such that the model is clearly visible.**
 
 ![100](https://user-images.githubusercontent.com/34486030/101340546-92879980-3888-11eb-9fbc-6751b0c6ac3e.png)
+
+**9.Resize the window two two diffferent sizes and show that your application maintains aspect ratio.**
+first window is the default 1280x720 , the second is bigger than the first . Showing the diffrences and
+how the model is not changing with size :
+
+![555](https://user-images.githubusercontent.com/34486030/104463652-b5f5e080-55ba-11eb-954b-4664a3e92bda.png)
+![666](https://user-images.githubusercontent.com/34486030/104463661-b9896780-55ba-11eb-95f9-d4757dce3fe7.png)
+
