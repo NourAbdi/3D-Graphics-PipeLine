@@ -172,7 +172,17 @@ void Renderer::DrawLine(const glm::vec2& p1, const glm::vec2& p2, const glm::vec
 		else
 			plotLineHigh(p1, p2, color);
 }
-
+void Renderer::ResizeBuffers(int w, int h)
+{
+	viewport_height_ = h;
+	viewport_width_ = w;
+	if (color_buffer_) delete[] color_buffer_;
+	delete[] z_buffer_;
+	CreateOpenGLBuffer(); //Do not remove this line.
+	color_buffer_ = new float[3 * w * h];
+	z_buffer_ = new float[w * h];
+	ClearColorBuffer(black);
+}
 void Renderer::CreateBuffers(int w, int h)
 {
 	CreateOpenGLBuffer(); //Do not remove this line.
@@ -377,8 +387,8 @@ void Renderer::Render(const Scene& scene)
 			max1 = (model.Getbuondes(0) - model.Getbuondes(3));
 			max2 = (model.Getbuondes(1) - model.Getbuondes(4));
 			Max = (max1 < max2) ? max2 : max1;
-			delta_x = half_width / Max/2;
-			delta_y = half_height / Max/2;
+			delta_x = half_width / Max;
+			delta_y = half_height / Max;
 			//delta_z = half_height / Max;
 			Avg_x = Avg_x * delta_x;
 			Avg_y = Avg_y * delta_y;
@@ -407,7 +417,7 @@ void Renderer::Render(const Scene& scene)
 			);
 
 			//In this case of multiplying matrices ,Order does matter... 
-			Transformations = Translate_center * Zooom * Scale_mat *projection*ViewMatrix*Cinv* Final_W *  Final_L ;
+			Transformations = Translate_center * Zooom * Scale_mat * projection * ViewMatrix * Cinv * Final_W *  Final_L ;
 			ViewTransformations =  Final_W *  Final_L ;
 
 			for (int faces_c = 0; faces_c < model.GetFacesCount(); faces_c++)
@@ -429,6 +439,8 @@ void Renderer::Render(const Scene& scene)
 				glm::vec4 v4(s1, 1.0f);
 				glm::vec4 v5(s2, 1.0f);
 				glm::vec4 v6(s3, 1.0f);
+				glm::vec4 v10(s1, 1.0f);
+				glm::vec4 v11(s2, 1.0f);
 				glm::vec4 u1(n1, 1.0f);
 				glm::vec4 u2(n2, 1.0f);
 				glm::vec4 u3(n3, 1.0f);
@@ -436,8 +448,6 @@ void Renderer::Render(const Scene& scene)
 				v1 = Transformations * v1;
 				v2 = Transformations * v2;
 				v3 = Transformations * v3;
-				//v4 = Transformations * v4;
-				//v5 = Transformations * v5;
 				u1 = Transformations * u1;
 				u2 = Transformations * u2;
 				u3 = Transformations * u3;
@@ -447,6 +457,8 @@ void Renderer::Render(const Scene& scene)
 				glm::vec3 q1(v4.x / v4.w,v4.y / v4.w,v4.z / v4.w);
 				glm::vec3 q2(v5.x / v5.w,v5.y / v5.w,v5.z / v5.w);
 				glm::vec3 q3(v6.x / v6.w,v6.y / v6.w,v6.z / v6.w);
+				v10 = Transformations * v10;
+				v11 = Transformations * v11;
 				q1 = glm::normalize(q1);
 				q3 = glm::normalize(q3);
 				glm::vec3 rand_color((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
@@ -502,31 +514,31 @@ void Renderer::Render(const Scene& scene)
 					result.y = (result.y > 1) ? 1.0f : result.y;
 					result.z = (result.z > 1) ? 1.0f : result.z;
 				}
-				DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, result);
+				//DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, result);
 
 				//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 				//Lines color is default black...
 				glm::vec2 d1(v1.x/v1.w, v1.y/v1.w);
 				glm::vec2 d2(v2.x/v2.w, v2.y/v2.w);
 				glm::vec2 d3(v3.x/v3.w, v3.y/v3.w);
-				glm::vec2 d4(v4.x/v4.w, v4.y/v4.w);
-				glm::vec2 d5(v5.x/v5.w, v5.y/v5.w);
+				glm::vec2 d4(v10.x/ v10.w, v10.y/ v10.w);
+				glm::vec2 d5(v11.x/ v11.w, v11.y/ v11.w);
 				glm::vec2 d6(u1.x/u1.w, u1.y/u1.w);
 				glm::vec2 d7(u2.x/u2.w, u2.y/u2.w);
 				glm::vec2 d8(u3.x/u3.w, u3.y/u3.w);
 
-				//DrawLine(d1,d2, Model_Color);
-				//DrawLine(d1,d3, Model_Color);
-				//DrawLine(d2,d3, Model_Color);
+				DrawLine(d1,d2, Model_Color);
+				DrawLine(d1,d3, Model_Color);
+				DrawLine(d2,d3, Model_Color);
 				if (model.Getfaces_normals())
 				{
-					DrawLine(d4, d5, black);
+					DrawLine(d4, d5, glm::vec3(1.0f, 1.0f, 0.0f));
 				}
 				if (model.Getvertices_normals())
 				{
-					DrawLine(d6, d1, black);
-					DrawLine(d7, d2, black);
-					DrawLine(d8, d3, black);
+					DrawLine(d6, d1, glm::vec3(1.0f, 0.0f, 0.0f));
+					DrawLine(d7, d2, glm::vec3(1.0f, 0.0f, 0.0f));
+					DrawLine(d8, d3, glm::vec3(1.0f, 0.0f, 0.0f));
 				}
 			}
 			glm::vec4 u1(model.Getbuondes(0), model.Getbuondes(1), model.Getbuondes(2), 1.0f);

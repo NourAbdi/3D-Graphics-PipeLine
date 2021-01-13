@@ -129,6 +129,7 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 		// TODO: Set new aspect ratio
 		//renderer.SetViewportWidth(frameBufferWidth);
 		//renderer.SetViewportHeight(frameBufferHeight);
+		renderer.ResizeBuffers(frameBufferWidth, frameBufferHeight);
 	}
 
 	if (!io.WantCaptureKeyboard)
@@ -272,7 +273,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float WAlpha_X = 0.0f;
 		static float WAlpha_Y = 0.0f;
 		static float WAlpha_Z = 0.0f;
-		static glm::vec3 color( 1.0f, 1.0f, 1.0f);
+		static glm::vec3 color( 0.0f, 0.0f, 0.0f);
 		static glm::vec3 ambient_color(1.0f, 1.0f, 1.0f);
 		static glm::vec3 diffuse_color(1.0f, 1.0f, 1.0f);
 		static glm::vec3 specular_color(1.0f, 1.0f, 1.0f);
@@ -309,7 +310,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			if (ImGui::BeginTabItem("Model Frame"))
 			{
 				mode = 0;
-				ImGui::SliderFloat3("scale (x,y,z)X(0~2)", Lscale, -1.0f, 1.0f);
+				ImGui::SliderFloat2("scale (x,y)X(0~2)", Lscale, -1.0f, 1.0f);
 				LScaling = {
 					glm::vec4(Lscale[0] + 1,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,Lscale[1] + 1,0.0f,0.0f),
@@ -352,7 +353,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			if (ImGui::BeginTabItem("World Frame"))
 			{
 				mode = 1;
-				ImGui::SliderFloat3("scale  (x,y,z)X(0~2)", Wscale, -1.0f, 1.0f);
+				ImGui::SliderFloat2("scale  (x,y)X(0~2)", Wscale, -1.0f, 1.0f);
 				WScaling = {
 					glm::vec4(Wscale[0] + 1,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,Wscale[1] + 1,0.0f,0.0f),

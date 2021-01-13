@@ -15,7 +15,7 @@ public:
 	void SetViewportHeight(int i);
 	int GetViewportWidth() const;
 	int GetViewportHeight() const;
-	
+	void ResizeBuffers(int w, int h);
 private:
 	void PutPixel(const int i, const int j, const glm::vec3& color);
 	void PutPixel(const int i, const int j,const float z, const glm::vec3& color);
@@ -26,7 +26,8 @@ private:
 	void DrawLine(const glm::vec2& p1, const glm::vec2& p2, const glm::vec3& color);
 	void plotLineLow(const glm::vec2& p1, const glm::vec2& p2, const glm::vec3& color);
 	void plotLineHigh(const glm::vec2& p1, const glm::vec2& p2, const glm::vec3& color);
-
+	
+	
 	void CreateBuffers(int w, int h);
 	void CreateOpenGLBuffer();
 	void InitOpenGLRendering();
