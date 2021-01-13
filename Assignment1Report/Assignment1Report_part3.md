@@ -62,3 +62,10 @@ how the model is not changing with size :
 ![555](https://user-images.githubusercontent.com/34486030/104463652-b5f5e080-55ba-11eb-954b-4664a3e92bda.png)
 ![666](https://user-images.githubusercontent.com/34486030/104463661-b9896780-55ba-11eb-95f9-d4757dce3fe7.png)
 
+** Changing the scale matrix so the modle scale correct with correct transformations **
+Here is some pictures of how modles are now displayed after the changing of the scale matrix:
+
+![Untitled](https://user-images.githubusercontent.com/34486030/104498739-c6bb4c00-55e4-11eb-9392-14404e55925e.png)
+![erad](https://user-images.githubusercontent.com/34486030/104499033-274a8900-55e5-11eb-9e6a-091fc136331a.png)
+![sdfdsf](https://user-images.githubusercontent.com/34486030/104499047-2d406a00-55e5-11eb-94f4-6a4b334a52da.png)
+
