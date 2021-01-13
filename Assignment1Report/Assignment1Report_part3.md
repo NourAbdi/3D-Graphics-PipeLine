@@ -23,9 +23,11 @@ normals. Make sure the the normals are scaled reasonably (not too long that they
 the whole screen, and not to short, that they look like points). Translate the model in
 the x direction, and compare the results**
 
-Here is bethoven model transformed toward the 
-![5](https://user-images.githubusercontent.com/34486030/101336758-81885980-3883-11eb-8931-80125ebb8044.png)
-![4](https://user-images.githubusercontent.com/34486030/101336761-8220f000-3883-11eb-98ff-db2bb9bd58be.png)
+Here is bethoven model is transformed and obviously converting the normals in line with the model ...
+![11](https://user-images.githubusercontent.com/34486030/104460780-3286c000-55b7-11eb-82c0-564e748216d5.png)
+![22](https://user-images.githubusercontent.com/34486030/104460833-3f0b1880-55b7-11eb-9d7c-456b0576a1ce.png)
+![33](https://user-images.githubusercontent.com/34486030/104460874-46cabd00-55b7-11eb-88d5-5c220504120f.png)
+![44](https://user-images.githubusercontent.com/34486030/104460904-4d593480-55b7-11eb-8b80-7baadf3be70a.png)
 
 **4.Reset the model's transformations again, and set the camera away from the model. Com-
 pare the orthographic projection vs. the perspective projection.**
