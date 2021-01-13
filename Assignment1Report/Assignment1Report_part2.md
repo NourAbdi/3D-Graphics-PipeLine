@@ -1,6 +1,9 @@
 ***Nour Abdi 20614750***
-
-**1. Load a mesh and output it's vertices and face to the console (using cout) "demo model" :**
+**Part 2 of the first assignment is to load a mesh, display it, and apply simple transformations
+to it. The goal is to ensure that mesh transformation are correct before starting to implement
+camera transformations.**
+**1. Loading a mesh and outputing it's vertices and face to the console (using cout)
+I chose the "demo model" to display it's vertices and face , Here is my implemintation for the code :**
 ```
 //output model's vertices and faces :
 //active model is the last opened file ( last read obj file)
@@ -33,7 +36,7 @@ if (scene.GetModelCount() > 0) //this check if we loaded the mesh model
 	counterflag++;
 }
 ```
-//I chose the 'demo' mish model to display :
+//I chose the 'demo' mish model to display : Here is the output results using std::cout :
 
 ![model's V F](https://user-images.githubusercontent.com/34486030/98798182-3e6ad000-2416-11eb-8186-52ebd1dd49c9.png)
 
