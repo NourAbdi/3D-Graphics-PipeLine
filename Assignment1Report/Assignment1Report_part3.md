@@ -1,4 +1,4 @@
-***Nour Abdi 20614750***
+***Nour Abdi 206144750***
 
 **1.Load a mesh and make sure that it's visible on screen. Pick an axis (i.e. x; y or z), and
 rotate the model around the axis. Scale the model such that it is always visible, no matter
