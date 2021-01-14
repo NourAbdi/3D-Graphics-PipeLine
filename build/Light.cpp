@@ -84,6 +84,15 @@ const glm::vec3& Light::Getspecular() const
 	return specular;
 }
 
+int Light::Getshading_kind() const
+{
+	return shading_kind;
+}
+void Light::Setshading_kind(int i)
+{
+	shading_kind = i;
+}
+
 bool Light::GetPointOrParallel() const
 {
 	return PointOrParallel;
@@ -91,4 +100,13 @@ bool Light::GetPointOrParallel() const
 void Light::SetPointOrParallel(bool i)
 {
 	PointOrParallel = i;
+}
+
+bool Light::GetFog() const
+{
+	return Fog;
+}
+void Light::SetFog(bool i)
+{
+	Fog = i;
 }

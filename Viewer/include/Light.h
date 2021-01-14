@@ -29,8 +29,14 @@ public:
 	void Setspecular(const glm::vec3& vec);
 	const glm::vec3& Getspecular() const;
 
+	int Getshading_kind() const;
+	void Setshading_kind(int i);
+
 	bool GetPointOrParallel() const;
 	void SetPointOrParallel(bool i);
+
+	bool GetFog() const;
+	void SetFog(bool i);
 
 private:
 
@@ -41,5 +47,7 @@ private:
 	float ambientintensity;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
+	int shading_kind;
 	bool PointOrParallel;
+	bool Fog;
 };

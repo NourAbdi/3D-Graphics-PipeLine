@@ -466,16 +466,19 @@ void Renderer::Render(const Scene& scene)
 				q3 = glm::normalize(q3);
 				glm::vec3 rand_color((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
 				glm::vec3 result(black);
+				int shadingkind;
 				if (scene.GetLightCount() > 0) //This check if we loaded light
 				{
 					Light &light = scene.GetActiveLight();
 					bool PointOrParallel = light.GetPointOrParallel();
-					glm::mat4x4 light_transformation = light.GetTransformation();
+					//glm::mat4x4 light_transformation = light.GetTransformation();
 					glm::vec3 ambient_light = light.Getambient();
 					float ambient_intensity = light.Getambientintensity();
 					glm::vec3 diffuse_light = light.Getdiffuse();
 					glm::vec3 specular_light = light.Getspecular();
 					glm::vec3 light_position = light.GetPosition();
+					shadingkind = light.Getshading_kind();
+					bool Fog = light.GetFog();
 					glm::vec3 ambient;
 					glm::vec3 diffuse;
 					glm::vec3 specular;
@@ -485,14 +488,14 @@ void Renderer::Render(const Scene& scene)
 						//// ambient
 						ambient = Model_Ambient_Color * ambient_light * ambient_intensity;
 						//// diffuse 
-						glm::vec3 norm = glm::normalize(q3);
-						glm::vec3 lightDir = glm::normalize(glm::normalize(light_position) - glm::normalize(q1));
-						float diff = glm::max(glm::dot(glm::normalize(q3 +q1), lightDir), 0.0f);
-						diffuse = diff * Model_Diffuse_Color * diffuse_light;
+						glm::vec3 norm = glm::normalize(-q2);
+						glm::vec3 lightDir = glm::normalize(light_position - q1);
+						float diff = glm::max(glm::dot(norm, -lightDir), 0.0f);
+						diffuse = diff * Model_Diffuse_Color * diffuse_light ;
 						//// specular
 						float specularStrength = 0.5;
 						glm::vec3 viewDir = glm::normalize(q3);
-						glm::vec3 reflectDir = glm::reflect(lightDir, norm);
+						glm::vec3 reflectDir = glm::reflect(-lightDir, norm);
 						float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
 						specular = specularStrength * spec * specular_light * Model_Specular_Color;
 					}
@@ -507,17 +510,28 @@ void Renderer::Render(const Scene& scene)
 						diffuse = diff * Model_Diffuse_Color * diffuse_light;
 						//// specular
 						float specularStrength = 0.5;
-						glm::vec3 viewDir = glm::normalize(q2-q1); 
+						glm::vec3 viewDir = glm::normalize(q3);
 						glm::vec3 reflectDir = glm::reflect(lightDir, norm);
 						float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
 						specular = specularStrength * spec * specular_light * Model_Specular_Color ;
 					}
-					result = (/*ambient +*/ diffuse /*+ specular*/) * Model_Color;
+					result = (ambient + diffuse + specular) * Model_Color;
 					result.x = (result.x > 1) ? 1.0f : result.x;
 					result.y = (result.y > 1) ? 1.0f : result.y;
 					result.z = (result.z > 1) ? 1.0f : result.z;
 				}
-				DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, result);
+				if (shadingkind == 0)//Flat shading
+				{
+					DrawTriangle(glm::vec3(v1.x, v1.y, v1.z) / v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, result);
+				}
+				if (shadingkind == 1)//Gouraud shading
+				{
+
+				}
+				if (shadingkind == 2)//Phong shading
+				{
+
+				}
 
 				//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 				//Lines color is default black...

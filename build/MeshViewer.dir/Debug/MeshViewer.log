@@ -1,5 +1,4 @@
 ﻿  Renderer.cpp
-  main.cpp
 D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(60): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
           with
           [
@@ -52,17 +51,5 @@ D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(158): warning C4244: '
           [
               T=float
           ]
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(329): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(330): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(331): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(372): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(373): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(374): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(438): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(439): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(440): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(476): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(477): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(478): warning C4305: 'argument': truncation from 'double' to 'float'
   MeshViewer.vcxproj -> D:\computergraphics2021-nour-abdi\build\bin\Debug\MeshViewer.exe
   Copying Shaders

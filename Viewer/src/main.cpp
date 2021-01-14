@@ -466,35 +466,35 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			{
 				PointOrParallel = true;
 				//ImGui::InputFloat3("position (x,y,z)", LLposition);
-				ImGui::SliderFloat3("position (x,y,z)", LLposition,-500.0f,500.0f);
+				ImGui::SliderFloat3("position (x,y,z)", LLposition,-100.0f,100.0f);
 				LLTranslate = {
 					glm::vec4(1.0f,0.0f,0.0f,0.0f),		
 					glm::vec4(0.0f,1.0f,0.0f,0.0f),
 					glm::vec4(0.0f,0.0f,1.0f,0.0f),
 					glm::vec4(LLposition[0],LLposition[1] ,LLposition[2],1.0f)
 				};
-				ImGui::SliderFloat("X-rotation (0~2pi)", &LLAlpha_X, 0, 2 * Pi);
-				ImGui::SliderFloat("Y-rotation (0~2pi)", &LLAlpha_Y, 0, 2 * Pi);
-				ImGui::SliderFloat("Z-rotation (0~2pi)", &LLAlpha_Z, 0, 2 * Pi);
-				glm::mat4 Rotate_x = {
-				glm::vec4(1.0f,0.0f,0.0f,0.0f),
-				glm::vec4(0.0f,cos(LLAlpha_X),sin(LLAlpha_X),0.0f),
-				glm::vec4(0.0f,-sin(LLAlpha_X),cos(LLAlpha_X),0.0f),
-				glm::vec4(0.0f,0.0f,0.0f,1.0f)
-				};
-				glm::mat4 Rotate_y = {
-				glm::vec4(cos(LLAlpha_Y),0.0f,sin(LLAlpha_Y),0.0f),
-				glm::vec4(0.0f,1.0f,0.0f,0.0f),
-				glm::vec4(-sin(LLAlpha_Y),0.0f,cos(LLAlpha_Y),0.0f),
-				glm::vec4(0.0f,0.0f,0.0f,1.0f)
-				};
-				glm::mat4 Rotate_z = {
-				glm::vec4(cos(LLAlpha_Z),sin(LLAlpha_Z),0.0f,0.0f),
-				glm::vec4(-sin(LLAlpha_Z),cos(LLAlpha_Z),0.0f,0.0f),
-				glm::vec4(0.0f,0.0f,1.0f,0.0f),
-				glm::vec4(0.0f,0.0f,0.0f,1.0f)
-				};
-				LLRotate = Rotate_z * Rotate_y * Rotate_x;
+				//ImGui::SliderFloat("X-rotation (0~2pi)", &LLAlpha_X, 0, 2 * Pi);
+				//ImGui::SliderFloat("Y-rotation (0~2pi)", &LLAlpha_Y, 0, 2 * Pi);
+				//ImGui::SliderFloat("Z-rotation (0~2pi)", &LLAlpha_Z, 0, 2 * Pi);
+				//glm::mat4 Rotate_x = {
+				//glm::vec4(1.0f,0.0f,0.0f,0.0f),
+				//glm::vec4(0.0f,cos(LLAlpha_X),sin(LLAlpha_X),0.0f),
+				//glm::vec4(0.0f,-sin(LLAlpha_X),cos(LLAlpha_X),0.0f),
+				//glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				//};
+				//glm::mat4 Rotate_y = {
+				//glm::vec4(cos(LLAlpha_Y),0.0f,sin(LLAlpha_Y),0.0f),
+				//glm::vec4(0.0f,1.0f,0.0f,0.0f),
+				//glm::vec4(-sin(LLAlpha_Y),0.0f,cos(LLAlpha_Y),0.0f),
+				//glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				//};
+				//glm::mat4 Rotate_z = {
+				//glm::vec4(cos(LLAlpha_Z),sin(LLAlpha_Z),0.0f,0.0f),
+				//glm::vec4(-sin(LLAlpha_Z),cos(LLAlpha_Z),0.0f,0.0f),
+				//glm::vec4(0.0f,0.0f,1.0f,0.0f),
+				//glm::vec4(0.0f,0.0f,0.0f,1.0f)
+				//};
+				//LLRotate = Rotate_z * Rotate_y * Rotate_x;
 				ImGui::EndTabItem();
 			}
 			if (ImGui::BeginTabItem("Parallel"))
@@ -508,7 +508,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		ImGui::ColorEdit3("ambient light ", (float*)&ambient_light);
 		ImGui::SliderFloat("ambient intensity", &ambient_light_intensity,0.0f,1.0f);
 		ImGui::ColorEdit3("diffuse light ", (float*)&diffuse_light);
-		ImGui::ColorEdit3("specular light ", (float*)&specular_light);
+		ImGui::ColorEdit3("specular light ", (float*)&specular_light); 
+		//ImGui::SliderFloat("ambient intensity", &shininess ,0.0f, 100.0f);
 
 		ImGui::Text("shading :  "); ImGui::SameLine();
 		static int e = 0;
@@ -554,13 +555,16 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		{
 			Light &light = scene.GetActiveLight();
 			light.SetPointOrParallel(PointOrParallel);
-			light.SetTransformation(LLRotate*LLTranslate);
+			//light.SetTransformation(LLRotate*LLTranslate);
 			light.SetPosition(glm::vec3(LLposition[0], LLposition[1], LLposition[2]));
 			light.SetDirection(glm::vec3(Ldirection[0], Ldirection[1], Ldirection[2]));
 			light.Setambient(ambient_light);
 			light.Setambientintensity(ambient_light_intensity);
 			light.Setdiffuse(diffuse_light);
 			light.Setspecular(specular_light);
+			//light.Setshininess(shininess);
+			light.Setshading_kind(e);
+			light.SetFog(Fog);
 		}
 		/***********************************************************************************************************/
 		if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
