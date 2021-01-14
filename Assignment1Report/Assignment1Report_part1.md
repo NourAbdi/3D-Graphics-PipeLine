@@ -1,4 +1,4 @@
-***Nour Abdi 20614750***
+***Nour Abdi 206144750***
 **Assignment 1 , Part 1 **
 
 ***1. My implementation of the algorithm:**

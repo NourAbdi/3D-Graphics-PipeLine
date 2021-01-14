@@ -1,4 +1,4 @@
-***Nour Abdi 20614750***
+***Nour Abdi 206144750***
 
 **1.Load a mesh and make sure that it's visible on screen. Pick an axis (i.e. x; y or z), and
 rotate the model around the axis. Scale the model such that it is always visible, no matter
@@ -25,11 +25,13 @@ the x direction, and compare the results**
 
 Here is bethoven model is transformed and obviously converting the normals in line with the model ...
 Transforming the faces normals :
-![11](https://user-images.githubusercontent.com/34486030/104460780-3286c000-55b7-11eb-82c0-564e748216d5.png)
-![22](https://user-images.githubusercontent.com/34486030/104460833-3f0b1880-55b7-11eb-9d7c-456b0576a1ce.png)
+![lkjdabflkjabfdlkjdasb](https://user-images.githubusercontent.com/34486030/104592718-4e519b00-5677-11eb-9336-67aca24085e7.png)
+![fdgdsfgdfkds](https://user-images.githubusercontent.com/34486030/104592725-4f82c800-5677-11eb-834c-19de1beb8377.png)
+![sg,fkjsdfblaksdjfhasd](https://user-images.githubusercontent.com/34486030/104592728-4f82c800-5677-11eb-9b7c-36025925635f.png)
 and now the same transformations on vertices normals ...
-![33](https://user-images.githubusercontent.com/34486030/104460874-46cabd00-55b7-11eb-88d5-5c220504120f.png)
-![44](https://user-images.githubusercontent.com/34486030/104460904-4d593480-55b7-11eb-8b80-7baadf3be70a.png)
+![df;lkasdf;lkasdhfsa](https://user-images.githubusercontent.com/34486030/104592807-704b1d80-5677-11eb-9a73-befd8fb95294.png)
+![fsgsfgdsfdsf](https://user-images.githubusercontent.com/34486030/104592811-717c4a80-5677-11eb-9b34-0c56e16e0aa0.png)
+![sfgsdfgkldsfjgh](https://user-images.githubusercontent.com/34486030/104592813-717c4a80-5677-11eb-831c-3d224bbe939c.png)
 
 **4.Reset the model's transformations again, and set the camera away from the model. Com-
 pare the orthographic projection vs. the perspective projection.**
