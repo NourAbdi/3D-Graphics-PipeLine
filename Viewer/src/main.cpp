@@ -273,14 +273,14 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float WAlpha_X = 0.0f;
 		static float WAlpha_Y = 0.0f;
 		static float WAlpha_Z = 0.0f;
-		static glm::vec3 color( 0.0f, 0.0f, 0.0f);
+		static glm::vec3 color( 0.8f, 0.8f, 0.8f);
 		static glm::vec3 ambient_color(1.0f, 1.0f, 1.0f);
 		static glm::vec3 diffuse_color(1.0f, 1.0f, 1.0f);
 		static glm::vec3 specular_color(1.0f, 1.0f, 1.0f);
 		static glm::vec3 ambient_light(1.0f, 1.0f, 1.0f);
 		static glm::vec3 diffuse_light(1.0f, 1.0f, 1.0f);
 		static glm::vec3 specular_light(1.0f, 1.0f, 1.0f);
-		static float ambient_light_intensity = 0.4f;
+		static float ambient_light_intensity = 0.1f;
 		static glm::mat4 LScaling ;
 		static glm::mat4 LTranslate ;
 		static glm::mat4 LRotate ;
@@ -292,8 +292,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float  l = -1.0f, r = 1.0f, b = -1.0f, t = 1.0f;
 		static float  fovy = 1.0f, nearP = -1.0f, farP = -10.0f;
 		static float Cposition[] = { 0.0f, 0.0f, 100.0f };
-		static float LLposition[] = { 0.0f, 100.0f, 0.0f };
-		static float Ldirection[] = { 0.0f, -1.0f, 0.0f };
+		static float LLposition[] = { 0.0f, 0.0f, 500.0f };
+		static float Ldirection[] = { 0.0f, 0.0f, 1.0f };
 		static float Zoom = 1.0f;
 		static float CAlpha_X = 0.0f;
 		static float CAlpha_Y = 0.0f;
@@ -318,7 +318,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 					glm::vec4(0.0f,0.0f,0.0f,1.0f)
 				};
 
-				ImGui::SliderFloat3("position(x,y,z)", Lposition, -1.0f, 1.0f);
+				ImGui::SliderFloat3("position (x,y,z)", Lposition, -1.0f, 1.0f);
 				LTranslate = {
 					glm::vec4(1.0f,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,1.0f,0.0f,0.0f),
@@ -353,7 +353,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			if (ImGui::BeginTabItem("World Frame"))
 			{
 				mode = 1;
-				ImGui::SliderFloat2("scale  (x,y)X(0~2)", Wscale, -1.0f, 1.0f);
+				ImGui::SliderFloat2("scale (x,y)X(0~2)", Wscale, -1.0f, 1.0f);
 				WScaling = {
 					glm::vec4(Wscale[0] + 1,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,Wscale[1] + 1,0.0f,0.0f),
@@ -465,7 +465,8 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			if (ImGui::BeginTabItem("Point"))
 			{
 				PointOrParallel = true;
-				ImGui::InputFloat3("position (x,y,z)", LLposition);
+				//ImGui::InputFloat3("position (x,y,z)", LLposition);
+				ImGui::SliderFloat3("position (x,y,z)", LLposition,-500.0f,500.0f);
 				LLTranslate = {
 					glm::vec4(1.0f,0.0f,0.0f,0.0f),		
 					glm::vec4(0.0f,1.0f,0.0f,0.0f),

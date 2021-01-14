@@ -496,13 +496,13 @@ void Renderer::Render(const Scene& scene)
 						float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
 						specular = specularStrength * spec * specular_light * Model_Specular_Color;
 					}
-					else
+					else // Parallel light source :
 					{
 						//// ambient
 						ambient = Model_Ambient_Color * ambient_light * ambient_intensity;
 						//// diffuse 
 						glm::vec3 norm = glm::normalize(-q2);
-						glm::vec3 lightDir = glm::normalize(light.GetDirection());
+						glm::vec3 lightDir = glm::normalize(-light.GetDirection());
 						float diff = glm::max(glm::dot(norm, lightDir), 0.0f);
 						diffuse = diff * Model_Diffuse_Color * diffuse_light;
 						//// specular
@@ -517,7 +517,7 @@ void Renderer::Render(const Scene& scene)
 					result.y = (result.y > 1) ? 1.0f : result.y;
 					result.z = (result.z > 1) ? 1.0f : result.z;
 				}
-				//DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, result);
+				DrawTriangle(glm::vec3(v1.x,v1.y,v1.z)/v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, result);
 
 				//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 				//Lines color is default black...
@@ -530,9 +530,9 @@ void Renderer::Render(const Scene& scene)
 				glm::vec2 d7(u2.x/u2.w, u2.y/u2.w);
 				glm::vec2 d8(u3.x/u3.w, u3.y/u3.w);
 
-				DrawLine(d1,d2, Model_Color);
-				DrawLine(d1,d3, Model_Color);
-				DrawLine(d2,d3, Model_Color);
+				//DrawLine(d1,d2, Model_Color);
+				//DrawLine(d1,d3, Model_Color);
+				//DrawLine(d2,d3, Model_Color);
 				if (model.Getfaces_normals())
 				{
 					DrawLine(d4, d5, glm::vec3(1.0f, 1.0f, 0.0f));
