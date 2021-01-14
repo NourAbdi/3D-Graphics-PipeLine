@@ -480,7 +480,7 @@ void Renderer::Render(const Scene& scene)
 					glm::vec3 diffuse;
 					glm::vec3 specular;
 					
-					if (PointOrParallel)
+					if (PointOrParallel) // Point light source :
 					{
 						//// ambient
 						ambient = Model_Ambient_Color * ambient_light * ambient_intensity;
@@ -502,7 +502,7 @@ void Renderer::Render(const Scene& scene)
 						ambient = Model_Ambient_Color * ambient_light * ambient_intensity;
 						//// diffuse 
 						glm::vec3 norm = glm::normalize(-q2);
-						glm::vec3 lightDir = glm::normalize(-light.GetDirection());
+						glm::vec3 lightDir = glm::normalize(light.GetDirection());
 						float diff = glm::max(glm::dot(norm, lightDir), 0.0f);
 						diffuse = diff * Model_Diffuse_Color * diffuse_light;
 						//// specular
@@ -512,7 +512,7 @@ void Renderer::Render(const Scene& scene)
 						float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
 						specular = specularStrength * spec * specular_light * Model_Specular_Color ;
 					}
-					result = (ambient + diffuse ) * Model_Color;
+					result = (ambient + diffuse + specular) * Model_Color;
 					result.x = (result.x > 1) ? 1.0f : result.x;
 					result.y = (result.y > 1) ? 1.0f : result.y;
 					result.z = (result.z > 1) ? 1.0f : result.z;
