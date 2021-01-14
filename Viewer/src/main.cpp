@@ -323,7 +323,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 					glm::vec4(1.0f,0.0f,0.0f,0.0f),
 					glm::vec4(0.0f,1.0f,0.0f,0.0f),
 					glm::vec4(0.0f,0.0f,1.0f,0.0f),
-					glm::vec4(Lposition[0] ,Lposition[1] ,Lposition[2],1.0f)
+					glm::vec4(Lposition[0]*10 ,Lposition[1]*10 ,Lposition[2],1.0f)
 				};
 
 				ImGui::SliderFloat("X-rotation (0~2pi)", &LAlpha_X, 0, 2 * Pi);

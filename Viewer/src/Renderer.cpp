@@ -462,7 +462,7 @@ void Renderer::Render(const Scene& scene)
 				glm::vec3 q3(v6.x / v6.w,v6.y / v6.w,v6.z / v6.w);
 				v10 = Transformations * v10;
 				v11 = Transformations * v11;
-				q1 = glm::normalize(q1);
+				//q1 = glm::normalize(q1);
 				q3 = glm::normalize(q3);
 				glm::vec3 rand_color((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
 				glm::vec3 result(black);
@@ -492,7 +492,7 @@ void Renderer::Render(const Scene& scene)
 						//// specular
 						float specularStrength = 0.5;
 						glm::vec3 viewDir = glm::normalize(q3);
-						glm::vec3 reflectDir = glm::reflect(-lightDir, norm);
+						glm::vec3 reflectDir = glm::reflect(lightDir, norm);
 						float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
 						specular = specularStrength * spec * specular_light * Model_Specular_Color;
 					}
@@ -508,11 +508,11 @@ void Renderer::Render(const Scene& scene)
 						//// specular
 						float specularStrength = 0.5;
 						glm::vec3 viewDir = glm::normalize(q2-q1); 
-						glm::vec3 reflectDir = glm::reflect(-lightDir, norm);
+						glm::vec3 reflectDir = glm::reflect(lightDir, norm);
 						float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
 						specular = specularStrength * spec * specular_light * Model_Specular_Color ;
 					}
-					result = (ambient + diffuse + specular) * Model_Color;
+					result = (/*ambient +*/ diffuse /*+ specular*/) * Model_Color;
 					result.x = (result.x > 1) ? 1.0f : result.x;
 					result.y = (result.y > 1) ? 1.0f : result.y;
 					result.z = (result.z > 1) ? 1.0f : result.z;
