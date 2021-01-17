@@ -19,3 +19,4 @@ pictures of the color buffer and z-buffer, for several models or viewpoints.**
 ![vcfssd](https://user-images.githubusercontent.com/34486030/104501435-60d0c380-55e8-11eb-9a45-944866ecf800.png)
 ![sdfda](https://user-images.githubusercontent.com/34486030/104568369-ae851480-5658-11eb-9af2-db396f7c4d31.png)
 ![dafsad](https://user-images.githubusercontent.com/34486030/104568372-af1dab00-5658-11eb-92d8-78d81e91a672.png)
+![image](https://user-images.githubusercontent.com/34486030/104856340-ce4b5f80-591a-11eb-9950-532979b72bb0.png)
