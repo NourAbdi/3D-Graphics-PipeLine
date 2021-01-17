@@ -120,7 +120,8 @@ float Renderer::cal_area(const glm::vec2& a, const glm::vec2& b, const glm::vec2
 {
 	return ((float)((c.x - a.x) * (b.y - a.y)) - (float)((c.y - a.y) * (b.x - a.x)));
 }
-void Renderer::DrawTriangle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, const glm::vec3& color)
+void Renderer::DrawTriangle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, 
+							const glm::vec3& color, bool fog,float fog_start,float fog_end, const glm::vec3& FogColor)
 {
 	float Maxx = max_point(p1.x, p2.x, p3.x);
 	float Maxy = max_point(p1.y, p2.y, p3.y);
@@ -131,6 +132,8 @@ void Renderer::DrawTriangle(const glm::vec3& p1, const glm::vec3& p2, const glm:
 	float B ;
 	float C ;
 	float Z ;
+	float f ;
+	glm::vec3 Color(black);
 
 	for (int j = Miny; j < Maxy; j++)
 	{
@@ -143,12 +146,123 @@ void Renderer::DrawTriangle(const glm::vec3& p1, const glm::vec3& p2, const glm:
 			if (A >= 0 && B >= 0 && C >= 0)
 			{
 				Z=(A/AREA)*p1.z + (B/AREA)*p2.z + (C/AREA)*p3.z ;
-				PutPixel(i, j , Z , color);
+				Color = color;
+				if (fog)
+				{
+					f = (fog_end - Z) / (fog_end - fog_start);
+					Color = ((1 - f) * FogColor) + (f * color);
+				}
+				PutPixel(i, j , Z , Color);
 			}
 		}
 	}
 }
+void Renderer::DrawTriangle1(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3,
+							const glm::vec3& color1, const glm::vec3& color2, const glm::vec3& color3)
+{
+	float Maxx = max_point(p1.x, p2.x, p3.x);
+	float Maxy = max_point(p1.y, p2.y, p3.y);
+	float Minx = min_point(p1.x, p2.x, p3.x);
+	float Miny = min_point(p1.y, p2.y, p3.y);
+	float AREA = cal_area(p3, p2, p1);
+	float A;
+	float B;
+	float C;
+	float Z;
+	glm::vec3 color(black);
 
+	for (int j = Miny; j < Maxy; j++)
+	{
+		for (int i = Minx; i < Maxx; i++)
+		{
+			A = cal_area(p3, p2, glm::vec2(i, j));
+			B = cal_area(p1, p3, glm::vec2(i, j));
+			C = cal_area(p2, p1, glm::vec2(i, j));
+
+			if (A >= 0 && B >= 0 && C >= 0)
+			{
+				Z = (A / AREA)*p1.z + (B / AREA)*p2.z + (C / AREA)*p3.z;
+				float colorx = (A / AREA)*color1.x + (B / AREA)*color2.x + (C / AREA)*color3.x;
+				float colory = (A / AREA)*color1.y + (B / AREA)*color2.y + (C / AREA)*color3.y;
+				float colorz = (A / AREA)*color1.z + (B / AREA)*color2.z + (C / AREA)*color3.z;
+				color = glm::vec3(colorx, colory, colorz);
+				PutPixel(i, j, Z, color);
+			}
+		}
+	}
+}
+void Renderer::DrawTriangle2(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3,
+							const glm::vec3& n1, const glm::vec3& n2, const glm::vec3& n3, const glm::vec3& color,
+							bool PointOrParallel, const glm::vec3& ambient, const glm::vec3& diffuse1, const glm::vec3&specular1,
+							const glm::vec3& light_position, const glm::vec3& lightDir
+							)
+{
+	float Maxx = max_point(p1.x, p2.x, p3.x);
+	float Maxy = max_point(p1.y, p2.y, p3.y);
+	float Minx = min_point(p1.x, p2.x, p3.x);
+	float Miny = min_point(p1.y, p2.y, p3.y);
+	float AREA = cal_area(p3, p2, p1);
+	float A;
+	float B;
+	float C;
+	float Z;
+	float specularStrength = 0.5;
+	glm::vec3 diffuse(black);
+	glm::vec3 specular(black);
+	glm::vec3 n;
+	glm::vec3 FragPosition;
+
+	for (int j = Miny; j < Maxy; j++)
+	{
+		for (int i = Minx; i < Maxx; i++)
+		{
+			A = cal_area(p3, p2, glm::vec2(i, j));
+			B = cal_area(p1, p3, glm::vec2(i, j));
+			C = cal_area(p2, p1, glm::vec2(i, j));
+
+			if (A >= 0 && B >= 0 && C >= 0)
+			{
+				float nx = (A / AREA)*n1.x + (B / AREA)*n2.x + (C / AREA)*n3.x;
+				float ny = (A / AREA)*n1.y + (B / AREA)*n2.y + (C / AREA)*n3.y;
+				float nz = (A / AREA)*n1.z + (B / AREA)*n2.z + (C / AREA)*n3.z;
+				Z = (A / AREA)*p1.z + (B / AREA)*p2.z + (C / AREA)*p3.z;
+				FragPosition = glm::normalize(glm::vec3(i, j, Z));
+				n = glm::normalize(glm::vec3(nx, ny, nz));
+				
+				if (PointOrParallel) // Point light source :
+				{
+					//// diffuse 
+					glm::vec3 norm = glm::normalize(-n);
+					glm::vec3 lightDir = glm::normalize(light_position - FragPosition);
+					float diff = glm::max(glm::dot(norm, -lightDir), 0.0f);
+					diffuse = diff * diffuse1;
+					//// specular
+					glm::vec3 viewDir = glm::normalize(n);
+					glm::vec3 reflectDir = glm::reflect(-lightDir, norm);
+					float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
+					specular = specularStrength * spec * specular1;
+				}
+				else // Parallel light source :
+				{
+					//// diffuse 
+					glm::vec3 norm = glm::normalize(-n);
+					float diff = glm::max(glm::dot(norm, lightDir), 0.0f);
+					diffuse = diff * diffuse1;
+					//// specula
+					glm::vec3 viewDir = glm::normalize(n);
+					glm::vec3 reflectDir = glm::reflect(lightDir, norm);
+					float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
+					specular = specularStrength * spec * specular1;
+				}
+				glm::vec3 result = (ambient + diffuse + specular) * color;
+				result.x = (result.x > 1) ? 1.0f : result.x;
+				result.y = (result.y > 1) ? 1.0f : result.y;
+				result.z = (result.z > 1) ? 1.0f : result.z;
+				PutPixel(i, j, Z, result);
+			}
+		}
+	}
+}
 void Renderer::DrawLine(const glm::vec2& p1, const glm::vec2& p2, const glm::vec3& color)
 {
 	// TODO: Implement bresenham algorithm
@@ -429,8 +543,13 @@ void Renderer::Render(const Scene& scene)
 				glm::vec3 p2 = vertices.at(model.GetFace(faces_c).GetVertexIndex(1) - 1);
 				glm::vec3 p3 = vertices.at(model.GetFace(faces_c).GetVertexIndex(2) - 1);
 				glm::vec3 n1 = (normals.at(model.GetFace(faces_c).GetNormalIndex(0) - 1) + p1);
-				glm::vec3 n2 = (normals.at(model.GetFace(faces_c).GetNormalIndex(1)-1)+p2);
-				glm::vec3 n3 = (normals.at(model.GetFace(faces_c).GetNormalIndex(2)-1)+p3);
+				glm::vec3 n2 = (normals.at(model.GetFace(faces_c).GetNormalIndex(1) - 1) + p2);
+				glm::vec3 n3 = (normals.at(model.GetFace(faces_c).GetNormalIndex(2) - 1) + p3);
+				glm::vec3 n11 = glm::normalize(n1);
+				glm::vec3 n22 = glm::normalize(n2);
+				glm::vec3 n33 = glm::normalize(n3);
+				//glm::vec3 n22 = glm::normalize((normals.at(model.GetFace(faces_c).GetNormalIndex(1) - 1)));
+				//glm::vec3 n33 = glm::normalize((normals.at(model.GetFace(faces_c).GetNormalIndex(2) - 1)));
 				glm::vec3 s1 (((p1.x+p2.x+p3.x)/3), ((p1.y + p2.y + p3.y) / 3), ((p1.z + p2.z + p3.z) / 3));
 				glm::vec3 s2 (glm::normalize(glm::cross(p2-p1, p3-p1))+s1);
 				glm::vec3 s3 (glm::normalize(glm::cross(p2-p1, p3-p1)));
@@ -447,6 +566,9 @@ void Renderer::Render(const Scene& scene)
 				glm::vec4 u1(n1, 1.0f);
 				glm::vec4 u2(n2, 1.0f);
 				glm::vec4 u3(n3, 1.0f);
+				glm::vec4 u11(n1, 1.0f);
+				glm::vec4 u22(n2, 1.0f);
+				glm::vec4 u33(n3, 1.0f);
 				
 				v1 = Transformations * v1;
 				v2 = Transformations * v2;
@@ -454,24 +576,35 @@ void Renderer::Render(const Scene& scene)
 				u1 = Transformations * u1;
 				u2 = Transformations * u2;
 				u3 = Transformations * u3;
+				u11 = ViewTransformations * u11;
+				u22 = ViewTransformations * u22;
+				u33 = ViewTransformations * u33;
 				v4 = ViewTransformations * v4;
 				v5 = ViewTransformations * v5;
 				v6 = ViewTransformations * v6;
+				glm::vec3 m(v1.x / v1.w,v1.y / v1.w,v1.z / v1.w);
+				glm::vec3 n(v2.x / v2.w,v2.y / v2.w,v2.z / v2.w);
+				glm::vec3 l(v3.x / v3.w,v3.y / v3.w,v3.z / v3.w);
 				glm::vec3 q1(v4.x / v4.w,v4.y / v4.w,v4.z / v4.w);
 				glm::vec3 q2(v5.x / v5.w,v5.y / v5.w,v5.z / v5.w);
 				glm::vec3 q3(v6.x / v6.w,v6.y / v6.w,v6.z / v6.w);
+				glm::vec3 q4(u11.x / u11.w, u11.y / u11.w, u11.z / u11.w);
+				glm::vec3 q5(u22.x / u22.w, u22.y / u22.w, u22.z / u22.w);
+				glm::vec3 q6(u33.x / u33.w, u33.y / u33.w, u33.z / u33.w);
 				v10 = Transformations * v10;
 				v11 = Transformations * v11;
 				//q1 = glm::normalize(q1);
 				q3 = glm::normalize(q3);
 				glm::vec3 rand_color((float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX, (float)rand() / (float)RAND_MAX);
 				glm::vec3 result(black);
+				glm::vec3 result1(black);
+				glm::vec3 result2(black);
+				glm::vec3 result3(black);
 				int shadingkind;
 				if (scene.GetLightCount() > 0) //This check if we loaded light
 				{
 					Light &light = scene.GetActiveLight();
 					bool PointOrParallel = light.GetPointOrParallel();
-					//glm::mat4x4 light_transformation = light.GetTransformation();
 					glm::vec3 ambient_light = light.Getambient();
 					float ambient_intensity = light.Getambientintensity();
 					glm::vec3 diffuse_light = light.Getdiffuse();
@@ -479,9 +612,18 @@ void Renderer::Render(const Scene& scene)
 					glm::vec3 light_position = light.GetPosition();
 					shadingkind = light.Getshading_kind();
 					bool Fog = light.GetFog();
+					float FogStart = light.GetfogStart();
+					float fogEnd = light.GetfogEnd(); 
+					glm::vec3 FogColor = light.GetFogColor();
 					glm::vec3 ambient;
 					glm::vec3 diffuse;
+					glm::vec3 diffuse1;
+					glm::vec3 diffuse2;
+					glm::vec3 diffuse3;
 					glm::vec3 specular;
+					glm::vec3 specular1;
+					glm::vec3 specular2;
+					glm::vec3 specular3;
 					
 					if (PointOrParallel) // Point light source :
 					{
@@ -489,15 +631,39 @@ void Renderer::Render(const Scene& scene)
 						ambient = Model_Ambient_Color * ambient_light * ambient_intensity;
 						//// diffuse 
 						glm::vec3 norm = glm::normalize(-q2);
+						glm::vec3 norm1 = glm::normalize(-q4);
+						glm::vec3 norm2 = glm::normalize(-q5);
+						glm::vec3 norm3 = glm::normalize(-q6);
 						glm::vec3 lightDir = glm::normalize(light_position - q1);
+						glm::vec3 lightDir1 = glm::normalize(light_position - glm::normalize(m));
+						glm::vec3 lightDir2 = glm::normalize(light_position - glm::normalize(n));
+						glm::vec3 lightDir3 = glm::normalize(light_position - glm::normalize(l));
 						float diff = glm::max(glm::dot(norm, -lightDir), 0.0f);
+						float diff1 = glm::max(glm::dot(norm1, -lightDir1), 0.0f);
+						float diff2 = glm::max(glm::dot(norm2, -lightDir2), 0.0f);
+						float diff3 = glm::max(glm::dot(norm3, -lightDir3), 0.0f);
 						diffuse = diff * Model_Diffuse_Color * diffuse_light ;
+						diffuse1 = diff1 * Model_Diffuse_Color * diffuse_light ;
+						diffuse2 = diff2 * Model_Diffuse_Color * diffuse_light ;
+						diffuse3 = diff3 * Model_Diffuse_Color * diffuse_light ;
 						//// specular
 						float specularStrength = 0.5;
-						glm::vec3 viewDir = glm::normalize(q3);
+						glm::vec3 viewDir = glm::normalize(q2);
+						glm::vec3 viewDir1 = glm::normalize(q4);
+						glm::vec3 viewDir2 = glm::normalize(q5);
+						glm::vec3 viewDir3 = glm::normalize(q6);
 						glm::vec3 reflectDir = glm::reflect(-lightDir, norm);
+						glm::vec3 reflectDir1 = glm::reflect(-lightDir1, norm1);
+						glm::vec3 reflectDir2 = glm::reflect(-lightDir2, norm2);
+						glm::vec3 reflectDir3 = glm::reflect(-lightDir3, norm3);
 						float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
+						float spec1 = glm::pow(glm::max(glm::dot(viewDir1, reflectDir1), 0.0f), 32);
+						float spec2 = glm::pow(glm::max(glm::dot(viewDir2, reflectDir2), 0.0f), 32);
+						float spec3 = glm::pow(glm::max(glm::dot(viewDir3, reflectDir3), 0.0f), 32);
 						specular = specularStrength * spec * specular_light * Model_Specular_Color;
+						specular1 = specularStrength * spec1 * specular_light * Model_Specular_Color;
+						specular2 = specularStrength * spec2 * specular_light * Model_Specular_Color;
+						specular3 = specularStrength * spec3 * specular_light * Model_Specular_Color;
 					}
 					else // Parallel light source :
 					{
@@ -505,34 +671,80 @@ void Renderer::Render(const Scene& scene)
 						ambient = Model_Ambient_Color * ambient_light * ambient_intensity;
 						//// diffuse 
 						glm::vec3 norm = glm::normalize(-q2);
+						glm::vec3 norm1 = glm::normalize(-q4);
+						glm::vec3 norm2 = glm::normalize(-q5);
+						glm::vec3 norm3 = glm::normalize(-q6);
 						glm::vec3 lightDir = glm::normalize(light.GetDirection());
 						float diff = glm::max(glm::dot(norm, lightDir), 0.0f);
+						float diff1 = glm::max(glm::dot(norm1, lightDir), 0.0f);
+						float diff2 = glm::max(glm::dot(norm2, lightDir), 0.0f);
+						float diff3 = glm::max(glm::dot(norm3, lightDir), 0.0f);
 						diffuse = diff * Model_Diffuse_Color * diffuse_light;
+						diffuse1 = diff1 * Model_Diffuse_Color * diffuse_light;
+						diffuse2 = diff2 * Model_Diffuse_Color * diffuse_light;
+						diffuse3 = diff3 * Model_Diffuse_Color * diffuse_light;
 						//// specular
 						float specularStrength = 0.5;
-						glm::vec3 viewDir = glm::normalize(q3);
+						glm::vec3 viewDir = glm::normalize(q2);
+						glm::vec3 viewDir1 = glm::normalize(q4);
+						glm::vec3 viewDir2 = glm::normalize(q5);
+						glm::vec3 viewDir3 = glm::normalize(q6);
 						glm::vec3 reflectDir = glm::reflect(lightDir, norm);
+						glm::vec3 reflectDir1 = glm::reflect(lightDir, norm1);
+						glm::vec3 reflectDir2 = glm::reflect(lightDir, norm2);
+						glm::vec3 reflectDir3 = glm::reflect(lightDir, norm3);
 						float spec = glm::pow(glm::max(glm::dot(viewDir, reflectDir), 0.0f), 32);
+						float spec1 = glm::pow(glm::max(glm::dot(viewDir1, reflectDir1), 0.0f), 32);
+						float spec2 = glm::pow(glm::max(glm::dot(viewDir2, reflectDir2), 0.0f), 32);
+						float spec3 = glm::pow(glm::max(glm::dot(viewDir3, reflectDir3), 0.0f), 32);
 						specular = specularStrength * spec * specular_light * Model_Specular_Color ;
+						specular1 = specularStrength * spec1 * specular_light * Model_Specular_Color ;
+						specular2 = specularStrength * spec2 * specular_light * Model_Specular_Color ;
+						specular3 = specularStrength * spec3 * specular_light * Model_Specular_Color ;
 					}
 					result = (ambient + diffuse + specular) * Model_Color;
+					result1 = (ambient + diffuse1 + specular1) * Model_Color;
+					result2 = (ambient + diffuse2 + specular2) * Model_Color;
+					result3 = (ambient + diffuse3 + specular3) * Model_Color;
 					result.x = (result.x > 1) ? 1.0f : result.x;
 					result.y = (result.y > 1) ? 1.0f : result.y;
 					result.z = (result.z > 1) ? 1.0f : result.z;
-				}
-				if (shadingkind == 0)//Flat shading
-				{
-					DrawTriangle(glm::vec3(v1.x, v1.y, v1.z) / v1.w, glm::vec3(v2.x, v2.y, v2.z) / v2.w, glm::vec3(v3.x, v3.y, v3.z) / v3.w, result);
-				}
-				if (shadingkind == 1)//Gouraud shading
-				{
+					result1.x = (result1.x > 1) ? 1.0f : result1.x;
+					result1.y = (result1.y > 1) ? 1.0f : result1.y;
+					result1.z = (result1.z > 1) ? 1.0f : result1.z;
+					result2.x = (result2.x > 1) ? 1.0f : result2.x;
+					result2.y = (result2.y > 1) ? 1.0f : result2.y;
+					result2.z = (result2.z > 1) ? 1.0f : result2.z;
+					result3.x = (result3.x > 1) ? 1.0f : result3.x;
+					result3.y = (result3.y > 1) ? 1.0f : result3.y;
+					result3.z = (result3.z > 1) ? 1.0f : result3.z;
 
+					if (shadingkind == 0)//Flat shading
+					{
+						DrawTriangle(glm::vec3(v1.x, v1.y, v1.z) / v1.w,
+							glm::vec3(v2.x, v2.y, v2.z) / v2.w,
+							glm::vec3(v3.x, v3.y, v3.z) / v3.w,
+							result,Fog, FogStart, fogEnd, FogColor);
+					}
+					if (shadingkind == 1)//Gouraud shading
+					{
+						DrawTriangle1(glm::vec3(v1.x, v1.y, v1.z) / v1.w,
+							glm::vec3(v2.x, v2.y, v2.z) / v2.w,
+							glm::vec3(v3.x, v3.y, v3.z) / v3.w,
+							result1, result2, result3);
+					}
+					if (shadingkind == 2)//Phong shading
+					{
+						DrawTriangle2(glm::vec3(v1.x, v1.y, v1.z) / v1.w,
+							glm::vec3(v2.x, v2.y, v2.z) / v2.w,
+							glm::vec3(v3.x, v3.y, v3.z) / v3.w,
+							glm::normalize(q4), glm::normalize(q5), glm::normalize(q6), Model_Color,
+							PointOrParallel, ambient , Model_Diffuse_Color * diffuse_light, specular_light * Model_Specular_Color,
+							light.GetPosition() , glm::normalize(light.GetDirection())
+							);
+					}
 				}
-				if (shadingkind == 2)//Phong shading
-				{
-
-				}
-
+				
 				//To draw the mish model lines we need to convert the cordinates from 1x4 to 1x2 :
 				//Lines color is default black...
 				glm::vec2 d1(v1.x/v1.w, v1.y/v1.w);

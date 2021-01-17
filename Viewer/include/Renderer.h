@@ -22,7 +22,15 @@ private:
 	float max_point(const float x, const float y, const float z);
 	float min_point(const float x, const float y, const float z);
 	float cal_area(const glm::vec2& p1, const glm::vec2& p2, const glm::vec2& p3);
-	void DrawTriangle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, const glm::vec3& color);
+	void DrawTriangle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3,
+						const glm::vec3& color, bool fog, float fog_start, float fog_end, const glm::vec3& FogColor);
+	void DrawTriangle1(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3,
+						const glm::vec3& color1, const glm::vec3& color2, const glm::vec3& color3);
+	void DrawTriangle2(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3,
+						const glm::vec3& n1, const glm::vec3& n2, const glm::vec3& n3, const glm::vec3& color,
+						bool PointOrParallel, const glm::vec3& ambient, const glm::vec3& diffuse1, const glm::vec3&specular1,
+						const glm::vec3& light_position, const glm::vec3& lightDir
+	);
 	void DrawLine(const glm::vec2& p1, const glm::vec2& p2, const glm::vec3& color);
 	void plotLineLow(const glm::vec2& p1, const glm::vec2& p2, const glm::vec3& color);
 	void plotLineHigh(const glm::vec2& p1, const glm::vec2& p2, const glm::vec3& color);

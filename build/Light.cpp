@@ -110,3 +110,30 @@ void Light::SetFog(bool i)
 {
 	Fog = i;
 }
+
+float Light::GetfogStart() const
+{
+	return fogStart;
+}
+void Light::SetfogStart(float i)
+{
+	fogStart = i;
+}
+
+float Light::GetfogEnd() const
+{
+	return fogEnd;
+}
+void Light::SetfogEnd(float i)
+{
+	fogEnd = i;
+}
+
+void Light::SetFogColor(const glm::vec3& vec)
+{
+	FogColor = vec;
+}
+const glm::vec3& Light::GetFogColor() const
+{
+	return FogColor;
+}

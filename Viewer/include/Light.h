@@ -38,6 +38,15 @@ public:
 	bool GetFog() const;
 	void SetFog(bool i);
 
+	float GetfogStart() const;
+	void SetfogStart(float i);
+
+	float GetfogEnd() const;
+	void SetfogEnd(float i);
+
+	void SetFogColor(const glm::vec3& vec);
+	const glm::vec3& GetFogColor() const;
+
 private:
 
 	glm::mat4x4 transformation_;
@@ -45,9 +54,12 @@ private:
 	glm::vec3 Direction;
 	glm::vec3 ambient;
 	float ambientintensity;
+	float fogStart;
+	float fogEnd;
+	int shading_kind;
 	glm::vec3 diffuse;
 	glm::vec3 specular;
-	int shading_kind;
+	glm::vec3 FogColor;
 	bool PointOrParallel;
 	bool Fog;
 };

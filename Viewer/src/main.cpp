@@ -20,7 +20,7 @@ bool show_demo_window = false;
 bool show_another_window = false;
 static glm::vec3 black(0.0f, 0.0f, 0.0f);
 static glm::vec3 white(1.0f, 1.0f, 1.0f);
-glm::vec4 clear_color = glm::vec4(0.8f, 0.8f, 0.8f, 1.00f);
+glm::vec4 clear_color = glm::vec4(0.6f, 0.6f, 0.6f, 1.00f);
 
 /**
  * Function declarations
@@ -280,7 +280,10 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static glm::vec3 ambient_light(1.0f, 1.0f, 1.0f);
 		static glm::vec3 diffuse_light(1.0f, 1.0f, 1.0f);
 		static glm::vec3 specular_light(1.0f, 1.0f, 1.0f);
+		static glm::vec3 FogColor(0.6f,0.6f,0.6f);
 		static float ambient_light_intensity = 0.1f;
+		static float fogStart = 98.0f;
+		static float fogEnd = 100.0f;
 		static glm::mat4 LScaling ;
 		static glm::mat4 LTranslate ;
 		static glm::mat4 LRotate ;
@@ -473,28 +476,6 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 					glm::vec4(0.0f,0.0f,1.0f,0.0f),
 					glm::vec4(LLposition[0],LLposition[1] ,LLposition[2],1.0f)
 				};
-				//ImGui::SliderFloat("X-rotation (0~2pi)", &LLAlpha_X, 0, 2 * Pi);
-				//ImGui::SliderFloat("Y-rotation (0~2pi)", &LLAlpha_Y, 0, 2 * Pi);
-				//ImGui::SliderFloat("Z-rotation (0~2pi)", &LLAlpha_Z, 0, 2 * Pi);
-				//glm::mat4 Rotate_x = {
-				//glm::vec4(1.0f,0.0f,0.0f,0.0f),
-				//glm::vec4(0.0f,cos(LLAlpha_X),sin(LLAlpha_X),0.0f),
-				//glm::vec4(0.0f,-sin(LLAlpha_X),cos(LLAlpha_X),0.0f),
-				//glm::vec4(0.0f,0.0f,0.0f,1.0f)
-				//};
-				//glm::mat4 Rotate_y = {
-				//glm::vec4(cos(LLAlpha_Y),0.0f,sin(LLAlpha_Y),0.0f),
-				//glm::vec4(0.0f,1.0f,0.0f,0.0f),
-				//glm::vec4(-sin(LLAlpha_Y),0.0f,cos(LLAlpha_Y),0.0f),
-				//glm::vec4(0.0f,0.0f,0.0f,1.0f)
-				//};
-				//glm::mat4 Rotate_z = {
-				//glm::vec4(cos(LLAlpha_Z),sin(LLAlpha_Z),0.0f,0.0f),
-				//glm::vec4(-sin(LLAlpha_Z),cos(LLAlpha_Z),0.0f,0.0f),
-				//glm::vec4(0.0f,0.0f,1.0f,0.0f),
-				//glm::vec4(0.0f,0.0f,0.0f,1.0f)
-				//};
-				//LLRotate = Rotate_z * Rotate_y * Rotate_x;
 				ImGui::EndTabItem();
 			}
 			if (ImGui::BeginTabItem("Parallel"))
@@ -519,6 +500,9 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 
 		static bool Fog = false;
 		ImGui::Checkbox("Enable Fog", &Fog);
+		ImGui::ColorEdit3("Fog color ", (float*)&FogColor);
+		ImGui::SliderFloat("fog Start", &fogStart, 95.0f, 100.0f);
+		ImGui::SliderFloat("fog End", &fogEnd, 98.0f, 105.0f);
 		/*********************************************************************************************************/
 		if (!ONCE)
 		{
@@ -565,6 +549,9 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			//light.Setshininess(shininess);
 			light.Setshading_kind(e);
 			light.SetFog(Fog);
+			light.SetfogStart(fogStart);
+			light.SetfogEnd(fogEnd);
+			light.SetFogColor(FogColor);
 		}
 		/***********************************************************************************************************/
 		if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
