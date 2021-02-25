@@ -1,6 +1,6 @@
 ***Nour Abdi 206144750***
 
-**Assignment3 : OpenGL renderer**
+****Assignment3 : OpenGL renderer****
 
 **1.The software renderer was built on top of OpenGL. The Renderer::SwapBuffer() function
 loads color buffer into a texture on the GPU. Read the function Renderer::InitOpenGLRendering()
