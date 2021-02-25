@@ -27,3 +27,9 @@ Shader.setUniform("model", modelMatrix);
 Shader.setUniform("view", ViewMatrix);
 Shader.setUniform("projection", Zooom * projection);
 ```
+
+**4.Write a fragment shader that only outputs a constant color and paste it in the report.
+The goal for now is to ensure that the pipeline works. Lights will be added later.**
+
+Fragmant shader for constant color:
+![51](https://user-images.githubusercontent.com/34486030/109212256-f64e9e00-77b7-11eb-9abe-b8e5355f72e9.jpeg)
