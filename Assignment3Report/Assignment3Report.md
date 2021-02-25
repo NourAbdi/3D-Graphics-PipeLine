@@ -51,3 +51,13 @@ The goal for now is to ensure that the pipeline works. Lights will be added late
 Fragmant shader for constant color:
 
 ![51](https://user-images.githubusercontent.com/34486030/109212256-f64e9e00-77b7-11eb-9abe-b8e5355f72e9.jpeg)
+
+**5.In the renderer, update all the relevant vertex attributes and uniforms, and paste the
+relevant piece of code to the report. If everything was done correctly, you should be able
+to view the mesh in your application.**
+
+I chose the bishop model for demonstration :
+
+![04](https://user-images.githubusercontent.com/34486030/109214891-10d64680-77bb-11eb-94cf-a10925db4587.jpeg)
+
+
