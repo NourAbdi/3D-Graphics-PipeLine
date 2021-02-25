@@ -1,5 +1,6 @@
 #pragma once
 #include "Scene.h"
+#include "ShaderProgram.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
@@ -8,6 +9,7 @@ class Renderer
 public:
 	Renderer(int viewportWidth, int viewportHeight);
 	virtual ~Renderer();
+	void LoadShaders();
 	void Render(const Scene& scene);
 	void SwapBuffers();
 	void ClearColorBuffer(const glm::vec3& color);
@@ -39,7 +41,7 @@ private:
 	void CreateBuffers(int w, int h);
 	void CreateOpenGLBuffer();
 	void InitOpenGLRendering();
-
+	ShaderProgram Shader;
 	float* color_buffer_;
 	float* z_buffer_;
 	int viewport_width_;

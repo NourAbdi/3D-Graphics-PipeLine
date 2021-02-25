@@ -1,1 +1,16 @@
-﻿
+﻿  Checking Build System
+  CMake is re-running because D:/computergraphics2021-nour-abdi/build/CMakeFiles/generate.stamp is out-of-date.
+    the file 'D:/computergraphics2021-nour-abdi/Viewer/shaders/fshader.glsl'
+    is newer than 'D:/computergraphics2021-nour-abdi/build/CMakeFiles/generate.stamp.depend'
+    result='-1'
+  -- Selecting Windows SDK version 10.0.17763.0 to target Windows 10.0.19041.
+  -- Could NOT find Doxygen (missing: DOXYGEN_EXECUTABLE) 
+  -- Using Win32 for window creation
+  -- >>> NFD is created for Windows system
+  -- >>> OpenGL found: TRUE
+  -- >>> OPENGL_LIBRARIES: opengl32;glu32
+  -- >>> shader: fshader.glsl is copied to D:/computergraphics2021-nour-abdi/build/fshader.glsl
+  -- >>> shader: vshader.glsl is copied to D:/computergraphics2021-nour-abdi/build/vshader.glsl
+  -- Configuring done
+  -- Generating done
+  -- Build files have been written to: D:/computergraphics2021-nour-abdi/build

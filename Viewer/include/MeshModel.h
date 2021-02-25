@@ -1,8 +1,14 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <glad/glad.h>
 #include <string>
 #include "Face.h"
-
+struct Vertex
+{
+	glm::vec3 position;
+	glm::vec3 normal;
+	glm::vec2 textureCoords;
+};
 class MeshModel
 {
 public:
@@ -40,7 +46,18 @@ public:
 	void Setspecular(const glm::vec3& vec);
 	const glm::vec3& Getspecular() const;
 
+
+	GLuint GetVAO() const;
+
+	const std::vector<Vertex>& GetModelVertices();
+
 private:
+
+	GLuint vbo;
+	GLuint vao;
+
+	std::vector<Vertex> modelVertices;
+
 	std::vector<Face> faces_;
 	std::vector<glm::vec3> vertices_;
 	std::vector<glm::vec3> normals_;

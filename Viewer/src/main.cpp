@@ -50,11 +50,16 @@ int main(int argc, char **argv)
 	if (!window)
 		return 1;
 
+
+	glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
+	glEnable(GL_DEPTH_TEST);
+
 	int frameBufferWidth, frameBufferHeight;
 	glfwMakeContextCurrent(window);
 	glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
 
 	Renderer renderer = Renderer(frameBufferWidth, frameBufferHeight);
+	renderer.LoadShaders();
 	Scene scene = Scene();
 	
 	ImGuiIO& io = SetupDearImgui(window);
@@ -151,6 +156,7 @@ void RenderFrame(GLFWwindow* window, Scene& scene, Renderer& renderer, ImGuiIO& 
 		}
 	}
 
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);	
 	renderer.ClearColorBuffer(clear_color);
 	renderer.Render(scene);
 	renderer.SwapBuffers();
@@ -294,10 +300,10 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static glm::mat4 LLRotate ;
 		static float  l = -1.0f, r = 1.0f, b = -1.0f, t = 1.0f;
 		static float  fovy = 1.0f, nearP = -1.0f, farP = -10.0f;
-		static float Cposition[] = { 0.0f, 0.0f, 100.0f };
+		static float Cposition[] = { 0.0f, 0.0f, 300.0f };
 		static float LLposition[] = { 0.0f, 0.0f, 100.0f };
 		static float Ldirection[] = { 0.0f, 0.0f, -1.0f };
-		static float Zoom = 1.0f;
+		static float Zoom = 0.6f;
 		static float CAlpha_X = 0.0f;
 		static float CAlpha_Y = 0.0f;
 		static float CAlpha_Z = 0.0f;
