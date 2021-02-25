@@ -19,8 +19,25 @@ project as a reference.**
 pay attention to the differences between your code and the reference code. Copy the code
 the the report.**
 
-![11](https://user-images.githubusercontent.com/34486030/109211677-319c9d00-77b7-11eb-8ca0-45df435b0ad9.jpeg)
+```
+#version 330 core
 
+uniform mat4 model;
+uniform mat4 view;
+uniform mat4 projection;
+
+layout(location = 0) in vec3 FragPos;
+layout(location = 1) in vec3 FragNormal;
+layout(location = 2) in vec2 texture;
+
+//out vec2 texCoord;
+out vec3 fragFinalPos;
+
+void main()
+{
+    gl_Position = vec3(projection * view * model * vec4(FragPos,1));
+}
+```
 ```
 Shader.use();
 Shader.setUniform("model", modelMatrix);
@@ -32,4 +49,5 @@ Shader.setUniform("projection", Zooom * projection);
 The goal for now is to ensure that the pipeline works. Lights will be added later.**
 
 Fragmant shader for constant color:
+
 ![51](https://user-images.githubusercontent.com/34486030/109212256-f64e9e00-77b7-11eb-9abe-b8e5355f72e9.jpeg)
