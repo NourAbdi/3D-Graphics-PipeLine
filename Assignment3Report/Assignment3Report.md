@@ -69,6 +69,12 @@ has now improved a lot, load one of the meshes from
 https://github.com/alecjacobson/common-3d-test-models and display it from several view-
 point and different lighting.**
 
+![222](https://user-images.githubusercontent.com/34486030/109349223-47c16080-787e-11eb-93b1-ff2db7d308b3.png)
+![dsfa](https://user-images.githubusercontent.com/34486030/109349228-48f28d80-787e-11eb-9f52-1284132c4b1f.png)
+![safdsds](https://user-images.githubusercontent.com/34486030/109349232-4abc5100-787e-11eb-9724-57774488cd25.png)
+![dasdsdsa](https://user-images.githubusercontent.com/34486030/109349235-4d1eab00-787e-11eb-85b4-0e1319f0bf4d.png)
+![dsfsdfsdf](https://user-images.githubusercontent.com/34486030/109349242-4ee86e80-787e-11eb-84b6-b0f7621be652.png)
+
 **7. Implement texture mapping. Use the example OpenGL project as reference. Enable
 at least one type of canonical project (for pairs: three): plane, cylinder or sphere. In
 addition, find a mesh with texture coordinates and use them. Show your results in the
