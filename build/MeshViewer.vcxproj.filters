@@ -25,6 +25,9 @@
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\ShaderProgram.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\Texture2D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\Utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,6 +66,9 @@
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\ShaderProgram.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\Texture2D.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -73,6 +79,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\imgui_impl_opengl3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

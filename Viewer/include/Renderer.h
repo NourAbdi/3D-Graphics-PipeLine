@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "ShaderProgram.h"
+#include "Texture2D.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
@@ -12,6 +13,8 @@ public:
 	void LoadShaders();
 	void Render(const Scene& scene);
 	void SwapBuffers();
+	void LoadTextures();
+
 	void ClearColorBuffer(const glm::vec3& color);
 	void SetViewportWidth(int i);
 	void SetViewportHeight(int i);
@@ -42,6 +45,8 @@ private:
 	void CreateOpenGLBuffer();
 	void InitOpenGLRendering();
 	ShaderProgram Shader;
+	Texture2D texture1;
+
 	float* color_buffer_;
 	float* z_buffer_;
 	int viewport_width_;

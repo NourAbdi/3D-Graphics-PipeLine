@@ -25,7 +25,13 @@ Renderer::Renderer(int viewport_width, int viewport_height) :
 	InitOpenGLRendering();
 	CreateBuffers(viewport_width, viewport_height);
 }
-
+void Renderer::LoadTextures()
+{
+	if (!texture1.loadTexture("bin\\Debug\\wood.jpeg", true))
+	{
+		texture1.loadTexture("bin\\Release\\wood.jpeg", true);
+	}
+}
 Renderer::~Renderer()
 {
 	delete[] color_buffer_;
@@ -503,18 +509,30 @@ void Renderer::Render(const Scene& scene)
 				Light light = scene.GetActiveLight();
 				Shader.setUniform("eyePos", position);
 				Shader.setUniform("color", model.GetColor());
-
+				
 				Shader.setUniform("lighting.lightPos", light.GetPosition() );
 				Shader.setUniform("lighting.ambientColor", light.Getambient());
 				Shader.setUniform("lighting.diffuseColor", light.Getdiffuse());
 				Shader.setUniform("lighting.specularColor", light.Getspecular());
 				Shader.setUniform("lighting.ambientStr", light.Getambientintensity());
+				Shader.setUniform("ambientColor", model.Getambient());
+				Shader.setUniform("diffuseColor", model.Getdiffuse());
+				Shader.setUniform("specularColor", model.Getspecular());
+
 			}
+
+			Shader.setUniform("textures", 0);
+
+			// Set 'texture1' as the active texture at slot #0
+			texture1.bind(0);
+
 			//Shader.setUniform("material.textureMap", 0);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 			glBindVertexArray(model.GetVAO());
 			glDrawArrays(GL_TRIANGLES, 0, model.GetModelVertices().size());
 			glBindVertexArray(0);
+			// Unset 'texture1' as the active texture at slot #0
+			texture1.unbind(0);
 
 			// Drag our model's faces (triangles) in line mode (wireframe)
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);

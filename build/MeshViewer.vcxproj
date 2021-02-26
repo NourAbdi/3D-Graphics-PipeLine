@@ -369,6 +369,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp" />
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\Scene.cpp" />
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\ShaderProgram.cpp" />
+    <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\Texture2D.cpp" />
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\Utils.cpp" />
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\imgui_impl_glfw.cpp" />
     <ClCompile Include="D:\computergraphics2021-nour-abdi\Viewer\src\imgui_impl_opengl3.cpp" />
@@ -381,10 +382,12 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\Renderer.h" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\Scene.h" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\ShaderProgram.h" />
+    <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\Texture2D.h" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\Utils.h" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\ZBuffer.h" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\imgui_impl_glfw.h" />
     <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\imgui_impl_opengl3.h" />
+    <ClInclude Include="D:\computergraphics2021-nour-abdi\Viewer\include\stb_image.h" />
     <None Include="D:\computergraphics2021-nour-abdi\Viewer\shaders\fshader.glsl">
     </None>
     <None Include="D:\computergraphics2021-nour-abdi\Viewer\shaders\vshader.glsl">

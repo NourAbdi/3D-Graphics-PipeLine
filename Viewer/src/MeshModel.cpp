@@ -1,6 +1,6 @@
 #include "MeshModel.h"
 
-MeshModel::MeshModel(std::vector<Face> faces, std::vector<glm::vec3> vertices, std::vector<glm::vec3> normals, const std::string& model_name) :
+MeshModel::MeshModel(std::vector<Face> faces, std::vector<glm::vec3> vertices, std::vector<glm::vec3> normals, std::vector<glm::vec2> textureCoords, const std::string& model_name) :
 	faces_(faces),
 	vertices_(vertices),
 	normals_(normals)
@@ -51,11 +51,11 @@ MeshModel::MeshModel(std::vector<Face> faces, std::vector<glm::vec3> vertices, s
 			vertex.position = vertices[vertexIndex];
 			vertex.normal = normals[normalIndex];
 
-			//if (textureCoords.size() > 0)
-			//{
-			//	int textureCoordsIndex = currentFace.GetTextureIndex(j) - 1;
-			//	vertex.textureCoords = textureCoords[textureCoordsIndex];
-			//}
+			if (textureCoords.size() > 0)
+			{
+				int textureCoordsIndex = currentFace.GetTextureIndex(j) - 1;
+				vertex.textureCoords = textureCoords[textureCoordsIndex];
+			}
 
 			modelVertices.push_back(vertex);
 		}
@@ -77,8 +77,8 @@ MeshModel::MeshModel(std::vector<Face> faces, std::vector<glm::vec3> vertices, s
 	glEnableVertexAttribArray(1);
 
 	// Vertex Texture Coords
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(6 * sizeof(GLfloat)));
-	//glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
 
 	// unbind to make sure other code does not change it somewhere else
 	glBindVertexArray(0);

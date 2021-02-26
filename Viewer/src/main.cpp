@@ -58,8 +58,9 @@ int main(int argc, char **argv)
 	glfwMakeContextCurrent(window);
 	glfwGetFramebufferSize(window, &frameBufferWidth, &frameBufferHeight);
 
-	Renderer renderer = Renderer(frameBufferWidth, frameBufferHeight);
+	Renderer renderer(frameBufferWidth, frameBufferHeight);
 	renderer.LoadShaders();
+	renderer.LoadTextures();
 	Scene scene = Scene();
 	
 	ImGuiIO& io = SetupDearImgui(window);
