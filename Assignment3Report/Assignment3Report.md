@@ -38,15 +38,16 @@ void main()
     gl_Position = vec3(projection * view * model * vec4(FragPos,1));
 }
 ```
+
+**4.Write a fragment shader that only outputs a constant color and paste it in the report.
+The goal for now is to ensure that the pipeline works. Lights will be added later.**
+
 ```
 Shader.use();
 Shader.setUniform("model", modelMatrix);
 Shader.setUniform("view", ViewMatrix);
 Shader.setUniform("projection", Zooom * projection);
 ```
-
-**4.Write a fragment shader that only outputs a constant color and paste it in the report.
-The goal for now is to ensure that the pipeline works. Lights will be added later.**
 
 Fragmant shader for constant color:
 
@@ -59,5 +60,26 @@ to view the mesh in your application.**
 I chose the bishop model for demonstration :
 
 ![04](https://user-images.githubusercontent.com/34486030/109214891-10d64680-77bb-11eb-94cf-a10925db4587.jpeg)
+
+
+**6.Implement Phong shading in the fragment shader. To demonstrate that the performance
+has now improved a lot, load one of the meshes from
+https://github.com/alecjacobson/common-3d-test-models and display it from several view-
+point and different lighting.**
+
+**7. Implement texture mapping. Use the example OpenGL project as reference. Enable
+at least one type of canonical project (for pairs: three): plane, cylinder or sphere. In
+addition, find a mesh with texture coordinates and use them. Show your results in the
+report.**
+
+I used the plane type of canonical project for example I used this texture :
+
+![66](https://user-images.githubusercontent.com/34486030/109223079-cfe23000-77c2-11eb-994e-69b492710136.jpeg)
+
+Using the wood texture on the crate :
+
+![24](https://user-images.githubusercontent.com/34486030/109225046-6dd6fa00-77c5-11eb-934d-d708024b83e7.jpeg)
+
+![25](https://user-images.githubusercontent.com/34486030/109223169-f0aa8580-77c2-11eb-84c7-64166a4a4faf.jpeg)
 
 
