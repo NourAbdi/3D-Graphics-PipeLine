@@ -13,7 +13,6 @@ project as a reference.**
 ![1](https://user-images.githubusercontent.com/34486030/109210620-c0a8b580-77b5-11eb-9102-c2ddadcb1217.jpeg)
 ![2](https://user-images.githubusercontent.com/34486030/109210621-c1414c00-77b5-11eb-9c50-b01ec3434e01.jpeg)
 ![3](https://user-images.githubusercontent.com/34486030/109210622-c2727900-77b5-11eb-90c0-7ea985ec7f0a.jpeg)
-![4](https://user-images.githubusercontent.com/34486030/109210624-c30b0f80-77b5-11eb-9333-6c10b5ac1230.jpeg)
 
 **3.Write a vertex shader that applies all the transformations. Use the reference code, but
 pay attention to the differences between your code and the reference code. Copy the code
@@ -42,13 +41,6 @@ void main()
 **4.Write a fragment shader that only outputs a constant color and paste it in the report.
 The goal for now is to ensure that the pipeline works. Lights will be added later.**
 
-```
-Shader.use();
-Shader.setUniform("model", modelMatrix);
-Shader.setUniform("view", ViewMatrix);
-Shader.setUniform("projection", Zooom * projection);
-```
-
 Fragmant shader for constant color:
 
 ![51](https://user-images.githubusercontent.com/34486030/109212256-f64e9e00-77b7-11eb-9abe-b8e5355f72e9.jpeg)
@@ -57,7 +49,16 @@ Fragmant shader for constant color:
 relevant piece of code to the report. If everything was done correctly, you should be able
 to view the mesh in your application.**
 
+![4](https://user-images.githubusercontent.com/34486030/109210624-c30b0f80-77b5-11eb-9333-6c10b5ac1230.jpeg)
+
 I chose the bishop model for demonstration :
+
+```
+Shader.use();
+Shader.setUniform("model", modelMatrix);
+Shader.setUniform("view", ViewMatrix);
+Shader.setUniform("projection", Zooom * projection);
+```
 
 ![04](https://user-images.githubusercontent.com/34486030/109214891-10d64680-77bb-11eb-94cf-a10925db4587.jpeg)
 
@@ -82,4 +83,6 @@ Using the wood texture on the crate :
 
 ![25](https://user-images.githubusercontent.com/34486030/109223169-f0aa8580-77c2-11eb-84c7-64166a4a4faf.jpeg)
 
+**8. Implementing (c) Toon shading (without the silhouette) :**
 
+![28](https://user-images.githubusercontent.com/34486030/109345232-7fc5a500-7878-11eb-8427-36f4a6d347ca.jpeg)
