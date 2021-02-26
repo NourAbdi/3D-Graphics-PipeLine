@@ -42,6 +42,6 @@ void main()
 	float specularConstant = pow(max(dot(posToViewDir, reflectDirVec),0),10);
 	vec3 specularFinal = lighting.specularColor * specularConstant * specularColor;
 
-   fColor = (vec4(ambientlight,1) + vec4(specularFinal,1) + vec4(diffuseFinal,1)) * vec4(textureColor,1);
+   fColor = (vec4(ambientlight,1) + vec4(specularFinal,1) + vec4(diffuseFinal,1)) * vec4(color,1);
 } 
 
