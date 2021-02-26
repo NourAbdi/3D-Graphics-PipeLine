@@ -13,6 +13,7 @@ project as a reference.**
 ![1](https://user-images.githubusercontent.com/34486030/109210620-c0a8b580-77b5-11eb-9102-c2ddadcb1217.jpeg)
 ![2](https://user-images.githubusercontent.com/34486030/109210621-c1414c00-77b5-11eb-9c50-b01ec3434e01.jpeg)
 ![3](https://user-images.githubusercontent.com/34486030/109210622-c2727900-77b5-11eb-90c0-7ea985ec7f0a.jpeg)
+![4](https://user-images.githubusercontent.com/34486030/109210624-c30b0f80-77b5-11eb-9333-6c10b5ac1230.jpeg)
 
 **3.Write a vertex shader that applies all the transformations. Use the reference code, but
 pay attention to the differences between your code and the reference code. Copy the code
