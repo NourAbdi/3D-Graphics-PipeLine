@@ -437,7 +437,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 			}
 			ImGui::EndTabBar();
 		}
-		ImGui::SliderFloat3("position(x,y,z)", Cposition, 0.0f, 500.0f);
+		ImGui::SliderFloat3("position(x,y,z)", Cposition, -1000.0f, 1000.0f);
 		CTranslate = {
 			glm::vec4(1.0f,0.0f,0.0f,0.0f),
 			glm::vec4(0.0f,1.0f,0.0f,0.0f),
