@@ -28,7 +28,7 @@ out vec4 fColor;
 
 void main() 
 { 
-	vec3 textureColor = vec3(texture(texture, texCoord));
+	//vec3 textureColor = vec3(texture(texture, texCoord));
 	//Ambient light
 	vec3 ambientlight = lighting.ambientColor * lighting.ambientStr * ambientColor; 
 
@@ -57,6 +57,6 @@ void main()
 			ToonColor =vec4(0.2,0.1,0.1,1.0);
 		fColor = vec4(color,1)*ToonColor;
 	}else
-   fColor = (vec4(ambientlight,1) + vec4(specularFinal,1) + vec4(diffuseFinal,1)) * vec4(textureColor,1);
+   fColor = (vec4(ambientlight,1) + vec4(specularFinal,1) + vec4(diffuseFinal,1)) * vec4(color,1);
 } 
 

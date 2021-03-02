@@ -1,12 +1,2 @@
-﻿  main.cpp
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(339): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(340): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(341): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(382): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(383): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(384): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(448): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(449): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(450): warning C4305: 'argument': truncation from 'double' to 'float'
-  MeshViewer.vcxproj -> D:\computergraphics2021-nour-abdi\build\bin\Release\MeshViewer.exe
+﻿  MeshViewer.vcxproj -> D:\computergraphics2021-nour-abdi\build\bin\Release\MeshViewer.exe
   Copying Shaders
