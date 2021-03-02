@@ -27,9 +27,9 @@ Renderer::Renderer(int viewport_width, int viewport_height) :
 }
 void Renderer::LoadTextures()
 {
-	if (!texture1.loadTexture("bin\\Debug\\wood.jpeg", true))
+	if (!texture1.loadTexture("bin\\Debug\\wood.jpg", true))
 	{
-		texture1.loadTexture("bin\\Release\\wood.jpeg", true);
+		texture1.loadTexture("bin\\Release\\wood.jpg", true);
 	}
 }
 Renderer::~Renderer()
@@ -45,7 +45,7 @@ void Renderer::PutPixel(int i, int j, const glm::vec3& color)
 {
 	if (i < 0) return; if (i >= viewport_width_) return;
 	if (j < 0) return; if (j >= viewport_height_) return;
-	
+
 	color_buffer_[INDEX(viewport_width_, i, j, 0)] = color.x;
 	color_buffer_[INDEX(viewport_width_, i, j, 1)] = color.y;
 	color_buffer_[INDEX(viewport_width_, i, j, 2)] = color.z;
@@ -119,7 +119,7 @@ void Renderer::plotLineHigh(const glm::vec2& p1, const glm::vec2& p2, const glm:
 
 float Renderer::max_point(const float x, const float y, const float z)
 {
-	return ((x >= y) ? x : y) >= z ? ((x >= y) ? x : y):z ;
+	return ((x >= y) ? x : y) >= z ? ((x >= y) ? x : y) : z;
 }
 float Renderer::min_point(const float x, const float y, const float z)
 {
@@ -129,45 +129,45 @@ float Renderer::cal_area(const glm::vec2& a, const glm::vec2& b, const glm::vec2
 {
 	return ((float)((c.x - a.x) * (b.y - a.y)) - (float)((c.y - a.y) * (b.x - a.x)));
 }
-void Renderer::DrawTriangle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3, 
-							const glm::vec3& color, bool fog,float fog_start,float fog_end, const glm::vec3& FogColor)
+void Renderer::DrawTriangle(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3,
+	const glm::vec3& color, bool fog, float fog_start, float fog_end, const glm::vec3& FogColor)
 {
 	float Maxx = max_point(p1.x, p2.x, p3.x);
 	float Maxy = max_point(p1.y, p2.y, p3.y);
 	float Minx = min_point(p1.x, p2.x, p3.x);
 	float Miny = min_point(p1.y, p2.y, p3.y);
 	float AREA = cal_area(p3, p2, p1);
-	float A ;
-	float B ;
-	float C ;
-	float Z ;
-	float f ;
+	float A;
+	float B;
+	float C;
+	float Z;
+	float f;
 	glm::vec3 Color(black);
 
 	for (int j = Miny; j < Maxy; j++)
 	{
 		for (int i = Minx; i < Maxx; i++)
 		{
-			A = cal_area(p3, p2, glm::vec2(i , j));
-			B = cal_area(p1, p3, glm::vec2(i , j));
-			C = cal_area(p2, p1, glm::vec2(i , j));
+			A = cal_area(p3, p2, glm::vec2(i, j));
+			B = cal_area(p1, p3, glm::vec2(i, j));
+			C = cal_area(p2, p1, glm::vec2(i, j));
 
 			if (A >= 0 && B >= 0 && C >= 0)
 			{
-				Z=(A/AREA)*p1.z + (B/AREA)*p2.z + (C/AREA)*p3.z ;
+				Z = (A / AREA)*p1.z + (B / AREA)*p2.z + (C / AREA)*p3.z;
 				Color = color;
 				if (fog)
 				{
 					f = (fog_end - Z) / (fog_end - fog_start);
 					Color = ((1 - f) * FogColor) + (f * color);
 				}
-				PutPixel(i, j , Z , Color);
+				PutPixel(i, j, Z, Color);
 			}
 		}
 	}
 }
 void Renderer::DrawTriangle1(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3,
-							const glm::vec3& color1, const glm::vec3& color2, const glm::vec3& color3)
+	const glm::vec3& color1, const glm::vec3& color2, const glm::vec3& color3)
 {
 	float Maxx = max_point(p1.x, p2.x, p3.x);
 	float Maxy = max_point(p1.y, p2.y, p3.y);
@@ -201,10 +201,10 @@ void Renderer::DrawTriangle1(const glm::vec3& p1, const glm::vec3& p2, const glm
 	}
 }
 void Renderer::DrawTriangle2(const glm::vec3& p1, const glm::vec3& p2, const glm::vec3& p3,
-							const glm::vec3& n1, const glm::vec3& n2, const glm::vec3& n3, const glm::vec3& color,
-							bool PointOrParallel, const glm::vec3& ambient, const glm::vec3& diffuse1, const glm::vec3&specular1,
-							const glm::vec3& light_position, const glm::vec3& lightDir
-							)
+	const glm::vec3& n1, const glm::vec3& n2, const glm::vec3& n3, const glm::vec3& color,
+	bool PointOrParallel, const glm::vec3& ambient, const glm::vec3& diffuse1, const glm::vec3&specular1,
+	const glm::vec3& light_position, const glm::vec3& lightDir
+)
 {
 	float Maxx = max_point(p1.x, p2.x, p3.x);
 	float Maxy = max_point(p1.y, p2.y, p3.y);
@@ -237,7 +237,7 @@ void Renderer::DrawTriangle2(const glm::vec3& p1, const glm::vec3& p2, const glm
 				Z = (A / AREA)*p1.z + (B / AREA)*p2.z + (C / AREA)*p3.z;
 				FragPosition = glm::normalize(glm::vec3(i, j, Z));
 				n = glm::normalize(glm::vec3(nx, ny, nz));
-				
+
 				if (PointOrParallel) // Point light source :
 				{
 					//// diffuse 
@@ -286,7 +286,7 @@ void Renderer::DrawLine(const glm::vec2& p1, const glm::vec2& p2, const glm::vec
 
 	if (dy < dx)//abs(y1 - y0) < abs(x1 - x0)
 		if (p1.x > p2.x)
-			plotLineLow(p2 ,p1 ,color);
+			plotLineLow(p2, p1, color);
 		else
 			plotLineLow(p1, p2, color);
 	else
@@ -342,7 +342,7 @@ void Renderer::InitOpenGLRendering()
 	//	     | \ | <--- The exture is drawn over two triangles that stretch over the screen.
 	//	     |__\|
 	// (-1,-1)    (1,-1)
-	const GLfloat vtc[]={
+	const GLfloat vtc[] = {
 		-1, -1,
 		 1, -1,
 		-1,  1,
@@ -351,19 +351,19 @@ void Renderer::InitOpenGLRendering()
 		 1,  1
 	};
 
-	const GLfloat tex[]={
+	const GLfloat tex[] = {
 		0,0,
 		1,0,
 		0,1,
 		0,1,
 		1,0,
-		1,1};
+		1,1 };
 
 	// Makes this buffer the current one.
 	glBindBuffer(GL_ARRAY_BUFFER, buffer);
 
 	// This is the opengl way for doing malloc on the gpu. 
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vtc)+sizeof(tex), NULL, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vtc) + sizeof(tex), NULL, GL_STATIC_DRAW);
 
 	// memcopy vtc to buffer[0,sizeof(vtc)-1]
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vtc), vtc);
@@ -372,25 +372,25 @@ void Renderer::InitOpenGLRendering()
 	glBufferSubData(GL_ARRAY_BUFFER, sizeof(vtc), sizeof(tex), tex);
 
 	// Loads and compiles a sheder.
-	GLuint program = InitShader( "vshader.glsl", "fshader.glsl" );
+	GLuint program = InitShader("vshader.glsl", "fshader.glsl");
 
 	// Make this program the current one.
 	glUseProgram(program);
 
 	// Tells the shader where to look for the vertex position data, and the data dimensions.
-	GLint  vPosition = glGetAttribLocation( program, "vPosition" );
-	glEnableVertexAttribArray( vPosition );
-	glVertexAttribPointer( vPosition,2,GL_FLOAT,GL_FALSE,0,0 );
+	GLint  vPosition = glGetAttribLocation(program, "vPosition");
+	glEnableVertexAttribArray(vPosition);
+	glVertexAttribPointer(vPosition, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
 	// Same for texture coordinates data.
-	GLint  vTexCoord = glGetAttribLocation( program, "vTexCoord" );
-	glEnableVertexAttribArray( vTexCoord );
-	glVertexAttribPointer( vTexCoord,2,GL_FLOAT,GL_FALSE,0,(GLvoid *)sizeof(vtc) );
+	GLint  vTexCoord = glGetAttribLocation(program, "vTexCoord");
+	glEnableVertexAttribArray(vTexCoord);
+	glVertexAttribPointer(vTexCoord, 2, GL_FLOAT, GL_FALSE, 0, (GLvoid *)sizeof(vtc));
 
 	//glProgramUniform1i( program, glGetUniformLocation(program, "texture"), 0 );
 
 	// Tells the shader to use GL_TEXTURE0 as the texture id.
-	glUniform1i(glGetUniformLocation(program, "texture"),0);
+	glUniform1i(glGetUniformLocation(program, "texture"), 0);
 }
 
 void Renderer::CreateOpenGLBuffer()
@@ -444,12 +444,12 @@ void Renderer::Render(const Scene& scene)
 	// TODO: Replace this code with real scene rendering code
 	int half_width = viewport_width_ / 2;
 	int half_height = viewport_height_ / 2;
-	float max1	= 0.0f;
-	float max2	= 0.0f;
+	float max1 = 0.0f;
+	float max2 = 0.0f;
 	float Max = 0.0f;
-	float Avg_x	= 0.0f;
-	float Avg_y	= 0.0f;
-	float Avg_z	= 0.0f;
+	float Avg_x = 0.0f;
+	float Avg_y = 0.0f;
+	float Avg_z = 0.0f;
 	float delta = 0.0f;
 	float delta_x = 0.0f;
 	float delta_y = 0.0f;
@@ -466,13 +466,13 @@ void Renderer::Render(const Scene& scene)
 		Camera &camera = scene.GetActiveCamera(); // Gets active camera 
 		glm::mat4x4 Tc = camera.GetViewTransformation();
 		glm::mat4x4 Cinv = glm::inverse(Tc);
-		glm::vec4 positionhc= (Tc * glm::vec4(camera.GetCameraPosition(),1.0f));
-		glm::vec3 position= (positionhc)/ positionhc.w;
+		glm::vec4 positionhc = (Tc * glm::vec4(camera.GetCameraPosition(), 1.0f));
+		glm::vec3 position = (positionhc) / positionhc.w;
 		glm::vec3 up(0.0f, 1.0f, 0.0f);
-		glm::vec3 at(0.0f,0.0f,1.0f);
-		glm::mat4x4 ViewMatrix = glm::lookAt(position, at,up);
+		glm::vec3 at(0.0f, 0.0f, 1.0f);
+		glm::mat4x4 ViewMatrix = glm::lookAt(position, at, up);
 		glm::mat4x4 projection;
-		
+
 		float fovy = camera.Getfovy();
 		float nearP = camera.Getnear();
 		float farP = camera.Getfar();
@@ -497,9 +497,9 @@ void Renderer::Render(const Scene& scene)
 		if (scene.GetModelCount() > 0) //This check if we loaded the mesh model
 		{
 			MeshModel &model = scene.GetActiveModel(); // Gets active model 
-			
+
 			glm::mat4x4 modelMatrix = model.GetWTransform() * model.GetLTransform();
-		
+
 			Shader.use();
 			Shader.setUniform("model", modelMatrix);
 			Shader.setUniform("view", ViewMatrix);
@@ -509,8 +509,8 @@ void Renderer::Render(const Scene& scene)
 				Light light = scene.GetActiveLight();
 				Shader.setUniform("eyePos", position);
 				Shader.setUniform("color", model.GetColor());
-				
-				Shader.setUniform("lighting.lightPos", light.GetPosition() );
+
+				Shader.setUniform("lighting.lightPos", light.GetPosition());
 				Shader.setUniform("lighting.ambientColor", light.Getambient());
 				Shader.setUniform("lighting.diffuseColor", light.Getdiffuse());
 				Shader.setUniform("lighting.specularColor", light.Getspecular());
@@ -518,10 +518,13 @@ void Renderer::Render(const Scene& scene)
 				Shader.setUniform("ambientColor", model.Getambient());
 				Shader.setUniform("diffuseColor", model.Getdiffuse());
 				Shader.setUniform("specularColor", model.Getspecular());
+				Shader.setUniform("specularColor", model.Getspecular());
+
+				Shader.setUniform("toonShading", TRUE);
 
 			}
 
-			Shader.setUniform("textures", 0);
+			Shader.setUniform("texture", 0);
 
 			// Set 'texture1' as the active texture at slot #0
 			texture1.bind(0);
@@ -539,7 +542,7 @@ void Renderer::Render(const Scene& scene)
 			glBindVertexArray(model.GetVAO());
 			glDrawArrays(GL_TRIANGLES, 0, model.GetModelVertices().size());
 			glBindVertexArray(0);
-			
+
 		}
 	}
 }

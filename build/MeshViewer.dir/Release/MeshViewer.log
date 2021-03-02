@@ -1,12 +1,61 @@
-﻿  main.cpp
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(339): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(340): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(341): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(382): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(383): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(384): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(448): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(449): warning C4305: 'argument': truncation from 'double' to 'float'
-D:\computergraphics2021-nour-abdi\Viewer\src\main.cpp(450): warning C4305: 'argument': truncation from 'double' to 'float'
+﻿  Renderer.cpp
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(69): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(70): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(78): warning C4244: '=': conversion from 'const T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(80): warning C4244: 'initializing': conversion from 'const T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(96): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(97): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(105): warning C4244: '=': conversion from 'const T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(107): warning C4244: 'initializing': conversion from 'const T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(147): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(149): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(183): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(185): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(224): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(226): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(280): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(281): warning C4244: 'initializing': conversion from 'T' to 'int', possible loss of data
+          with
+          [
+              T=float
+          ]
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(457): warning C4101: 'Transformations': unreferenced local variable
+D:\computergraphics2021-nour-abdi\Viewer\src\Renderer.cpp(458): warning C4101: 'ViewTransformations': unreferenced local variable
   MeshViewer.vcxproj -> D:\computergraphics2021-nour-abdi\build\bin\Release\MeshViewer.exe
   Copying Shaders

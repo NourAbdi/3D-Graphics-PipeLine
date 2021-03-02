@@ -13,7 +13,7 @@ in vec2 texCoord;
 in vec3 fragFinalPos;
 in vec3 normalFinalPos;
 
-uniform sampler2D textures;
+uniform sampler2D texture;
 uniform vec3 color;
 uniform Light lighting;
 uniform vec3 eyePos;
@@ -21,13 +21,14 @@ uniform vec3 ambientColor;
 uniform vec3 diffuseColor;
 uniform vec3 specularColor;
 uniform float shine;
+uniform bool toonShading;
 
 
 out vec4 fColor;
 
 void main() 
 { 
-	vec3 textureColor = vec3(texture(textures,texCoord));
+	vec3 textureColor = vec3(texture(texture, texCoord));
 	//Ambient light
 	vec3 ambientlight = lighting.ambientColor * lighting.ambientStr * ambientColor; 
 
@@ -41,7 +42,21 @@ void main()
 	vec3 posToViewDir = normalize( fragFinalPos - eyePos);
 	float specularConstant = pow(max(dot(posToViewDir, reflectDirVec),0),10);
 	vec3 specularFinal = lighting.specularColor * specularConstant * specularColor;
+	if(toonShading){
+		float intensity;
+		vec4 ToonColor;
+		intensity = dot(posToLightDirVec,normalFinalPos);
 
-   fColor = (vec4(ambientlight,1) + vec4(specularFinal,1) + vec4(diffuseFinal,1)) * vec4(color,1);
+		if (intensity > 0.95)
+			ToonColor = vec4(1.0,0.5,0.5,1.0);
+		else if (intensity > 0.5)
+			ToonColor = vec4(0.6,0.3,0.3,1.0);
+		else if (intensity > 0.25)
+			ToonColor = vec4(0.4,0.2,0.2,1.0);
+		else
+			ToonColor =vec4(0.2,0.1,0.1,1.0);
+		fColor = vec4(color,1)*ToonColor;
+	}else
+   fColor = (vec4(ambientlight,1) + vec4(specularFinal,1) + vec4(diffuseFinal,1)) * vec4(textureColor,1);
 } 
 
