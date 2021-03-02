@@ -304,7 +304,7 @@ void DrawImguiMenus(ImGuiIO& io, Scene& scene)
 		static float Cposition[] = { 0.0f, 0.0f, 300.0f };
 		static float LLposition[] = { 0.0f, 0.0f, 100.0f };
 		static float Ldirection[] = { 0.0f, 0.0f, -1.0f };
-		static float Zoom = 0.001f;
+		static float Zoom = 0.2f;
 		static float CAlpha_X = 0.0f;
 		static float CAlpha_Y = 0.0f;
 		static float CAlpha_Z = 0.0f;
